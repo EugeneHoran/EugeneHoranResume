@@ -1,0 +1,57 @@
+{
+  "EugeneHoran": {
+    "name_full": "Eugene J. Horan",
+    "name_first": "Eugene",
+    "name_middle": "John",
+    "name_last": "Horan",
+	 "contact": {
+      "phone_primary": "631-790-5218",
+	  "phone_secondary": "631-736-8655",
+	  "text": "631-790-5218",
+      "email": "eh841271@gmail.com"
+    },
+    "location": {
+      "country": "United States",
+      "state": "New York",
+      "city": "Port Jefferson Station",
+      "street": "Yale St.",
+      "zip": "11776"
+    },
+    "goals": {
+      "goal_current": "Contribute to the Open-Source community that tought me everything I know. Keep up to date with the latest Android Libraries. Learning and implementing the latest SDK's.",
+      "goal_future": "Become a full stack engineer. Dabble with IOS. "
+    },
+    "social_media": [
+      {
+        "account": "GitHub",
+        "url": "https://github.com/EugeneHoran",
+        "visible": "true"
+      },
+      {
+        "account": "Stackoverflow",
+        "url": "https://stackoverflow.com/users/3904085/eugene-h",
+        "visible": "true"
+      },
+      {
+        "account": "Google+",
+        "url": "https://plus.google.com/111858771255127443258",
+        "visible": "true"
+      },
+      {
+        "account": "Facebook",
+        "url": "https://www.facebook.com/profile.php?id=565328301",
+        "visible": "false"
+      },
+      {
+        "account": "Twitter",
+        "url": "https://twitter.com/EugeneHoran",
+        "visible": "fale"
+      },
+      {
+        "account": "LinkedIn",
+        "url": "https://www.linkedin.com/in/eugene-horan-a1654752/",
+        "visible": "false"
+      }
+    ]
+  }
+}

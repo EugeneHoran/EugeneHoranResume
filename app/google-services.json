@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "142506979309",
+    "firebase_url": "https://eugenehoranresume.firebaseio.com",
+    "project_id": "eugenehoranresume",
+    "storage_bucket": "eugenehoranresume.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142506979309:android:4bc0765d62ef785b",
+        "android_client_info": {
+          "package_name": "com.resume.horan.eugene.eugenehoranresume"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "142506979309-bv90apkfm21lvpj2hgqml7eh8kn76kjn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.resume.horan.eugene.eugenehoranresume",
+            "certificate_hash": "a7d143b2419d528de0151e87217702cb51b4f2d0"
+          }
+        },
+        {
+          "client_id": "142506979309-i9ugc7p696e97vl6c5ats62j8f0t4ep3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMzjXd9vmvWdF-AY_jEwkBJ4qoGHcC-h4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "142506979309-i9ugc7p696e97vl6c5ats62j8f0t4ep3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
