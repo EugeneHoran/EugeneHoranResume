@@ -1,6 +1,7 @@
 
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+
 public class Location {
 
     private String country;
@@ -8,6 +9,28 @@ public class Location {
     private String city;
     private String street;
     private String zip;
+
+    /**
+     * No args constructor for use in serialization
+     */
+    public Location() {
+    }
+
+    /**
+     * @param zip
+     * @param street
+     * @param state
+     * @param city
+     * @param country
+     */
+    public Location(String country, String state, String city, String street, String zip) {
+        super();
+        this.country = country;
+        this.state = state;
+        this.city = city;
+        this.street = street;
+        this.zip = zip;
+    }
 
     public String getCountry() {
         return country;
@@ -48,4 +71,5 @@ public class Location {
     public void setZip(String zip) {
         this.zip = zip;
     }
+
 }

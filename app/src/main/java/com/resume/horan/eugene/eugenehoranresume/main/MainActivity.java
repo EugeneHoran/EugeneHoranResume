@@ -5,18 +5,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,41 +40,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        TextView generic = findViewById(R.id.generic);
-
-        if (user != null) {
-            if (!TextUtils.isEmpty(user.getDisplayName())) {
-                generic.setText(user.getDisplayName());
-            } else if (!TextUtils.isEmpty(user.getEmail())) {
-                generic.setText(user.getEmail());
-            } else {
-                generic.setText(user.getProviderId());
-            }
-        } else {
-            generic.setText("No Identifier");
-        }
-
         mAuth = FirebaseAuth.getInstance();
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        myRef = database.getReference("EugeneHoran");
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef = database.getReference("eugeneHoran");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 EugeneHoran value = dataSnapshot.getValue(EugeneHoran.class);
-                Toast.makeText(MainActivity.this, value.getLocation().getCountry(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, value.getNameFull(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Error Loading", Toast.LENGTH_SHORT).show();
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        TextView generic = findViewById(R.id.generic);
+//
+//        if (user != null) {
+//            if (!TextUtils.isEmpty(user.getDisplayName())) {
+//                generic.setText(user.getDisplayName());
+//            } else if (!TextUtils.isEmpty(user.getEmail())) {
+//                generic.setText(user.getEmail());
+//            } else {
+//                generic.setText(user.getProviderId());
+//            }
+//        } else {
+//            generic.setText("No Identifier");
+//        }
+
 
         Button mBtnChangeData = findViewById(R.id.btnChangeData);
         mBtnChangeData.setOnClickListener(new View.OnClickListener() {

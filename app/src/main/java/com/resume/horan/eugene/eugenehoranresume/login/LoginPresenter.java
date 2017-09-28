@@ -257,35 +257,6 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     /**
      * Fingerprint
      */
-    private void registerForFingerprintService(LoginActivity loginView) {
-        fingerPrintHelper = new FingerprintHelper(loginView, Common.KEY_FINGERPRINT);
-        switch (fingerPrintHelper.checkAndEnableFingerPrintService()) {
-            case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    fingerprintResultsHandler = new FingerprintResultsHandler(loginView);
-                    fingerprintResultsHandler.setFingerprintAuthListener(this);
-                    fingerprintResultsHandler.startListening(fingerPrintHelper.getFingerprintManager(), fingerPrintHelper.getCryptoObject());
-                }
-                getView().showToast("Fingerprint sensor started scanning");
-                break;
-            case FingerprintResponseCode.OS_NOT_SUPPORTED:
-                getView().showToast("OS doesn't support fingerprint api");
-                break;
-            case FingerprintResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE:
-                getView().showToast("Fingerprint sensor not found");
-                break;
-            case FingerprintResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS:
-                getView().showToast("Give access to use fingerprint sensor");
-                break;
-            case FingerprintResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED:
-                break;
-            case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED:
-                break;
-            case FingerprintResponseCode.DEVICE_NOT_KEY_GUARD_SECURED:
-                break;
-        }
-    }
-
     @Override
     public void onAuthentication(int helpOrErrorCode, CharSequence infoString, FingerprintManager.AuthenticationResult authenticationResult, int authCode) {
         switch (authCode) {
@@ -313,6 +284,36 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                 // Do whatever you want
                 getView().showFingerprintMessage("Login successful", false);
                 getView().loginSuccessfulFingerprint();
+                break;
+        }
+    }
+
+    //TODO work on this
+    private void registerForFingerprintService(LoginActivity loginView) {
+        fingerPrintHelper = new FingerprintHelper(loginView, Common.KEY_FINGERPRINT);
+        switch (fingerPrintHelper.checkAndEnableFingerPrintService()) {
+            case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    fingerprintResultsHandler = new FingerprintResultsHandler(loginView);
+                    fingerprintResultsHandler.setFingerprintAuthListener(this);
+                    fingerprintResultsHandler.startListening(fingerPrintHelper.getFingerprintManager(), fingerPrintHelper.getCryptoObject());
+                }
+                getView().showToast("Fingerprint sensor started scanning");
+                break;
+            case FingerprintResponseCode.OS_NOT_SUPPORTED:
+                getView().showToast("OS doesn't support fingerprint api");
+                break;
+            case FingerprintResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE:
+                getView().showToast("Fingerprint sensor not found");
+                break;
+            case FingerprintResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS:
+                getView().showToast("Give access to use fingerprint sensor");
+                break;
+            case FingerprintResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED:
+                break;
+            case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED:
+                break;
+            case FingerprintResponseCode.DEVICE_NOT_KEY_GUARD_SECURED:
                 break;
         }
     }

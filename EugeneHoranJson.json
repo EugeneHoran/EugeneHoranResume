@@ -1,57 +1,148 @@
-{
-  "EugeneHoran": {
-    "name_full": "Eugene J. Horan",
-    "name_first": "Eugene",
-    "name_middle": "John",
-    "name_last": "Horan",
-	 "contact": {
-      "phone_primary": "631-790-5218",
-	  "phone_secondary": "631-736-8655",
-	  "text": "631-790-5218",
-      "email": "eh841271@gmail.com"
-    },
-    "location": {
-      "country": "United States",
-      "state": "New York",
-      "city": "Port Jefferson Station",
-      "street": "Yale St.",
-      "zip": "11776"
-    },
-    "goals": {
-      "goal_current": "Contribute to the Open-Source community that tought me everything I know. Keep up to date with the latest Android Libraries. Learning and implementing the latest SDK's.",
-      "goal_future": "Become a full stack engineer. Dabble with IOS. "
-    },
-    "social_media": [
-      {
-        "account": "GitHub",
-        "url": "https://github.com/EugeneHoran",
-        "visible": "true"
+{  
+   "eugeneHoran":{  
+      "nameFull":"Eugene J. Horan",
+      "nameFirst":"Eugene",
+      "nameMiddle":"John",
+      "nameLast":"Horan",
+      "contact":{  
+         "phonePrimary":"631-790-5218",
+         "phoneSecondary":"631-736-8655",
+         "text":"631-790-5218",
+         "email":"eh841271@gmail.com"
       },
-      {
-        "account": "Stackoverflow",
-        "url": "https://stackoverflow.com/users/3904085/eugene-h",
-        "visible": "true"
+      "location":{  
+         "country":"United States",
+         "state":"New York",
+         "city":"Port Jefferson Station",
+         "street":"Yale St.",
+         "zip":"11776"
       },
-      {
-        "account": "Google+",
-        "url": "https://plus.google.com/111858771255127443258",
-        "visible": "true"
+      "goals":{  
+         "goalCurrent":"Contribute to the Open-Source community that tought me everything I know. Keep up to date with the latest Android Libraries. Learning and implementing the latest SDK's.",
+         "goalFuture":"Become a full stack engineer. Dabble with IOS. "
       },
-      {
-        "account": "Facebook",
-        "url": "https://www.facebook.com/profile.php?id=565328301",
-        "visible": "false"
-      },
-      {
-        "account": "Twitter",
-        "url": "https://twitter.com/EugeneHoran",
-        "visible": "fale"
-      },
-      {
-        "account": "LinkedIn",
-        "url": "https://www.linkedin.com/in/eugene-horan-a1654752/",
-        "visible": "false"
+      "socialMedia":[  
+         {  
+            "account":"GitHub",
+            "url":"https://github.com/EugeneHoran",
+            "visible":"true"
+         },
+         {  
+            "account":"Stack Overflow",
+            "url":"https://stackoverflow.com/users/3904085/eugene-h",
+            "visible":"true"
+         },
+         {  
+            "account":"Google+",
+            "url":"https://plus.google.com/111858771255127443258",
+            "visible":"true"
+         },
+         {  
+            "account":"Facebook",
+            "url":"https://www.facebook.com/profile.php?id=565328301",
+            "visible":"false"
+         },
+         {  
+            "account":"Twitter",
+            "url":"https://twitter.com/EugeneHoran",
+            "visible":"fale"
+         },
+         {  
+            "account":"LinkedIn",
+            "url":"https://www.linkedin.com/in/eugene-horan-a1654752/",
+            "visible":"false"
+         }
+      ],
+      "resume":{  
+         "experience":[  
+            {  
+               "order":"0",
+               "company":"Transfast",
+               "header":"",
+               "dateStart":"December 2016",
+               "dateEnd":"",
+               "dateRange":"July 2016 - Present",
+               "position":"Lead Android Engineer",
+               "linkApp":"https://play.google.com/store/apps/details?id=com.transfast.transfast",
+               "linkSite":"https://www.transfast.com/",
+               "bullets":[  
+                  {  
+                     "order":"0",
+                     "bullet":"Work with the business, design, tech and testing teams to rebuild and test Transfast(v3.0) mobile apps from scratch."
+                  },
+                  {  
+                     "order":"1",
+                     "bullet":"Collaborate with back-end to architect REST content."
+                  },
+                  {  
+                     "order":"2",
+                     "bullet":"Implemented Google's Material Design and Android recomended practices within Transfast app."
+                  },
+                  {  
+                     "order":"3",
+                     "bullet":"Peer review all code for Android and test Mobile REST architect."
+                  }
+               ]
+            },
+            {  
+               "order":"1",
+               "company":"Transfast",
+               "header":"",
+               "dateStart":"July 2015",
+               "dateEnd":"December 2016",
+               "dateRange":"July 2015 - December 2016",
+               "position":"Android Engineer",
+               "linkApp":"https://play.google.com/store/apps/details?id=com.transfast.transfast",
+               "linkSite":"https://www.transfast.com/",
+               "bullets":[  
+                  {  
+                     "order":"0",
+                     "bullet":"Develop and maintain Transfast(v2.0) Android application as well as several Transfast money transfer products."
+                  },
+                  {  
+                     "order":"1",
+                     "bullet":"Implemented new features to existing Transfast(v2) application."
+                  }
+               ]
+            },
+            {  
+               "order":"2",
+               "company":"Fit Health",
+               "header":"Depreciated",
+               "dateStart":"January 2014",
+               "dateEnd":"July 2015",
+               "dateRange":"January 2014 - July 2015",
+               "position":"Creator",
+               "linkApp":"https://play.google.com/store/apps/details?id=com.eugene.fithealthmaingit",
+               "linkSite":"",
+               "bullets":[  
+                  {  
+                     "order":"0",
+                     "bullet":"Fit Health was a nutrition tracker as well as a weight management application."
+                  },
+                  {  
+                     "order":"1",
+                     "bullet":"Goal of the app was to showcase Material Design, FatSecret REST API, and simple smooth UI."
+                  }
+               ]
+            }
+         ],
+         "education":[  
+            {  
+               "order":"0",
+               "university":"University at Albany",
+               "location":"Albany, NY",
+               "dateRange":"Spring 2009 - May 2013",
+               "major":"B.A in Psychology and History"
+            },
+            {  
+               "order":"1",
+               "university":"Symbiosis Internation University",
+               "location":"Pune, India",
+               "dateRange":"January 2013 - May 2013",
+               "major":"Research in Child Development"
+            }
+         ]
       }
-    ]
-  }
+   }
 }
