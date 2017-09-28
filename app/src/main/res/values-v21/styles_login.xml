@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Background Inherits Primary -->
+    <style name="Login" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <!-- Toolbar -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--Only v21-->
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+
+        <!-- Fingerprint Swirl -->
+        <item name="swirl_ridgeColor">@color/white</item>
+        <item name="swirl_errorColor">@color/redError</item>
+    </style>
+
+</resources>

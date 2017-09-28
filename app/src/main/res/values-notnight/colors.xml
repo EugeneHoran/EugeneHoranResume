@@ -2,6 +2,5 @@
 <resources>
     <color name="colorBackground">#FAFAFA</color>
     <color name="colorAccent">#616161</color>
-    <color name="colorButton">#757575</color>
     <color name="colorButtonPrimaryText">#EEEEEE</color>
 </resources>

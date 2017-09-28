@@ -1,171 +1,184 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.resume.horan.eugene.eugenehoranresume.login.LoginActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-    </android.support.design.widget.AppBarLayout>
-
-    <LinearLayout
+    <View
+        android:id="@+id/viewGetFocus"
         android:layout_width="0px"
         android:layout_height="0px"
         android:focusable="true"
         android:focusableInTouchMode="true" />
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/viewLoginHolder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:padding="@dimen/activity_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:paddingBottom="@dimen/activity_margin"
+        android:paddingLeft="@dimen/activity_margin"
+        android:paddingRight="@dimen/activity_margin"
+        android:paddingTop="56dp">
 
-
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/viewMainHolder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:animateLayoutChanges="true">
+            android:animateLayoutChanges="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/mainHolder"
+            <TextView
+                android:id="@+id/textTitle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:animateLayoutChanges="true"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:text="Eugene Horan's \n Resume App"
+                android:textSize="28sp" />
 
-                <com.resume.horan.eugene.eugenehoranresume.util.TextInputView
-                    android:id="@+id/emailInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            <com.resume.horan.eugene.eugenehoranresume.util.TextInputView
+                android:id="@+id/inputEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_email"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1" />
-
-                </com.resume.horan.eugene.eugenehoranresume.util.TextInputView>
-
-                <com.resume.horan.eugene.eugenehoranresume.util.TextInputView
-                    android:id="@+id/passwordInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_password"
-                        android:imeActionId="@+id/login"
-                        android:imeActionLabel="@string/action_sign_in_short"
-                        android:imeOptions="actionUnspecified"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
-
-                </com.resume.horan.eugene.eugenehoranresume.util.TextInputView>
-
-                <Button
-                    android:id="@+id/email_sign_in_button"
+                <EditText
+                    android:id="@+id/editEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/action_sign_in_short"
-                    android:theme="@style/AppTheme.ButtonPrimary" />
+                    android:hint="@string/prompt_email"
+                    android:inputType="textEmailAddress|textFilter"
+                    android:maxLines="1" />
 
-                <Button
-                    android:id="@+id/email_create_account_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="8dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:text="@string/action_create_account"
-                    android:theme="@style/AppTheme.ButtonSecondary" />
+            </com.resume.horan.eugene.eugenehoranresume.util.TextInputView>
 
-                <LinearLayout
+            <com.resume.horan.eugene.eugenehoranresume.util.TextInputView
+                android:id="@+id/inputPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/editPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:hint="@string/prompt_password"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
 
-                    <com.google.android.gms.common.SignInButton
-                        android:id="@+id/googleSignIn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:background="?android:attr/selectableItemBackground" />
+            </com.resume.horan.eugene.eugenehoranresume.util.TextInputView>
 
-                    <Space
-                        android:layout_width="8dp"
-                        android:layout_height="1dp" />
+            <Button
+                android:id="@+id/btnEmailSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/action_sign_in_short"
+                android:theme="@style/Login.ButtonPrimary" />
 
-                    <com.facebook.login.widget.LoginButton
-                        android:id="@+id/facebookSignIn"
-                        android:layout_width="0dp"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:paddingBottom="11dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingTop="11dp"
-                        facebook:com_facebook_login_text="Sign In" />
-                </LinearLayout>
-            </LinearLayout>
+            <Button
+                android:id="@+id/btnEmailCreateAccount"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/transparent"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="@string/action_create_account"
+                android:theme="@style/Login.ButtonFlat" />
 
             <LinearLayout
-                android:id="@+id/fingerprintHolder"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="88dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                <ImageView
-                    android:layout_width="88dp"
-                    android:layout_height="88dp"
-                    android:src="@drawable/ic_fingerprint" />
-
-                <TextView
-                    android:id="@+id/fingerprintText"
-                    android:layout_width="wrap_content"
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/btnGoogleSignIn"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="88dp"
-                    android:text="Scan Fingerprint" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1" />
+
+                <Space
+                    android:layout_width="8dp"
+                    android:layout_height="1dp" />
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/btnFacebookSignIn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:elevation="2dp"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="12dp"
+                    facebook:com_facebook_login_text="Sign In" />
             </LinearLayout>
-
-        </RelativeLayout>
-
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/viewProgress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:visibility="gone" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:animateLayoutChanges="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    <RelativeLayout
+        android:id="@+id/viewFingerprintHolder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-88dp"
+        android:visibility="gone">
+
+        <com.mattprecious.swirl.SwirlView
+            android:id="@+id/swirlFinger"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:id="@+id/imageFingerprint"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_fingerprint"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/textFingerprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageFingerprint"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="88dp"
+            android:text="Scan Fingerprint"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</FrameLayout>

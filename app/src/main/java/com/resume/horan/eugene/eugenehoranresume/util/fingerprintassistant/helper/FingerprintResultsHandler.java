@@ -10,7 +10,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 
 import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.interfaces.FingerprintAuthListener;
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.ResponseCode;
+import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.FingerprintResponseCode;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class FingerprintResultsHandler extends FingerprintManager.AuthenticationCallback {
@@ -28,26 +28,26 @@ public class FingerprintResultsHandler extends FingerprintManager.Authentication
     @Override
     public void onAuthenticationError(int errorCode, CharSequence errString) {
         super.onAuthenticationError(errorCode, errString);
-        publishResult(errorCode, errString, null, ResponseCode.AUTH_ERROR);
+        publishResult(errorCode, errString, null, FingerprintResponseCode.AUTH_ERROR);
     }
 
     @Override
     public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
         super.onAuthenticationHelp(helpCode, helpString);
-        publishResult(helpCode, helpString, null, ResponseCode.AUTH_HELP);
+        publishResult(helpCode, helpString, null, FingerprintResponseCode.AUTH_HELP);
     }
 
     @Override
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
         super.onAuthenticationSucceeded(result);
         authState = true;
-        publishResult(-1, null, result, ResponseCode.AUTH_SUCCESS);
+        publishResult(-1, null, result, FingerprintResponseCode.AUTH_SUCCESS);
     }
 
     @Override
     public void onAuthenticationFailed() {
         super.onAuthenticationFailed();
-        publishResult(-1, null, null, ResponseCode.AUTH_FAILED);
+        publishResult(-1, null, null, FingerprintResponseCode.AUTH_FAILED);
     }
 
     /**

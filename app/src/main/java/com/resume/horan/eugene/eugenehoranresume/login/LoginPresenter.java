@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -34,7 +35,7 @@ import com.resume.horan.eugene.eugenehoranresume.util.Verify;
 import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.helper.FingerprintHelper;
 import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.helper.FingerprintResultsHandler;
 import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.interfaces.FingerprintAuthListener;
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.ResponseCode;
+import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.FingerprintResponseCode;
 
 class LoginPresenter extends LoginPresenterNullCheck implements
         LoginContract.Presenter,
@@ -97,7 +98,8 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         LoginManager.getInstance().registerCallback(mFacebookCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
+                AccessToken mFacebookAccessToken = loginResult.getAccessToken();
+                AuthCredential credential = FacebookAuthProvider.getCredential(mFacebookAccessToken.getToken());
                 mAuth.signInWithCredential(credential);
             }
 
@@ -222,8 +224,8 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     private FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null && mAuthFlag) {
+            FirebaseUser mUser = firebaseAuth.getCurrentUser();
+            if (mUser != null && mAuthFlag) {
                 mAuthFlag = false;
                 if (!Prefs.getBoolean(Common.PREF_FINGERPRINT, false)) {
                     getView().loginSuccessful();
@@ -258,7 +260,7 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     private void registerForFingerprintService(LoginActivity loginView) {
         fingerPrintHelper = new FingerprintHelper(loginView, Common.KEY_FINGERPRINT);
         switch (fingerPrintHelper.checkAndEnableFingerPrintService()) {
-            case ResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS:
+            case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     fingerprintResultsHandler = new FingerprintResultsHandler(loginView);
                     fingerprintResultsHandler.setFingerprintAuthListener(this);
@@ -266,20 +268,20 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                 }
                 getView().showToast("Fingerprint sensor started scanning");
                 break;
-            case ResponseCode.OS_NOT_SUPPORTED:
+            case FingerprintResponseCode.OS_NOT_SUPPORTED:
                 getView().showToast("OS doesn't support fingerprint api");
                 break;
-            case ResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE:
+            case FingerprintResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE:
                 getView().showToast("Fingerprint sensor not found");
                 break;
-            case ResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS:
+            case FingerprintResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS:
                 getView().showToast("Give access to use fingerprint sensor");
                 break;
-            case ResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED:
+            case FingerprintResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED:
                 break;
-            case ResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED:
+            case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED:
                 break;
-            case ResponseCode.DEVICE_NOT_KEY_GUARD_SECURED:
+            case FingerprintResponseCode.DEVICE_NOT_KEY_GUARD_SECURED:
                 break;
         }
     }
@@ -287,19 +289,30 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     @Override
     public void onAuthentication(int helpOrErrorCode, CharSequence infoString, FingerprintManager.AuthenticationResult authenticationResult, int authCode) {
         switch (authCode) {
-            case ResponseCode.AUTH_ERROR:
-                // Show appropriate message
+            case FingerprintResponseCode.AUTH_ERROR:
+                // Called when an unrecoverable error has been encountered and the operation is complete.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (fingerprintResultsHandler != null) {
+                        fingerprintResultsHandler.stopListening();
+                    }
+                }
+                mAuth.signOut();
+                LoginManager.getInstance().logOut();
+                getView().fingerprintAuthError();
+                getView().showToast("Too many tries. Please login");
                 break;
-            case ResponseCode.AUTH_FAILED:
-                // Show appropriate message
-                getView().showToast("Authentication Failed");
+            case FingerprintResponseCode.AUTH_FAILED:
+                // Called when a fingerprint is valid but not recognized.
+                getView().showFingerprintMessage("Fingerprint Authentication Failed", true);
                 break;
-            case ResponseCode.AUTH_HELP:
-                // Show appropriate message
+            case FingerprintResponseCode.AUTH_HELP:
+                // Called when a recoverable error has been encountered during authentication.
+                getView().showFingerprintMessage("Make sure your finger is on the scanner", false);
                 break;
-            case ResponseCode.AUTH_SUCCESS:
+            case FingerprintResponseCode.AUTH_SUCCESS:
                 // Do whatever you want
-                getView().loginSuccessful();
+                getView().showFingerprintMessage("Login successful", false);
+                getView().loginSuccessfulFingerprint();
                 break;
         }
     }

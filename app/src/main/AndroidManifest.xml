@@ -28,9 +28,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+
+        <!-- App Activities-->
         <activity
             android:name=".login.LoginActivity"
-            android:label="@string/app_login_title">
+            android:label="@string/app_login_title"
+            android:theme="@style/Login"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,6 +44,7 @@
         <activity android:name=".main.MainActivity" />
 
 
+        <!-- Facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

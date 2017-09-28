@@ -3,6 +3,8 @@ package com.resume.horan.eugene.eugenehoranresume.login;
 
 import android.content.Intent;
 
+import com.facebook.AccessToken;
+import com.google.firebase.auth.FirebaseUser;
 import com.resume.horan.eugene.eugenehoranresume.base.BasePresenter;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseView;
 
@@ -10,6 +12,8 @@ interface LoginContract {
 
     interface View extends BaseView<Presenter> {
         void loginSuccessful();
+
+        void loginSuccessfulFingerprint();
 
         void showLoading(boolean showLoading);
 
@@ -24,6 +28,10 @@ interface LoginContract {
         void showCreateAccount();
 
         void showFingerprint();
+
+        void showFingerprintMessage(String message, boolean isError);
+
+        void fingerprintAuthError();
     }
 
     interface Presenter extends BasePresenter {

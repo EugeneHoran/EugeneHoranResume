@@ -1,32 +1,33 @@
 <resources>
 
+    <!-- App Primary Theme -->
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
-
-    <!-- Toolbar, AppBarLayout, CollapsingToolbarLayout -->
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
+    <!-- Toolbar and Appbar -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!--Button Background & Text Color-->
-    <style name="AppTheme.ButtonPrimary" parent="Widget.AppCompat.Button.Colored">
+
+    <style name="ButtonPrimary" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorButtonPrimary</item>
         <item name="android:textColor">@color/colorButtonPrimaryText</item>
     </style>
 
-    <style name="AppTheme.ButtonSecondary" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/colorTransparent</item>
+    <style name="ButtonSecondary" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/transparent</item>
         <item name="android:textColor">@color/colorButtonPrimary</item>
     </style>
+
 </resources>

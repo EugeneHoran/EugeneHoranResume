@@ -32,6 +32,12 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/generic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp" />
+
             <Button
                 android:id="@+id/btnChangeData"
                 android:layout_width="match_parent"

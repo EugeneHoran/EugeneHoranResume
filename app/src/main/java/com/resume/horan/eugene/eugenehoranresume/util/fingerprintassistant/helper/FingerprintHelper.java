@@ -12,7 +12,7 @@ import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
 
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.ResponseCode;
+import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.FingerprintResponseCode;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -69,37 +69,37 @@ public class FingerprintHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!fingerprintManager.isHardwareDetected()) {
                 // Check if fingerprint sensor is available
-                return ResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE;
+                return FingerprintResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE;
             } else {
                 // Check if permission is granted to access fingerprint sensor
                 if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                    return ResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS;
+                    return FingerprintResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS;
                 } else {
                     // Check if device is keyguard protected
                     if (!keyguardManager.isKeyguardSecure()) {
-                        return ResponseCode.DEVICE_NOT_KEY_GUARD_SECURED;
+                        return FingerprintResponseCode.DEVICE_NOT_KEY_GUARD_SECURED;
                     } else {
                         // Check if any fingerprints are enrolled
                         if (!fingerprintManager.hasEnrolledFingerprints()) {
-                            return ResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED;
+                            return FingerprintResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED;
                         } else {
 
                             if (generateKey()) {
                                 if (cipherInit()) {
                                     cryptoObject = new FingerprintManager.CryptoObject(cipher);
-                                    return ResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS;
+                                    return FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS;
                                 } else {
-                                    return ResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED;
+                                    return FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED;
                                 }
                             } else {
-                                return ResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED;
+                                return FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED;
                             }
                         }
                     }
                 }
             }
         } else {
-            return ResponseCode.OS_NOT_SUPPORTED;
+            return FingerprintResponseCode.OS_NOT_SUPPORTED;
         }
     }
 

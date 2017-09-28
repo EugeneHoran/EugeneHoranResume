@@ -50,6 +50,21 @@ class LoginPresenterNullCheck extends BasePresenterNullCheck<LoginContract.View>
             public void showFingerprint() {
 
             }
+
+            @Override
+            public void showFingerprintMessage(String message, boolean isError) {
+
+            }
+
+            @Override
+            public void fingerprintAuthError() {
+
+            }
+
+            @Override
+            public void loginSuccessfulFingerprint() {
+
+            }
         };
     }
 }

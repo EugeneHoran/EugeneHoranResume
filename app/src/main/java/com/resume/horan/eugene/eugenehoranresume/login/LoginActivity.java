@@ -1,17 +1,15 @@
 package com.resume.horan.eugene.eugenehoranresume.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,20 +17,19 @@ import android.widget.Toast;
 
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
+import com.mattprecious.swirl.SwirlView;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.main.MainActivity;
+import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.MultiTextWatcher;
 import com.resume.horan.eugene.eugenehoranresume.util.TextInputView;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View, OnClickListener {
-
-    private static final List<String> mFacebookPermissionList = Arrays.asList("email", "public_profile");
-    private boolean mCreateAccountVisible = false;
+public class LoginActivity extends AppCompatActivity implements LoginContract.View, OnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private LoginContract.Presenter mPresenter;
+    private boolean mCreateAccountVisible = false;
 
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
@@ -47,8 +44,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        mViewRoot.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         mPresenter.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -60,109 +58,98 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         }
     }
 
-    // UI references.
-    private TextInputView mEmailInputView;
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private TextInputView mPasswordInputView;
-    private Button mEmailSignInButton;
-    private Button mEmailCreateAccountButton;
-    private SignInButton mGoogleSignIn;
-    private LoginButton mFacebookSignIn;
-    private View mMainHolder, mFingerprintHolder;
-    private View mProgressView;
-    private View mLoginFormView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        setContentView(R.layout.activity_login);
-
-        Toolbar mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationOnClickListener(this);
-
-        mEmailView = findViewById(R.id.email);
-        mEmailInputView = findViewById(R.id.emailInput);
-        mPasswordView = findViewById(R.id.password);
-        mPasswordInputView = findViewById(R.id.passwordInput);
-        mEmailSignInButton = findViewById(R.id.email_sign_in_button);
-        mEmailCreateAccountButton = findViewById(R.id.email_create_account_button);
-        mGoogleSignIn = findViewById(R.id.googleSignIn);
-        mFacebookSignIn = findViewById(R.id.facebookSignIn);
-        mFacebookSignIn.setReadPermissions(mFacebookPermissionList);
-        mMainHolder = findViewById(R.id.mainHolder);
-        mFingerprintHolder = findViewById(R.id.fingerprintHolder);
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
-        new MultiTextWatcher()
-                .registerEditText(mEmailView)
-                .registerEditText(mPasswordView)
-                .setCallback(textWatcherInterface);
-        mPasswordView.setOnEditorActionListener(onEditorActionListener);
-        mEmailSignInButton.setOnClickListener(this);
-        mEmailCreateAccountButton.setOnClickListener(this);
-        mGoogleSignIn.setOnClickListener(this);
-
-        new LoginPresenter(this);
-        mPresenter.createGoogleClient(this);
-        mPresenter.createFacebookClient();
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == mEmailSignInButton) {
-            attemptLoginFromEmail();
-        } else if (v == mEmailCreateAccountButton) {
-            if (mCreateAccountVisible) {
-                attemptCreateAccountFromEmail();
-            } else {
-                showCreateAccount();
-            }
-        } else if (v == mGoogleSignIn) {
-            mPresenter.signInGoogle(this);
-        } else {
-            showLogin();
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mPresenter.onActivityResult(this, requestCode, resultCode, data);
     }
 
-    @Override
-    public void showLogin() {
-        mCreateAccountVisible = false;
-        setTitle("Login or Create Account");
-        mPasswordInputView.setError(null);
-        mEmailInputView.setError(null);
-        setUpEnabled(false);
-        mGoogleSignIn.setVisibility(View.VISIBLE);
-        mFacebookSignIn.setVisibility(View.VISIBLE);
-        mEmailSignInButton.setVisibility(View.VISIBLE);
-    }
+    // UI references.
+    private View mViewRoot;
+    private Toolbar mToolbar;
+    private View mViewGetFocus;
+    private View mViewLoginForm;
+    private View mViewMainHolder;
+    private TextView mTextTitle;
+    private TextInputView mInputEmail;
+    private EditText mEditEmail;
+    private TextInputView mInputPassword;
+    private EditText mEditPassword;
+    private Button mBtnEmailSignIn;
+    private Button mBtnEmailCreateAccount;
+    private SignInButton mBtnGoogleSignIn;
+    private View mViewFingerprintHolder;
+    private TextView mTextFingerprint;
+    private View mViewProgress;
+    private SwirlView mSwirlFinger;
+
 
     @Override
-    public void showCreateAccount() {
-        mCreateAccountVisible = true;
-        setTitle("Create Account");
-        mPasswordInputView.setError(null);
-        mEmailInputView.setError(null);
-        setUpEnabled(true);
-        mGoogleSignIn.setVisibility(View.GONE);
-        mFacebookSignIn.setVisibility(View.GONE);
-        mEmailSignInButton.setVisibility(View.GONE);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        // UI references.
+        mViewRoot = findViewById(R.id.viewRoot);
+        mToolbar = findViewById(R.id.toolbar);
+        mViewGetFocus = findViewById(R.id.viewGetFocus);
+        mViewLoginForm = findViewById(R.id.viewLoginHolder);
+        mViewMainHolder = findViewById(R.id.viewMainHolder);
+        mTextTitle = findViewById(R.id.textTitle);
+        mInputEmail = findViewById(R.id.inputEmail);
+        mEditEmail = findViewById(R.id.editEmail);
+        mInputPassword = findViewById(R.id.inputPassword);
+        mEditPassword = findViewById(R.id.editPassword);
+        mBtnEmailSignIn = findViewById(R.id.btnEmailSignIn);
+        mBtnEmailCreateAccount = findViewById(R.id.btnEmailCreateAccount);
+        mBtnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        LoginButton mBtnFacebookSignIn = findViewById(R.id.btnFacebookSignIn);
+        mBtnFacebookSignIn.setReadPermissions(Arrays.asList("email", "public_profile"));
+        mViewFingerprintHolder = findViewById(R.id.viewFingerprintHolder);
+        mTextFingerprint = findViewById(R.id.textFingerprint);
+        mViewProgress = findViewById(R.id.viewProgress);
+        mSwirlFinger = findViewById(R.id.swirlFinger);
+
+        // Init Listeners
+        new MultiTextWatcher()
+                .registerEditText(mEditEmail)
+                .registerEditText(mEditPassword)
+                .setCallback(textWatcherInterface);
+        mViewRoot.getViewTreeObserver().addOnGlobalLayoutListener(this);
+        mEditPassword.setOnEditorActionListener(onEditorActionListener);
+        mToolbar.setNavigationOnClickListener(this);
+        mBtnEmailSignIn.setOnClickListener(this);
+        mBtnEmailCreateAccount.setOnClickListener(this);
+        mBtnGoogleSignIn.setOnClickListener(this);
+
+        // Init Presenter
+        new LoginPresenter(this);
+        mPresenter.createGoogleClient(this);
+        mPresenter.createFacebookClient();
     }
 
+    /**
+     * onClickListener
+     *
+     * @param v view
+     */
     @Override
-    public void showFingerprint() {
-        mPresenter.initFingerprint(this);
-        mMainHolder.setVisibility(View.GONE);
-        mFingerprintHolder.setVisibility(View.VISIBLE);
+    public void onClick(View v) {
+        if (v == mBtnEmailSignIn) {
+            attemptLoginFromEmail();
+        } else if (v == mBtnEmailCreateAccount) {
+            if (mCreateAccountVisible) {
+                attemptCreateAccountFromEmail();
+            } else {
+                showCreateAccount();
+            }
+        } else if (v == mBtnGoogleSignIn) {
+            mPresenter.signInGoogle(this);
+        }
+        // Toolbar Nav Click
+        else {
+            showLogin();
+        }
     }
 
     @Override
@@ -170,26 +157,84 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         mPresenter.onDestroy();
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
-        overridePendingTransition(0, 0);
     }
 
+    @Override
+    public void loginSuccessfulFingerprint() {
+        mPresenter.onDestroy();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
+    }
 
     @Override
     public void showEmailError(String error) {
-        mEmailInputView.setError(error);
-        mEmailView.requestFocus();
+        mInputEmail.setError(error);
+        mEditEmail.requestFocus();
     }
 
     @Override
     public void showPasswordError(String error) {
-        mPasswordInputView.setError(error);
-        mPasswordView.requestFocus();
+        mInputPassword.setError(error);
+        mEditPassword.requestFocus();
+    }
+
+    @Override
+    public void showLogin() {
+        onLayoutTypeChange();
+        mCreateAccountVisible = false;
+        mToolbar.setTitle(null);
+        setUpEnabled(false);
+        mTextTitle.setVisibility(View.VISIBLE);
+        mBtnEmailSignIn.setVisibility(View.VISIBLE);
+        mBtnEmailCreateAccount.setBackgroundResource(R.color.transparent);
+    }
+
+
+    @Override
+    public void showCreateAccount() {
+        onLayoutTypeChange();
+        mCreateAccountVisible = true;
+        mToolbar.setTitle("Create Account");
+        setUpEnabled(true);
+        mTextTitle.setVisibility(View.GONE);
+        mBtnEmailSignIn.setVisibility(View.GONE);
+        mBtnEmailCreateAccount.setBackgroundResource(R.drawable.button_normal);
+    }
+
+    private void onLayoutTypeChange() {
+        LayoutUtil.hideKeyboard(mInputEmail);
+        mViewGetFocus.requestFocus();
+        mInputEmail.setError(null);
+        mInputPassword.setError(null);
+        mInputEmail.clearFocus();
+        mInputPassword.clearFocus();
+    }
+
+    @Override
+    public void showFingerprint() {
+        mSwirlFinger.setState(SwirlView.State.ON);
+        mPresenter.initFingerprint(this);
+        mViewMainHolder.setVisibility(View.GONE);
+        mViewFingerprintHolder.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void fingerprintAuthError() {
+        mViewMainHolder.setVisibility(View.VISIBLE);
+        mViewFingerprintHolder.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showFingerprintMessage(String message, boolean isError) {
+        mTextFingerprint.setText(message);
+        mTextFingerprint.setTextColor(ContextCompat.getColor(LoginActivity.this, isError ? R.color.redError : R.color.white));
+        mSwirlFinger.setState(isError ? SwirlView.State.ERROR : SwirlView.State.ON);
     }
 
     @Override
     public void showLoading(boolean showLoading) {
-        mLoginFormView.setVisibility(showLoading ? View.GONE : View.VISIBLE);
-        mProgressView.setVisibility(showLoading ? View.VISIBLE : View.GONE);
+        mViewLoginForm.setVisibility(showLoading ? View.GONE : View.VISIBLE);
+        mViewProgress.setVisibility(showLoading ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -203,24 +248,45 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLoginFromEmail() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mPasswordInputView.getWindowToken(), 0);
-        mEmailInputView.setError(null);
-        mPasswordInputView.setError(null);
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        LayoutUtil.hideKeyboard(mInputEmail);
+        resetErrors();
+        String email = mEditEmail.getText().toString();
+        String password = mEditPassword.getText().toString();
         mPresenter.signInEmail(this, email, password);
     }
 
     private void attemptCreateAccountFromEmail() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mPasswordInputView.getWindowToken(), 0);
-        mEmailInputView.setError(null);
-        mPasswordInputView.setError(null);
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        LayoutUtil.hideKeyboard(mInputEmail);
+        resetErrors();
+        String email = mEditEmail.getText().toString();
+        String password = mEditPassword.getText().toString();
         mPresenter.createAccountEmail(this, email, password);
     }
+
+    /**
+     * Reset Errors
+     */
+    private void resetErrors() {
+        if (mInputEmail.getError() != null) {
+            mInputEmail.setError(null);
+        }
+        if (mInputPassword.getError() != null) {
+            mInputPassword.setError(null);
+        }
+    }
+
+    /**
+     * Multi Text Watcher
+     * Reset the errors if any
+     */
+    private MultiTextWatcher.MultiTextWatcherInterface textWatcherInterface = new MultiTextWatcher.MultiTextWatcherInterface() {
+        @Override
+        public void onTextChanged(EditText editText, CharSequence s, int start, int before, int count) {
+            if (editText == mEditEmail || editText == mEditPassword) {
+                resetErrors();
+            }
+        }
+    };
 
     /**
      * On Keyboard Sign in Clicked
@@ -235,23 +301,31 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             return false;
         }
     };
+
     /**
-     * Reset errors
+     * Hide title if keyboard is visible
      */
-    private MultiTextWatcher.MultiTextWatcherInterface textWatcherInterface = new MultiTextWatcher.MultiTextWatcherInterface() {
-        @Override
-        public void onTextChanged(EditText editText, CharSequence s, int start, int before, int count) {
-            if (editText == mEmailView || editText == mPasswordView) {
-                mEmailInputView.setError(null);
-                mPasswordInputView.setError(null);
+    @Override
+    public void onGlobalLayout() {
+        int heightDiff = mViewRoot.getRootView().getHeight() - mViewRoot.getHeight();
+        if (heightDiff > LayoutUtil.dpToPx(LoginActivity.this, 200)) { // if more than 200 dp, it's probably a keyboard...
+            mTextTitle.setVisibility(View.GONE);
+        } else {
+            if (mCreateAccountVisible) {
+                mTextTitle.setVisibility(View.GONE);
+            } else {
+                mTextTitle.setVisibility(View.VISIBLE);
             }
         }
-    };
+    }
 
+    /**
+     * Hide or show Toolbar nav icon
+     *
+     * @param showHomeAsUp boolean
+     */
     private void setUpEnabled(boolean showHomeAsUp) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(showHomeAsUp);
-        }
+        mToolbar.setNavigationIcon(showHomeAsUp ? ContextCompat.getDrawable(this, R.drawable.ic_arrow_back) : null);
     }
 }
 

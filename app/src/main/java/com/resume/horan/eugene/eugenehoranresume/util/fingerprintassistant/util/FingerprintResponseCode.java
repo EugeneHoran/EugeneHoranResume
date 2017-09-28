@@ -1,7 +1,7 @@
 package com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util;
 
 
-public class ResponseCode {
+public class FingerprintResponseCode {
     public static final int FINGER_PRINT_SENSOR_UNAVAILABLE = 100;
     public static final int ENABLE_FINGER_PRINT_SENSOR_ACCESS = 200;
     public static final int NO_FINGER_PRINTS_ARE_ENROLLED = 300;
