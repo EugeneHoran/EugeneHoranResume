@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_resume"
+            android:checked="true"
+            android:icon="@drawable/ic_resume"
+            android:title="@string/resume" />
+
+        <item
+            android:id="@+id/action_contact"
+            android:checked="true"
+            android:icon="@drawable/ic_phone"
+            android:title="@string/contact" />
+    </group>
+
+</menu>

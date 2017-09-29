@@ -1,21 +1,17 @@
-package com.resume.horan.eugene.eugenehoranresume.login;
+package com.resume.horan.eugene.eugenehoranresume.ui.login;
 
 
 import android.content.Intent;
 
-import com.facebook.AccessToken;
-import com.google.firebase.auth.FirebaseUser;
 import com.resume.horan.eugene.eugenehoranresume.base.BasePresenter;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseView;
 
-interface LoginContract {
+public interface LoginContract {
 
     interface View extends BaseView<Presenter> {
         void loginSuccessful();
 
         void loginSuccessfulFingerprint();
-
-        void showLoading(boolean showLoading);
 
         void showToast(String message);
 

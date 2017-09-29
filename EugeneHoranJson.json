@@ -54,6 +54,18 @@
          }
       ],
       "resume":{  
+         "account":[  
+            {  
+               "type":"0",
+               "name":"Stack Overflow",
+               "url":"https://stackoverflow.com/users/3904085/eugene-h"
+            },
+            {  
+               "type":"1",
+               "name":"GitHub",
+               "url":"https://github.com/EugeneHoran"
+            }
+         ],
          "experience":[  
             {  
                "order":"0",
@@ -97,11 +109,11 @@
                "bullets":[  
                   {  
                      "order":"0",
-                     "bullet":"Develop and maintain Transfast(v2.0) Android application as well as several Transfast money transfer products."
+                     "bullet":"Develop and maintain Transfast(v2.+) Android application as well as several Transfast money transfer products."
                   },
                   {  
                      "order":"1",
-                     "bullet":"Implemented new features to existing Transfast(v2) application."
+                     "bullet":"Implemented new features to existing Transfast(v2.+) application."
                   }
                ]
             },
@@ -133,14 +145,16 @@
                "university":"University at Albany",
                "location":"Albany, NY",
                "dateRange":"Spring 2009 - May 2013",
-               "major":"B.A in Psychology and History"
+               "major":"B.A in Psychology and History",
+               "logoUrl":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Albany_Great_Danes_logo.svg/250px-Albany_Great_Danes_logo.svg.png"
             },
             {  
                "order":"1",
                "university":"Symbiosis Internation University",
                "location":"Pune, India",
                "dateRange":"January 2013 - May 2013",
-               "major":"Research in Child Development"
+               "major":"Research in Child Development",
+               "logoUrl":"http://www.shiksharambh.com/images/colleges/gallery/15_10_14_074324_siu1.png"
             }
          ]
       }

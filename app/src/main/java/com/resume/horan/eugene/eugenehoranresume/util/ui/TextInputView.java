@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.util;
+package com.resume.horan.eugene.eugenehoranresume.util.ui;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

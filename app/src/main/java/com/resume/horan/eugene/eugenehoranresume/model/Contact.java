@@ -1,8 +1,10 @@
 
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Contact {
+public class Contact implements Parcelable {
 
     private String phonePrimary;
     private String phoneSecondary;
@@ -59,6 +61,42 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    /**
+     * Parcel
+     */
+    public final static Creator<Contact> CREATOR = new Creator<Contact>() {
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Contact createFromParcel(Parcel in) {
+            return new Contact(in);
+        }
+
+        public Contact[] newArray(int size) {
+            return (new Contact[size]);
+        }
+
+    };
+
+    protected Contact(Parcel in) {
+        this.phonePrimary = ((String) in.readValue((String.class.getClassLoader())));
+        this.phoneSecondary = ((String) in.readValue((String.class.getClassLoader())));
+        this.text = ((String) in.readValue((String.class.getClassLoader())));
+        this.email = ((String) in.readValue((String.class.getClassLoader())));
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(phonePrimary);
+        dest.writeValue(phoneSecondary);
+        dest.writeValue(text);
+        dest.writeValue(email);
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
 }

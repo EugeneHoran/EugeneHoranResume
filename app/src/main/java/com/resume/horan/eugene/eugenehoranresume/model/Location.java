@@ -1,14 +1,17 @@
 
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Location {
+public class Location implements Parcelable {
 
     private String country;
     private String state;
     private String city;
     private String street;
     private String zip;
+
 
     /**
      * No args constructor for use in serialization
@@ -70,6 +73,42 @@ public class Location {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    /**
+     * Parcel
+     */
+    public final static Creator<Location> CREATOR = new Creator<Location>() {
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Location createFromParcel(Parcel in) {
+            return new Location(in);
+        }
+
+        public Location[] newArray(int size) {
+            return (new Location[size]);
+        }
+    };
+
+    protected Location(Parcel in) {
+        this.country = ((String) in.readValue((String.class.getClassLoader())));
+        this.state = ((String) in.readValue((String.class.getClassLoader())));
+        this.city = ((String) in.readValue((String.class.getClassLoader())));
+        this.street = ((String) in.readValue((String.class.getClassLoader())));
+        this.zip = ((String) in.readValue((String.class.getClassLoader())));
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(country);
+        dest.writeValue(state);
+        dest.writeValue(city);
+        dest.writeValue(street);
+        dest.writeValue(zip);
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
 }

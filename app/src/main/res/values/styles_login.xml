@@ -12,7 +12,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="swirl_ridgeColor">@color/white</item>
-        <item name="swirl_errorColor">@color/redError</item>
+        <item name="swirl_errorColor">@color/red700</item>
     </style>
 
     <style name="Login.ButtonPrimary" parent="Widget.AppCompat.Button.Colored">

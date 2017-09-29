@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.login;
+package com.resume.horan.eugene.eugenehoranresume.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,10 +19,11 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.mattprecious.swirl.SwirlView;
 import com.resume.horan.eugene.eugenehoranresume.R;
-import com.resume.horan.eugene.eugenehoranresume.main.MainActivity;
+import com.resume.horan.eugene.eugenehoranresume.ui.main.MainActivity;
+import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.MultiTextWatcher;
-import com.resume.horan.eugene.eugenehoranresume.util.TextInputView;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView;
 
 import java.util.Arrays;
 

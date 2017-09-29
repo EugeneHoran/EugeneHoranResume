@@ -1,8 +1,9 @@
-package com.resume.horan.eugene.eugenehoranresume.login;
+package com.resume.horan.eugene.eugenehoranresume.base.nullpresenters;
 
 import com.resume.horan.eugene.eugenehoranresume.base.BasePresenterNullCheck;
+import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginContract;
 
-class LoginPresenterNullCheck extends BasePresenterNullCheck<LoginContract.View> {
+public class LoginPresenterNullCheck extends BasePresenterNullCheck<LoginContract.View> {
     @Override
     public LoginContract.View createNullView() {
         return new LoginContract.View() {

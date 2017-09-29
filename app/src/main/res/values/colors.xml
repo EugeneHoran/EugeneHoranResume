@@ -6,6 +6,21 @@
     <color name="colorButtonPrimary">#607D8B</color>
     <color name="colorButtonDark">#00695C</color>
 
+    <!--White Theme-->
+    <color name="colorPrimaryWhite">#F5F5F5</color>
+    <color name="colorPrimaryDarkWhite">#E0E0E0</color>
+    <color name="colorAccentBlue">#2979ff</color>
+
+    <color name="greyIconNormal">#727272</color>
+
+
+    <color name="colorPrimaryBlue">#2979ff</color>
+    <color name="colorPrimaryDarkBlue">#004ecb</color>
+    <color name="colorPrimaryBlueGrey">#607D8B</color>
+    <color name="colorPrimaryDarkBlueGrey">#455A64</color>
+
+    <color name="red700">#D50000</color>
+
     <!-- Generic Colors -->
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>

@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.login;
+package com.resume.horan.eugene.eugenehoranresume.ui.login;
 
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.LoginPresenterNullCheck;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
 import com.resume.horan.eugene.eugenehoranresume.util.Verify;

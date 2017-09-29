@@ -1,8 +1,10 @@
 
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class SocialMedia {
+public class SocialMedia implements Parcelable {
 
     private String account;
     private String url;
@@ -10,13 +12,11 @@ public class SocialMedia {
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public SocialMedia() {
     }
 
     /**
-     * 
      * @param visible
      * @param account
      * @param url
@@ -50,6 +50,39 @@ public class SocialMedia {
 
     public void setVisible(String visible) {
         this.visible = visible;
+    }
+
+    /**
+     * Parcel
+     */
+    public final static Creator<SocialMedia> CREATOR = new Creator<SocialMedia>() {
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public SocialMedia createFromParcel(Parcel in) {
+            return new SocialMedia(in);
+        }
+
+        public SocialMedia[] newArray(int size) {
+            return (new SocialMedia[size]);
+        }
+
+    };
+
+    protected SocialMedia(Parcel in) {
+        this.account = ((String) in.readValue((String.class.getClassLoader())));
+        this.url = ((String) in.readValue((String.class.getClassLoader())));
+        this.visible = ((String) in.readValue((String.class.getClassLoader())));
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(account);
+        dest.writeValue(url);
+        dest.writeValue(visible);
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
 }

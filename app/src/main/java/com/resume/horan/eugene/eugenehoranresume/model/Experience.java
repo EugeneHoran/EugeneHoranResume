@@ -3,7 +3,11 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 
 import java.util.List;
 
-public class Experience {
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.Parcelable.Creator;
+
+public class Experience implements Parcelable {
 
     private String order;
     private String company;
@@ -46,6 +50,12 @@ public class Experience {
         this.linkApp = linkApp;
         this.linkSite = linkSite;
         this.bullets = bullets;
+    }
+
+    public String getPositionFormatted() {
+        return String.format("%s %s",
+                getCompany(),
+                !getHeader().equalsIgnoreCase("") ? "(" + getHeader() + ")" : "");
     }
 
     public String getOrder() {
@@ -126,6 +136,53 @@ public class Experience {
 
     public void setBullets(List<Bullet> bullets) {
         this.bullets = bullets;
+    }
+
+    /**
+     * Parcel
+     */
+    public final static Creator<Experience> CREATOR = new Creator<Experience>() {
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Experience createFromParcel(Parcel in) {
+            return new Experience(in);
+        }
+
+        public Experience[] newArray(int size) {
+            return (new Experience[size]);
+        }
+
+    };
+
+    protected Experience(Parcel in) {
+        this.order = ((String) in.readValue((String.class.getClassLoader())));
+        this.company = ((String) in.readValue((String.class.getClassLoader())));
+        this.header = ((String) in.readValue((String.class.getClassLoader())));
+        this.dateStart = ((String) in.readValue((String.class.getClassLoader())));
+        this.dateEnd = ((String) in.readValue((String.class.getClassLoader())));
+        this.dateRange = ((String) in.readValue((String.class.getClassLoader())));
+        this.position = ((String) in.readValue((String.class.getClassLoader())));
+        this.linkApp = ((String) in.readValue((String.class.getClassLoader())));
+        this.linkSite = ((String) in.readValue((String.class.getClassLoader())));
+        in.readList(this.bullets, (Bullet.class.getClassLoader()));
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(order);
+        dest.writeValue(company);
+        dest.writeValue(header);
+        dest.writeValue(dateStart);
+        dest.writeValue(dateEnd);
+        dest.writeValue(dateRange);
+        dest.writeValue(position);
+        dest.writeValue(linkApp);
+        dest.writeValue(linkSite);
+        dest.writeList(bullets);
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
 }

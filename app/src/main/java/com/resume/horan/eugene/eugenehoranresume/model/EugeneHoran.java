@@ -3,9 +3,12 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 
 import java.util.List;
 
-public class EugeneHoran {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    private String nameFull;
+public class EugeneHoran implements Parcelable {
+
+    public String nameFull;
     private String nameFirst;
     private String nameMiddle;
     private String nameLast;
@@ -15,15 +18,14 @@ public class EugeneHoran {
     private List<SocialMedia> socialMedia = null;
     private Resume resume;
 
+
     /**
      * No args constructor for use in serialization
-     * 
      */
     public EugeneHoran() {
     }
 
     /**
-     * 
      * @param goals
      * @param resume
      * @param nameLast
@@ -117,6 +119,52 @@ public class EugeneHoran {
 
     public void setResume(Resume resume) {
         this.resume = resume;
+    }
+
+
+    /**
+     * Parcel
+     */
+    public final static Creator<EugeneHoran> CREATOR = new Creator<EugeneHoran>() {
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public EugeneHoran createFromParcel(Parcel in) {
+            return new EugeneHoran(in);
+        }
+
+        public EugeneHoran[] newArray(int size) {
+            return (new EugeneHoran[size]);
+        }
+
+    };
+
+    protected EugeneHoran(Parcel in) {
+        this.nameFull = ((String) in.readValue((String.class.getClassLoader())));
+        this.nameFirst = ((String) in.readValue((String.class.getClassLoader())));
+        this.nameMiddle = ((String) in.readValue((String.class.getClassLoader())));
+        this.nameLast = ((String) in.readValue((String.class.getClassLoader())));
+        this.contact = ((Contact) in.readValue((Contact.class.getClassLoader())));
+        this.location = ((Location) in.readValue((Location.class.getClassLoader())));
+        this.goals = ((Goals) in.readValue((Goals.class.getClassLoader())));
+        in.readList(this.socialMedia, (SocialMedia.class.getClassLoader()));
+        this.resume = ((Resume) in.readValue((Resume.class.getClassLoader())));
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(nameFull);
+        dest.writeValue(nameFirst);
+        dest.writeValue(nameMiddle);
+        dest.writeValue(nameLast);
+        dest.writeValue(contact);
+        dest.writeValue(location);
+        dest.writeValue(goals);
+        dest.writeList(socialMedia);
+        dest.writeValue(resume);
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
 }

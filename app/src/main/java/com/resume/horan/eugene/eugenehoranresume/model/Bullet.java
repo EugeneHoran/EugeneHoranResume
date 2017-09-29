@@ -1,8 +1,10 @@
 
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Bullet {
+public class Bullet implements Parcelable {
 
     private String order;
     private String bullet;
@@ -37,6 +39,37 @@ public class Bullet {
 
     public void setBullet(String bullet) {
         this.bullet = bullet;
+    }
+
+
+    /**
+     * Parcel
+     */
+    public final static Creator<Bullet> CREATOR = new Creator<Bullet>() {
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Bullet createFromParcel(Parcel in) {
+            return new Bullet(in);
+        }
+
+        public Bullet[] newArray(int size) {
+            return (new Bullet[size]);
+        }
+    };
+
+    protected Bullet(Parcel in) {
+        this.order = ((String) in.readValue((String.class.getClassLoader())));
+        this.bullet = ((String) in.readValue((String.class.getClassLoader())));
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(order);
+        dest.writeValue(bullet);
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
 }

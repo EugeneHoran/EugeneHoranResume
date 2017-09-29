@@ -5,7 +5,7 @@
     android:id="@+id/viewRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.resume.horan.eugene.eugenehoranresume.login.LoginActivity">
+    tools:context=".ui.login.LoginActivity">
 
     <View
         android:id="@+id/viewGetFocus"
@@ -43,7 +43,7 @@
                 android:text="Eugene Horan's \n Resume App"
                 android:textSize="28sp" />
 
-            <com.resume.horan.eugene.eugenehoranresume.util.TextInputView
+            <com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView
                 android:id="@+id/inputEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,9 +57,9 @@
                     android:inputType="textEmailAddress|textFilter"
                     android:maxLines="1" />
 
-            </com.resume.horan.eugene.eugenehoranresume.util.TextInputView>
+            </com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView>
 
-            <com.resume.horan.eugene.eugenehoranresume.util.TextInputView
+            <com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView
                 android:id="@+id/inputPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                     android:inputType="textPassword"
                     android:maxLines="1" />
 
-            </com.resume.horan.eugene.eugenehoranresume.util.TextInputView>
+            </com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView>
 
             <Button
                 android:id="@+id/btnEmailSignIn"
