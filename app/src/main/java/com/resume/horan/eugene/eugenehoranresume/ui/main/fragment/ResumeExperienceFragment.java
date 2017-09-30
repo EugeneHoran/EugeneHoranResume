@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.main.resume;
+package com.resume.horan.eugene.eugenehoranresume.ui.main.fragment;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -19,14 +19,14 @@ import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 import java.util.List;
 
-public class ExperienceFragment extends Fragment {
+public class ResumeExperienceFragment extends Fragment {
 
-    public ExperienceFragment() {
+    public ResumeExperienceFragment() {
         // Required empty public constructor
     }
 
-    public static ExperienceFragment newInstance(ResumeExperienceObject experienceObject) {
-        ExperienceFragment fragment = new ExperienceFragment();
+    public static ResumeExperienceFragment newInstance(ResumeExperienceObject experienceObject) {
+        ResumeExperienceFragment fragment = new ResumeExperienceFragment();
         Bundle args = new Bundle();
         args.putParcelable(Common.ARG_RESUME_EXPERIENCE, experienceObject);
         fragment.setArguments(args);

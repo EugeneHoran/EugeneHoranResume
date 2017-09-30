@@ -73,7 +73,7 @@
                "header":"",
                "dateStart":"December 2016",
                "dateEnd":"",
-               "dateRange":"July 2016 - Present",
+               "dateRange":"December 2016 - Present",
                "position":"Lead Android Engineer",
                "linkApp":"https://play.google.com/store/apps/details?id=com.transfast.transfast",
                "linkSite":"https://www.transfast.com/",
@@ -146,15 +146,244 @@
                "location":"Albany, NY",
                "dateRange":"Spring 2009 - May 2013",
                "major":"B.A in Psychology and History",
-               "logoUrl":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Albany_Great_Danes_logo.svg/250px-Albany_Great_Danes_logo.svg.png"
-            },
+               "logoUrl":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Albany_Great_Danes_logo.svg/250px-Albany_Great_Danes_logo.svg.png",
+			   "educationActivity" : [
+					{
+					"description" : "University at Albany, Division 1AA Football."
+					},
+					{
+					"description" : "Started programming in my free time."
+					},
+					{
+					"description" : "Played a lot of video games."
+					}
+				]
+			},
             {  
                "order":"1",
                "university":"Symbiosis Internation University",
                "location":"Pune, India",
                "dateRange":"January 2013 - May 2013",
                "major":"Research in Child Development",
-               "logoUrl":"http://www.shiksharambh.com/images/colleges/gallery/15_10_14_074324_siu1.png"
+               "logoUrl":"http://www.shiksharambh.com/images/colleges/gallery/15_10_14_074324_siu1.png",
+			   "educationActivity" : [
+					{
+					"description" : "Independent research project on the impacts of being raised within Shreevatsa orphanage."
+					},
+					{
+					"description" : "Taught english to underprivileged children at local schools."
+					}
+				]
+            }
+         ],
+         "skill":[  
+            {  
+               "order":"0",
+               "skillGroupName":"OS, Programs and Devices",
+               "skillColorHEX":"#D32F2F",
+               "skillColorName":"red700",
+               "textColorHEX":"#B71C1C",
+               "textColorName":"red900",
+               "skillItem":[  
+                  {  
+                     "skillName":"Windows",
+                     "skillColorHEX":"#D32F2F"
+                  },
+                  {  
+                     "skillName":"Mac OS",
+                     "skillColorHEX":"#D32F2F"
+                  },
+                  {  
+                     "skillName":"Android Studio",
+                     "skillColorHEX":"#D32F2F"
+                  },
+                  {  
+                     "skillName":"Eclipse",
+                     "skillColorHEX":"#D32F2F"
+                  },
+                  {  
+                     "skillName":"IntelliJ ",
+                     "skillColorHEX":"#D32F2F"
+                  },
+                  {  
+                     "skillName":"Arduino",
+                     "skillColorHEX":"#D32F2F"
+                  },
+                  {  
+                     "skillName":"Raspberry Pi",
+                     "skillColorHEX":"#D32F2F"
+                  },
+                  {  
+                     "skillName":"Android Things",
+                     "skillColorHEX":"#D32F2F"
+                  }
+               ]
+            },
+            {  
+               "order":"1",
+               "skillGroupName":"Programming Patterns",
+               "skillColorHEX":"#1976D2",
+               "skillColorName":"blue700",
+               "textColorHEX":"#0D47A1",
+               "textColorName":"blue900",
+               "skillItem":[  
+                  {  
+                     "skillName":"MVP",
+                     "skillColorHEX":"#1976D2"
+                  },
+                  {  
+                     "skillName":"MVVM",
+                     "skillColorHEX":"#1976D2"
+                  },
+                  {  
+                     "skillName":"MVC",
+                     "skillColorHEX":"#1976D2"
+                  }
+               ]
+            },
+            {  
+               "order":"2",
+               "skillGroupName":"Android",
+               "skillColorHEX":"#388E3C",
+               "skillColorName":"green700",
+               "textColorHEX":"#1B5E20",
+               "textColorName":"green900",
+               "skillItem":[  
+                  {  
+                     "skillName":"Android SDK",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Multiple Screen Support",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Fragmentation",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Material Design Patterns",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"REST Frameworks",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Retrofit",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Volley",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Cloud Services",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"RxJava",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Firebase",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Realm",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Google Maps",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Facebook Signin",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Google Signin",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"Authentication",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"DAO Libraries",
+                     "skillColorHEX":"#388E3C"
+                  },
+                  {  
+                     "skillName":"GreenDAO",
+                     "skillColorHEX":"#388E3C"
+                  }
+               ]
+            },
+            {  
+               "order":"3",
+               "skillGroupName":"General Programming",
+               "skillColorHEX":"#512DA8",
+               "skillColorName":"purple700",
+               "textColorHEX":"#311B92",
+               "textColorName":"purple900",
+               "skillItem":[  
+                  {  
+                     "skillName":"Java",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"XML",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"SQL",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"SQLite",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"Gradle",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"RxJava",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"HTML",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"JavaScript",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"C",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"C++",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"JSON",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"Git",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"Git Hub",
+                     "skillColorHEX":"#512DA8"
+                  },
+                  {  
+                     "skillName":"Bit Bucket",
+                     "skillColorHEX":"#512DA8"
+                  }
+               ]
             }
          ]
       }

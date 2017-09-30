@@ -1,6 +1,7 @@
 package com.resume.horan.eugene.eugenehoranresume.ui.login;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -82,7 +83,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private View mViewFingerprintHolder;
     private TextView mTextFingerprint;
     private View mViewProgress;
-    private SwirlView mSwirlFinger;
 
 
     @Override
@@ -109,7 +109,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         mViewFingerprintHolder = findViewById(R.id.viewFingerprintHolder);
         mTextFingerprint = findViewById(R.id.textFingerprint);
         mViewProgress = findViewById(R.id.viewProgress);
-        mSwirlFinger = findViewById(R.id.swirlFinger);
 
         // Init Listeners
         new MultiTextWatcher()
@@ -213,10 +212,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showFingerprint() {
-        mSwirlFinger.setState(SwirlView.State.ON);
-        mPresenter.initFingerprint(this);
-        mViewMainHolder.setVisibility(View.GONE);
-        mViewFingerprintHolder.setVisibility(View.VISIBLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ((SwirlView) findViewById(R.id.swirlFinger)).setState(SwirlView.State.ON);
+            mPresenter.initFingerprint(this);
+            mViewMainHolder.setVisibility(View.GONE);
+            mViewFingerprintHolder.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -227,9 +228,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showFingerprintMessage(String message, boolean isError) {
-        mTextFingerprint.setText(message);
-        mTextFingerprint.setTextColor(ContextCompat.getColor(LoginActivity.this, isError ? R.color.redError : R.color.white));
-        mSwirlFinger.setState(isError ? SwirlView.State.ERROR : SwirlView.State.ON);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mTextFingerprint.setText(message);
+            mTextFingerprint.setTextColor(ContextCompat.getColor(LoginActivity.this, isError ? R.color.redError : R.color.white));
+            ((SwirlView) findViewById(R.id.swirlFinger)).setState(isError ? SwirlView.State.ERROR : SwirlView.State.ON);
+        }
     }
 
     @Override

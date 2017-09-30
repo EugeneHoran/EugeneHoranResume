@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.main.resume;
+package com.resume.horan.eugene.eugenehoranresume.ui.main.fragment;
 
 
 import android.content.Context;
@@ -14,21 +14,30 @@ import android.view.ViewGroup;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.adapter.ResumeViewPagerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseInterface;
+import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
+import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
 import com.resume.horan.eugene.eugenehoranresume.ui.main.MainActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 public class ResumeParentFragment extends Fragment {
-    public static ResumeParentFragment newInstance(ResumeExperienceObject experienceObject) {
+    public static ResumeParentFragment newInstance(
+            ResumeExperienceObject experienceObject,
+            ResumeSkillObject resumeSkillObject,
+            ResumeEducationObject resumeEducationObject) {
         ResumeParentFragment fragment = new ResumeParentFragment();
         Bundle args = new Bundle();
         args.putParcelable(Common.ARG_RESUME_EXPERIENCE, experienceObject);
+        args.putParcelable(Common.ARG_RESUME_SKILL, resumeSkillObject);
+        args.putParcelable(Common.ARG_RESUME_EDUCATION, resumeEducationObject);
         fragment.setArguments(args);
         return fragment;
     }
 
     private MainActivity mHost;
     private ResumeExperienceObject mExperienceObject;
+    private ResumeSkillObject mSkillObject;
+    private ResumeEducationObject mEducationObject;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +45,8 @@ public class ResumeParentFragment extends Fragment {
         mHost = (MainActivity) getActivity();
         if (getArguments() != null) {
             mExperienceObject = getArguments().getParcelable(Common.ARG_RESUME_EXPERIENCE);
+            mSkillObject = getArguments().getParcelable(Common.ARG_RESUME_SKILL);
+            mEducationObject = getArguments().getParcelable(Common.ARG_RESUME_EDUCATION);
         }
     }
 
@@ -51,12 +62,16 @@ public class ResumeParentFragment extends Fragment {
         ViewPager viewPager = v.findViewById(R.id.viewpager);
         TabLayout tabLayout = mHost.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        mCallback.showTabs(true);
+        mCallback.showTabs(false);
         setupViewPager(viewPager);
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ResumeViewPagerAdapter adapter = new ResumeViewPagerAdapter(getChildFragmentManager(), mExperienceObject);
+        ResumeViewPagerAdapter adapter = new ResumeViewPagerAdapter(
+                getChildFragmentManager(),
+                mExperienceObject,
+                mSkillObject,
+                mEducationObject);
         adapter.addFragment("Experience");
         adapter.addFragment("Skills");
         adapter.addFragment("Education");

@@ -4,6 +4,8 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class Education implements Parcelable {
 
     private String order;
@@ -12,30 +14,19 @@ public class Education implements Parcelable {
     private String dateRange;
     private String major;
     private String logoUrl;
+    private List<EducationActivity> educationActivity;
 
-
-    /**
-     * No args constructor for use in serialization
-     */
     public Education() {
     }
 
-    /**
-     * @param dateRange
-     * @param university
-     * @param order
-     * @param location
-     * @param logoUrl
-     * @param major
-     */
-    public Education(String order, String university, String location, String dateRange, String major, String logoUrl) {
-        super();
+    public Education(String order, String university, String location, String dateRange, String major, String logoUrl, List<EducationActivity> educationActivity) {
         this.order = order;
         this.university = university;
         this.location = location;
         this.dateRange = dateRange;
         this.major = major;
         this.logoUrl = logoUrl;
+        this.educationActivity = educationActivity;
     }
 
     public String getOrder() {
@@ -86,43 +77,53 @@ public class Education implements Parcelable {
         this.logoUrl = logoUrl;
     }
 
+    public List<EducationActivity> getEducationActivity() {
+        return educationActivity;
+    }
+
+    public void setEducationActivity(List<EducationActivity> educationActivity) {
+        this.educationActivity = educationActivity;
+    }
+
     /**
      * Parcel
      */
-    public final static Creator<Education> CREATOR = new Creator<Education>() {
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public Education createFromParcel(Parcel in) {
-            return new Education(in);
-        }
 
-        public Education[] newArray(int size) {
-            return (new Education[size]);
-        }
-
-    };
-
-    protected Education(Parcel in) {
-        this.order = ((String) in.readValue((String.class.getClassLoader())));
-        this.university = ((String) in.readValue((String.class.getClassLoader())));
-        this.location = ((String) in.readValue((String.class.getClassLoader())));
-        this.dateRange = ((String) in.readValue((String.class.getClassLoader())));
-        this.major = ((String) in.readValue((String.class.getClassLoader())));
-        this.logoUrl = ((String) in.readValue((String.class.getClassLoader())));
-    }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(order);
-        dest.writeValue(university);
-        dest.writeValue(location);
-        dest.writeValue(dateRange);
-        dest.writeValue(major);
-        dest.writeValue(logoUrl);
-    }
-
+    @Override
     public int describeContents() {
         return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.order);
+        dest.writeString(this.university);
+        dest.writeString(this.location);
+        dest.writeString(this.dateRange);
+        dest.writeString(this.major);
+        dest.writeString(this.logoUrl);
+        dest.writeTypedList(this.educationActivity);
+    }
+
+    protected Education(Parcel in) {
+        this.order = in.readString();
+        this.university = in.readString();
+        this.location = in.readString();
+        this.dateRange = in.readString();
+        this.major = in.readString();
+        this.logoUrl = in.readString();
+        this.educationActivity = in.createTypedArrayList(EducationActivity.CREATOR);
+    }
+
+    public static final Creator<Education> CREATOR = new Creator<Education>() {
+        @Override
+        public Education createFromParcel(Parcel source) {
+            return new Education(source);
+        }
+
+        @Override
+        public Education[] newArray(int size) {
+            return new Education[size];
+        }
+    };
 }

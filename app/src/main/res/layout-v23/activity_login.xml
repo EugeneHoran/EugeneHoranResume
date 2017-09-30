@@ -157,11 +157,19 @@
         android:layout_marginTop="-88dp"
         android:visibility="gone">
 
+        <com.mattprecious.swirl.SwirlView
+            android:id="@+id/swirlFinger"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            tools:targetApi="N" />
+
         <ImageView
             android:id="@+id/imageFingerprint"
             android:layout_width="88dp"
             android:layout_height="88dp"
             android:layout_centerInParent="true"
+            android:src="@drawable/ic_fingerprint"
             android:visibility="invisible" />
 
         <TextView

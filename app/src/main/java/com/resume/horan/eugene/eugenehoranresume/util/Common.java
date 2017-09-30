@@ -16,4 +16,6 @@ public class Common {
      */
     public static final String ARG_EUGENE_HORAN = "arg_eugene_horan_data";
     public static final String ARG_RESUME_EXPERIENCE = "arg_resume_experience";
+    public static final String ARG_RESUME_SKILL = "arg_resume_skills";
+    public static final String ARG_RESUME_EDUCATION = "arg_resume_education";
 }

@@ -19,10 +19,12 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
+import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
 import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginActivity;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.contact.ContactFragment;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.resume.ResumeParentFragment;
+import com.resume.horan.eugene.eugenehoranresume.ui.main.fragment.ContactFragment;
+import com.resume.horan.eugene.eugenehoranresume.ui.main.fragment.ResumeParentFragment;
 import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
@@ -136,18 +138,19 @@ public class MainActivity extends AppCompatActivity implements
                             .replace(R.id.container, ContactFragment.newInstance(), TAG_CONTACT_FRAGMENT)
                             .commit();
                     return true;
+                case R.id.action_about:
+
+                    break;
             }
         }
         return false;
     }
 
-
     @Override
-    public void showResumeFragment(ResumeExperienceObject experienceObject) {
+    public void showResumeFragment(ResumeExperienceObject experienceObject, ResumeSkillObject resumeSkillObject, ResumeEducationObject resumeEducationObject) {
         ResumeParentFragment resumeParentFragment = (ResumeParentFragment) getSupportFragmentManager().findFragmentByTag(TAG_RESUME_PARENT_FRAGMENT);
-
         if (resumeParentFragment == null) {
-            resumeParentFragment = ResumeParentFragment.newInstance(experienceObject);
+            resumeParentFragment = ResumeParentFragment.newInstance(experienceObject, resumeSkillObject, resumeEducationObject);
             getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.anim_fade_in_slide_up, R.anim.anim_fade_out, R.anim.anim_fade_in_slide_up, R.anim.anim_fade_out)
@@ -155,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements
                     .commit();
         }
     }
+
 
     @Override
     public void showTabs(boolean show) {

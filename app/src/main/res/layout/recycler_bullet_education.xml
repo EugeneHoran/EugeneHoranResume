@@ -11,9 +11,8 @@
     android:elevation="1dp"
     android:fontFamily="sans-serif-light"
     android:gravity="center_vertical"
-    android:paddingBottom="4dp"
-    android:paddingLeft="16dp"
+    android:paddingBottom="16dp"
+    android:paddingLeft="64dp"
     android:paddingRight="16dp"
-    android:paddingTop="4dp"
     android:text="Testing"
     android:textSize="13sp" />

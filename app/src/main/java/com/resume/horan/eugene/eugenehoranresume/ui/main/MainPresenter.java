@@ -10,11 +10,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.MainPresenterNullCheck;
 import com.resume.horan.eugene.eugenehoranresume.model.Bullet;
 import com.resume.horan.eugene.eugenehoranresume.model.DividerFiller;
+import com.resume.horan.eugene.eugenehoranresume.model.Education;
+import com.resume.horan.eugene.eugenehoranresume.model.EducationActivity;
 import com.resume.horan.eugene.eugenehoranresume.model.EugeneHoran;
 import com.resume.horan.eugene.eugenehoranresume.model.Experience;
 import com.resume.horan.eugene.eugenehoranresume.model.Header;
 import com.resume.horan.eugene.eugenehoranresume.model.Resume;
+import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
+import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
+import com.resume.horan.eugene.eugenehoranresume.model.Skill;
+import com.resume.horan.eugene.eugenehoranresume.model.SkillItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,13 +63,50 @@ class MainPresenter extends MainPresenterNullCheck implements MainContract.Prese
     }
 
     private void filterList(Resume resume) {
+        getView().showLoading(false);
+        getView().showResumeFragment(
+                getFilteredExperiences(resume),
+                getFilteredSkills(resume),
+                getFilteredEducations(resume));
+    }
+
+    private ResumeEducationObject getFilteredEducations(Resume resume) {
+        List<Education> educationList = resume.getEducation();
+        List<Object> mObjectList = new ArrayList<>();
+        for (int i = 0; i < educationList.size(); i++) {
+            Education education = educationList.get(i);
+            List<EducationActivity> eductionActivity = new ArrayList<>();
+            if (education.getEducationActivity() != null) {
+                eductionActivity.addAll(education.getEducationActivity());
+                education.setEducationActivity(null);
+            }
+            mObjectList.add(education);
+            mObjectList.addAll(eductionActivity);
+        }
+        return new ResumeEducationObject(mObjectList);
+    }
+
+    private ResumeSkillObject getFilteredSkills(Resume resume) {
+        List<Skill> skillList = resume.getSkill();
+        List<Object> mObjectList = new ArrayList<>();
+        for (int i = 0; i < skillList.size(); i++) {
+            Skill skill = skillList.get(i);
+            List<SkillItem> skillItemList = new ArrayList<>();
+            skillItemList.addAll(skill.getSkillItem());
+            skill.setSkillItem(null);
+            mObjectList.add(skill);
+            mObjectList.addAll(skillItemList);
+        }
+        return new ResumeSkillObject(mObjectList);
+    }
+
+    private ResumeExperienceObject getFilteredExperiences(Resume resume) {
         List<Experience> experienceList = resume.getExperience();
         List<Object> mObjectList = new ArrayList<>();
         mObjectList.add(new Header("Public Accounts"));
         mObjectList.addAll(resume.getAccount());
         mObjectList.add(2, new DividerFiller("divider_no_space"));
         mObjectList.add(new Header("Resume"));
-        Log.e("Testing", mObjectList.size() + "");
         for (int i = 0; i < experienceList.size(); i++) {
             if (mObjectList.size() > 5) {
                 mObjectList.add(new DividerFiller("divider_space"));
@@ -76,7 +119,8 @@ class MainPresenter extends MainPresenterNullCheck implements MainContract.Prese
             mObjectList.addAll(bullets);
         }
         mObjectList.add(new DividerFiller("footer"));
-        getView().showLoading(false);
-        getView().showResumeFragment(new ResumeExperienceObject(mObjectList));
+        return new ResumeExperienceObject(mObjectList);
     }
+
+
 }

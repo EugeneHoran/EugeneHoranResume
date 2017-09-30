@@ -6,6 +6,10 @@
     <color name="colorButtonPrimary">#607D8B</color>
     <color name="colorButtonDark">#00695C</color>
 
+    <!--Chip -->
+    <color name="colorChipViewBackground">#E0E0E0</color>
+    <color name="white_transparency">#b9ffffff</color>
+
     <!--White Theme-->
     <color name="colorPrimaryWhite">#F5F5F5</color>
     <color name="colorPrimaryDarkWhite">#E0E0E0</color>
