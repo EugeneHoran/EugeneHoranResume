@@ -9,6 +9,8 @@ import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
 public interface MainContract {
 
     interface View extends BaseView<Presenter> {
+        void showTabs(boolean show);
+
         void showResumeFragment(ResumeExperienceObject experienceObject, ResumeSkillObject resumeSkillObject, ResumeEducationObject resumeEducationObject);
     }
 

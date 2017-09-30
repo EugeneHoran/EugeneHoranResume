@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;

@@ -26,6 +26,11 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainContract.
             public void showResumeFragment(ResumeExperienceObject experienceObject, ResumeSkillObject resumeSkillObject, ResumeEducationObject resumeEducationObject) {
 
             }
+
+            @Override
+            public void showTabs(boolean show) {
+
+            }
         };
     }
 }

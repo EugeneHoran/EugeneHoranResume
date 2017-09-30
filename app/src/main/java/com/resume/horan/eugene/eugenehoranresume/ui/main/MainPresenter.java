@@ -28,6 +28,8 @@ import java.util.List;
 class MainPresenter extends MainPresenterNullCheck implements MainContract.Presenter {
     private static final String TAG = "MainPresenter";
 
+    private DatabaseReference myResumeReference;
+
     MainPresenter(MainContract.View view) {
         onAttachView(view);
         getView().setPresenter(this);
@@ -47,11 +49,12 @@ class MainPresenter extends MainPresenterNullCheck implements MainContract.Prese
     @Override
     public void loadResumeData() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("eugeneHoran");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myResumeReference = database.getReference("eugeneHoran");
+        myResumeReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 EugeneHoran value = dataSnapshot.getValue(EugeneHoran.class);
+                myResumeReference.keepSynced(true);
                 filterList(value.getResume());
             }
 
@@ -121,6 +124,4 @@ class MainPresenter extends MainPresenterNullCheck implements MainContract.Prese
         mObjectList.add(new DividerFiller("footer"));
         return new ResumeExperienceObject(mObjectList);
     }
-
-
 }
