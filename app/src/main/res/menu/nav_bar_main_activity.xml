@@ -9,7 +9,7 @@
             android:title="@string/resume" />
         <item
             android:id="@+id/action_contact"
-            android:icon="@drawable/ic_phone"
+            android:icon="@drawable/ic_contact_phone"
             android:title="@string/contact" />
         <item
             android:id="@+id/action_about_me"
