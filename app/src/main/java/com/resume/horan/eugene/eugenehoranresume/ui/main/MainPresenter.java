@@ -1,44 +1,58 @@
 package com.resume.horan.eugene.eugenehoranresume.ui.main;
 
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.MainPresenterNullCheck;
-import com.resume.horan.eugene.eugenehoranresume.model.Bullet;
-import com.resume.horan.eugene.eugenehoranresume.model.DividerFiller;
-import com.resume.horan.eugene.eugenehoranresume.model.Education;
-import com.resume.horan.eugene.eugenehoranresume.model.EducationActivity;
+import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.EugeneHoran;
-import com.resume.horan.eugene.eugenehoranresume.model.Experience;
-import com.resume.horan.eugene.eugenehoranresume.model.Header;
-import com.resume.horan.eugene.eugenehoranresume.model.Resume;
-import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
-import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
-import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
-import com.resume.horan.eugene.eugenehoranresume.model.Skill;
-import com.resume.horan.eugene.eugenehoranresume.model.SkillItem;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 class MainPresenter extends MainPresenterNullCheck implements MainContract.Presenter {
+
     private static final String TAG = "MainPresenter";
 
     private DatabaseReference myResumeReference;
+    private DatabaseReference myContactReference;
+
+    private int mFragmentPosition = Common.WHICH_RESUME_FRAGMENT;
 
     MainPresenter(MainContract.View view) {
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        myResumeReference = mDatabase.getReference(Common.FB_REF_EUGENE_HORAN);
+        myContactReference = mDatabase.getReference(Common.FB_REF_CONTACT);
         onAttachView(view);
         getView().setPresenter(this);
     }
 
     @Override
+    public void start(int fragmentPosition) {
+        mFragmentPosition = fragmentPosition;
+        onStart();
+    }
+
+    @Override
     public void onStart() {
-        getView().showLoading(true);
-        loadResumeData();
+        getView().setFragmentPosition(mFragmentPosition);
+        switch (mFragmentPosition) {
+            case Common.WHICH_RESUME_FRAGMENT:
+                getView().showLoading(true);
+                getView().setToolbarTitle("Eugene Horan's Resume", false);
+                break;
+            case Common.WHICH_CONTACT_FRAGMENT:
+                getView().showLoading(true);
+                getView().showTabs(false);
+                getView().setToolbarTitle("Eugene J. Horan", false);
+                break;
+            case Common.WHICH_ABOUT_FRAGMENT:
+                getView().showLoading(false);
+                getView().showTabs(false);
+                getView().setToolbarTitle("About Eugene", true);
+                break;
+        }
+        loadMainData();
     }
 
     @Override
@@ -47,81 +61,55 @@ class MainPresenter extends MainPresenterNullCheck implements MainContract.Prese
     }
 
     @Override
-    public void loadResumeData() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myResumeReference = database.getReference("eugeneHoran");
-        myResumeReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                EugeneHoran value = dataSnapshot.getValue(EugeneHoran.class);
-                myResumeReference.keepSynced(true);
-                filterList(value.getResume());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.e(TAG, "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    private void filterList(Resume resume) {
-        getView().showLoading(false);
-        getView().showResumeFragment(
-                getFilteredExperiences(resume),
-                getFilteredSkills(resume),
-                getFilteredEducations(resume));
-    }
-
-    private ResumeEducationObject getFilteredEducations(Resume resume) {
-        List<Education> educationList = resume.getEducation();
-        List<Object> mObjectList = new ArrayList<>();
-        for (int i = 0; i < educationList.size(); i++) {
-            Education education = educationList.get(i);
-            List<EducationActivity> eductionActivity = new ArrayList<>();
-            if (education.getEducationActivity() != null) {
-                eductionActivity.addAll(education.getEducationActivity());
-                education.setEducationActivity(null);
-            }
-            mObjectList.add(education);
-            mObjectList.addAll(eductionActivity);
+    public void loadMainData() {
+        switch (mFragmentPosition) {
+            case Common.WHICH_RESUME_FRAGMENT:
+                myResumeReference.addListenerForSingleValueEvent(mResumeEventListener);
+                break;
+            case Common.WHICH_CONTACT_FRAGMENT:
+                myContactReference.addListenerForSingleValueEvent(mContactEventListener);
+                break;
+            case Common.WHICH_ABOUT_FRAGMENT:
+                getView().showAboutFragment();
+                break;
+            default:
+                break;
         }
-        return new ResumeEducationObject(mObjectList);
     }
 
-    private ResumeSkillObject getFilteredSkills(Resume resume) {
-        List<Skill> skillList = resume.getSkill();
-        List<Object> mObjectList = new ArrayList<>();
-        for (int i = 0; i < skillList.size(); i++) {
-            Skill skill = skillList.get(i);
-            List<SkillItem> skillItemList = new ArrayList<>();
-            skillItemList.addAll(skill.getSkillItem());
-            skill.setSkillItem(null);
-            mObjectList.add(skill);
-            mObjectList.addAll(skillItemList);
+    private ValueEventListener mResumeEventListener = new ValueEventListener() {
+        @Override
+        @SuppressWarnings("all")
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            EugeneHoran mEugeneValue = dataSnapshot.getValue(EugeneHoran.class);
+            myResumeReference.keepSynced(true);
+            getView().showResumeFragment(
+                    mEugeneValue.getFilteredExperiences(),
+                    mEugeneValue.getFilteredSkills(),
+                    mEugeneValue.getFilteredEducations());
+            getView().showLoading(false);
         }
-        return new ResumeSkillObject(mObjectList);
-    }
 
-    private ResumeExperienceObject getFilteredExperiences(Resume resume) {
-        List<Experience> experienceList = resume.getExperience();
-        List<Object> mObjectList = new ArrayList<>();
-        mObjectList.add(new Header("Public Accounts"));
-        mObjectList.addAll(resume.getAccount());
-        mObjectList.add(2, new DividerFiller("divider_no_space"));
-        mObjectList.add(new Header("Resume"));
-        for (int i = 0; i < experienceList.size(); i++) {
-            if (mObjectList.size() > 5) {
-                mObjectList.add(new DividerFiller("divider_space"));
-            }
-            Experience experience = experienceList.get(i);
-            List<Bullet> bullets = new ArrayList<>();
-            bullets.addAll(experience.getBullets());
-            experience.setBullets(null);
-            mObjectList.add(experience);
-            mObjectList.addAll(bullets);
+        @Override
+        public void onCancelled(DatabaseError error) {
+            getView().showLoadingError();
         }
-        mObjectList.add(new DividerFiller("footer"));
-        return new ResumeExperienceObject(mObjectList);
-    }
+    };
+
+    private ValueEventListener mContactEventListener = new ValueEventListener() {
+        @Override
+        @SuppressWarnings("all")
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            Contact mContactValue = dataSnapshot.getValue(Contact.class);
+            myContactReference.keepSynced(true);
+            getView().showContactFragment(mContactValue);
+            getView().showLoading(false);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError error) {
+            getView().showLoadingError();
+        }
+    };
+
 }

@@ -9,6 +9,7 @@
     <!--Chip -->
     <color name="colorChipViewBackground">#E0E0E0</color>
     <color name="white_transparency">#b9ffffff</color>
+    <color name="black_transparency">#b9000000</color>
 
     <!--White Theme-->
     <color name="colorPrimaryWhite">#F5F5F5</color>

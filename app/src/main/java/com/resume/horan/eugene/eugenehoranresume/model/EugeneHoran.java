@@ -1,10 +1,11 @@
 
 package com.resume.horan.eugene.eugenehoranresume.model;
 
-import java.util.List;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EugeneHoran implements Parcelable {
 
@@ -13,10 +14,65 @@ public class EugeneHoran implements Parcelable {
     private String nameMiddle;
     private String nameLast;
     private Contact contact;
-    private Location location;
     private Goals goals;
     private List<SocialMedia> socialMedia = null;
     private Resume resume;
+
+
+    /**
+     * Filters
+     */
+    public ResumeEducationObject getFilteredEducations() {
+        List<Education> educationList = resume.getEducation();
+        List<Object> mObjectList = new ArrayList<>();
+        for (int i = 0; i < educationList.size(); i++) {
+            Education education = educationList.get(i);
+            List<EducationActivity> eductionActivity = new ArrayList<>();
+            if (education.getEducationActivity() != null) {
+                eductionActivity.addAll(education.getEducationActivity());
+                education.setEducationActivity(null);
+            }
+            mObjectList.add(education);
+            mObjectList.addAll(eductionActivity);
+        }
+        return new ResumeEducationObject(mObjectList);
+    }
+
+    public ResumeSkillObject getFilteredSkills() {
+        List<Skill> skillList = resume.getSkill();
+        List<Object> mObjectList = new ArrayList<>();
+        for (int i = 0; i < skillList.size(); i++) {
+            Skill skill = skillList.get(i);
+            List<SkillItem> skillItemList = new ArrayList<>();
+            skillItemList.addAll(skill.getSkillItem());
+            skill.setSkillItem(null);
+            mObjectList.add(skill);
+            mObjectList.addAll(skillItemList);
+        }
+        return new ResumeSkillObject(mObjectList);
+    }
+
+    public ResumeExperienceObject getFilteredExperiences() {
+        List<Experience> experienceList = resume.getExperience();
+        List<Object> mObjectList = new ArrayList<>();
+        mObjectList.add(new Header("Public Accounts"));
+        mObjectList.addAll(resume.getAccount());
+        mObjectList.add(2, new DividerFiller("divider_no_space"));
+        mObjectList.add(new Header("Resume"));
+        for (int i = 0; i < experienceList.size(); i++) {
+            if (mObjectList.size() > 5) {
+                mObjectList.add(new DividerFiller("divider_space"));
+            }
+            Experience experience = experienceList.get(i);
+            List<Bullet> bullets = new ArrayList<>();
+            bullets.addAll(experience.getBullets());
+            experience.setBullets(null);
+            mObjectList.add(experience);
+            mObjectList.addAll(bullets);
+        }
+        mObjectList.add(new DividerFiller("footer"));
+        return new ResumeExperienceObject(mObjectList);
+    }
 
 
     /**
@@ -32,18 +88,16 @@ public class EugeneHoran implements Parcelable {
      * @param nameMiddle
      * @param nameFirst
      * @param socialMedia
-     * @param location
      * @param nameFull
      * @param contact
      */
-    public EugeneHoran(String nameFull, String nameFirst, String nameMiddle, String nameLast, Contact contact, Location location, Goals goals, List<SocialMedia> socialMedia, Resume resume) {
+    public EugeneHoran(String nameFull, String nameFirst, String nameMiddle, String nameLast, Contact contact, Goals goals, List<SocialMedia> socialMedia, Resume resume) {
         super();
         this.nameFull = nameFull;
         this.nameFirst = nameFirst;
         this.nameMiddle = nameMiddle;
         this.nameLast = nameLast;
         this.contact = contact;
-        this.location = location;
         this.goals = goals;
         this.socialMedia = socialMedia;
         this.resume = resume;
@@ -89,14 +143,6 @@ public class EugeneHoran implements Parcelable {
         this.contact = contact;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public Goals getGoals() {
         return goals;
     }
@@ -122,49 +168,43 @@ public class EugeneHoran implements Parcelable {
     }
 
 
-    /**
-     * Parcel
-     */
-    public final static Creator<EugeneHoran> CREATOR = new Creator<EugeneHoran>() {
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public EugeneHoran createFromParcel(Parcel in) {
-            return new EugeneHoran(in);
-        }
-
-        public EugeneHoran[] newArray(int size) {
-            return (new EugeneHoran[size]);
-        }
-
-    };
-
-    protected EugeneHoran(Parcel in) {
-        this.nameFull = ((String) in.readValue((String.class.getClassLoader())));
-        this.nameFirst = ((String) in.readValue((String.class.getClassLoader())));
-        this.nameMiddle = ((String) in.readValue((String.class.getClassLoader())));
-        this.nameLast = ((String) in.readValue((String.class.getClassLoader())));
-        this.contact = ((Contact) in.readValue((Contact.class.getClassLoader())));
-        this.location = ((Location) in.readValue((Location.class.getClassLoader())));
-        this.goals = ((Goals) in.readValue((Goals.class.getClassLoader())));
-        in.readList(this.socialMedia, (SocialMedia.class.getClassLoader()));
-        this.resume = ((Resume) in.readValue((Resume.class.getClassLoader())));
-    }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(nameFull);
-        dest.writeValue(nameFirst);
-        dest.writeValue(nameMiddle);
-        dest.writeValue(nameLast);
-        dest.writeValue(contact);
-        dest.writeValue(location);
-        dest.writeValue(goals);
-        dest.writeList(socialMedia);
-        dest.writeValue(resume);
-    }
-
+    @Override
     public int describeContents() {
         return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.nameFull);
+        dest.writeString(this.nameFirst);
+        dest.writeString(this.nameMiddle);
+        dest.writeString(this.nameLast);
+        dest.writeParcelable(this.contact, flags);
+        dest.writeParcelable(this.goals, flags);
+        dest.writeTypedList(this.socialMedia);
+        dest.writeParcelable(this.resume, flags);
+    }
+
+    protected EugeneHoran(Parcel in) {
+        this.nameFull = in.readString();
+        this.nameFirst = in.readString();
+        this.nameMiddle = in.readString();
+        this.nameLast = in.readString();
+        this.contact = in.readParcelable(Contact.class.getClassLoader());
+        this.goals = in.readParcelable(Goals.class.getClassLoader());
+        this.socialMedia = in.createTypedArrayList(SocialMedia.CREATOR);
+        this.resume = in.readParcelable(Resume.class.getClassLoader());
+    }
+
+    public static final Creator<EugeneHoran> CREATOR = new Creator<EugeneHoran>() {
+        @Override
+        public EugeneHoran createFromParcel(Parcel source) {
+            return new EugeneHoran(source);
+        }
+
+        @Override
+        public EugeneHoran[] newArray(int size) {
+            return new EugeneHoran[size];
+        }
+    };
 }

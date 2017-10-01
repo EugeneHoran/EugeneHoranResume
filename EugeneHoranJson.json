@@ -8,14 +8,16 @@
          "phonePrimary":"631-790-5218",
          "phoneSecondary":"631-736-8655",
          "text":"631-790-5218",
-         "email":"eh841271@gmail.com"
-      },
-      "location":{  
-         "country":"United States",
-         "state":"New York",
-         "city":"Port Jefferson Station",
-         "street":"Yale St.",
-         "zip":"11776"
+         "email":"eh841271@gmail.com",
+         "location":{  
+            "country":"United States",
+            "state":"New York",
+            "city":"Mt Sinai",
+            "street":"23 Graycrest Ct",
+            "zip":"11766",
+            "latitude":40.934829,
+            "longitude":-73.000755
+         }
       },
       "goals":{  
          "goalCurrent":"Contribute to the Open-Source community that tought me everything I know. Keep up to date with the latest Android Libraries. Learning and implementing the latest SDK's.",
@@ -147,18 +149,18 @@
                "dateRange":"Spring 2009 - May 2013",
                "major":"B.A in Psychology and History",
                "logoUrl":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Albany_Great_Danes_logo.svg/250px-Albany_Great_Danes_logo.svg.png",
-			   "educationActivity" : [
-					{
-					"description" : "University at Albany, Division 1AA Football."
-					},
-					{
-					"description" : "Started programming in my free time."
-					},
-					{
-					"description" : "Played a lot of video games."
-					}
-				]
-			},
+               "educationActivity":[  
+                  {  
+                     "description":"University at Albany, Division 1AA Football."
+                  },
+                  {  
+                     "description":"Started programming in my free time."
+                  },
+                  {  
+                     "description":"Played a lot of video games."
+                  }
+               ]
+            },
             {  
                "order":"1",
                "university":"Symbiosis Internation University",
@@ -166,14 +168,14 @@
                "dateRange":"January 2013 - May 2013",
                "major":"Research in Child Development",
                "logoUrl":"http://www.shiksharambh.com/images/colleges/gallery/15_10_14_074324_siu1.png",
-			   "educationActivity" : [
-					{
-					"description" : "Independent research project on the impacts of being raised within Shreevatsa orphanage."
-					},
-					{
-					"description" : "Taught english to underprivileged children at local schools."
-					}
-				]
+               "educationActivity":[  
+                  {  
+                     "description":"Independent research project on the impacts of being raised within Shreevatsa orphanage."
+                  },
+                  {  
+                     "description":"Taught english to underprivileged children at local schools."
+                  }
+               ]
             }
          ],
          "skill":[  
@@ -387,5 +389,8 @@
             }
          ]
       }
-   }
+   },
+   "users":[  
+
+   ]
 }

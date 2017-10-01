@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.fragment.ResumeEducationFragment;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.fragment.ResumeExperienceFragment;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.fragment.ResumeSkillFragment;
+import com.resume.horan.eugene.eugenehoranresume.ui.main.ResumeEducationFragment;
+import com.resume.horan.eugene.eugenehoranresume.ui.main.ResumeExperienceFragment;
+import com.resume.horan.eugene.eugenehoranresume.ui.main.ResumeSkillFragment;
 
 import java.util.ArrayList;
 import java.util.List;

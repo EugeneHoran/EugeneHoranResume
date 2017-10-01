@@ -1,6 +1,7 @@
 package com.resume.horan.eugene.eugenehoranresume.base.nullpresenters;
 
 import com.resume.horan.eugene.eugenehoranresume.base.BasePresenterNullCheck;
+import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
@@ -29,6 +30,31 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainContract.
 
             @Override
             public void showTabs(boolean show) {
+
+            }
+
+            @Override
+            public void showContactFragment(Contact contact) {
+
+            }
+
+            @Override
+            public void setToolbarTitle(String title, boolean showExpandedImage) {
+
+            }
+
+            @Override
+            public void setFragmentPosition(int which) {
+
+            }
+
+            @Override
+            public void showAboutFragment() {
+
+            }
+
+            @Override
+            public void showLoadingError() {
 
             }
         };

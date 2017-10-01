@@ -10,6 +10,7 @@ public class Contact implements Parcelable {
     private String phoneSecondary;
     private String text;
     private String email;
+    private Location location;
 
     /**
      * No args constructor for use in serialization
@@ -23,12 +24,13 @@ public class Contact implements Parcelable {
      * @param email
      * @param phoneSecondary
      */
-    public Contact(String phonePrimary, String phoneSecondary, String text, String email) {
-        super();
+
+    public Contact(String phonePrimary, String phoneSecondary, String text, String email, Location location) {
         this.phonePrimary = phonePrimary;
         this.phoneSecondary = phoneSecondary;
         this.text = text;
         this.email = email;
+        this.location = location;
     }
 
     public String getPhonePrimary() {
@@ -63,40 +65,45 @@ public class Contact implements Parcelable {
         this.email = email;
     }
 
-
-    /**
-     * Parcel
-     */
-    public final static Creator<Contact> CREATOR = new Creator<Contact>() {
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public Contact createFromParcel(Parcel in) {
-            return new Contact(in);
-        }
-
-        public Contact[] newArray(int size) {
-            return (new Contact[size]);
-        }
-
-    };
-
-    protected Contact(Parcel in) {
-        this.phonePrimary = ((String) in.readValue((String.class.getClassLoader())));
-        this.phoneSecondary = ((String) in.readValue((String.class.getClassLoader())));
-        this.text = ((String) in.readValue((String.class.getClassLoader())));
-        this.email = ((String) in.readValue((String.class.getClassLoader())));
+    public Location getLocation() {
+        return location;
     }
 
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(phonePrimary);
-        dest.writeValue(phoneSecondary);
-        dest.writeValue(text);
-        dest.writeValue(email);
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
+    @Override
     public int describeContents() {
         return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.phonePrimary);
+        dest.writeString(this.phoneSecondary);
+        dest.writeString(this.text);
+        dest.writeString(this.email);
+        dest.writeParcelable(this.location, flags);
+    }
+
+    protected Contact(Parcel in) {
+        this.phonePrimary = in.readString();
+        this.phoneSecondary = in.readString();
+        this.text = in.readString();
+        this.email = in.readString();
+        this.location = in.readParcelable(Location.class.getClassLoader());
+    }
+
+    public static final Creator<Contact> CREATOR = new Creator<Contact>() {
+        @Override
+        public Contact createFromParcel(Parcel source) {
+            return new Contact(source);
+        }
+
+        @Override
+        public Contact[] newArray(int size) {
+            return new Contact[size];
+        }
+    };
 }

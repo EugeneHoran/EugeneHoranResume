@@ -28,8 +28,14 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.LoginPresenterNullCheck;
+import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
 import com.resume.horan.eugene.eugenehoranresume.util.Verify;
@@ -227,16 +233,34 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             FirebaseUser mUser = firebaseAuth.getCurrentUser();
             if (mUser != null && mAuthFlag) {
-                mAuthFlag = false;
+                getView().showLoading(true);
+                writeNewUserIfNeeded(mUser.getUid(), "test@email.com", "Eugene Horan");
+            }
+        }
+    };
+
+    private void writeNewUserIfNeeded(final String userId, final String username, final String name) {
+        final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild(userId)) {
+                    usersRef.child(userId).setValue(new User(username, name));
+                }
                 if (!Prefs.getBoolean(Common.PREF_FINGERPRINT, false)) {
                     getView().loginSuccessful();
                 } else {
                     getView().showFingerprint();
+                    getView().showLoading(false);
                 }
             }
-            getView().showLoading(false);
-        }
-    };
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                getView().showLoading(false);
+            }
+        });
+    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

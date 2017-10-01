@@ -13,6 +13,11 @@ public class Resume implements Parcelable {
     private List<Account> account = null;
     private List<Skill> skill = null;
 
+
+
+
+
+
     /**
      * No args constructor for use in serialization
      */

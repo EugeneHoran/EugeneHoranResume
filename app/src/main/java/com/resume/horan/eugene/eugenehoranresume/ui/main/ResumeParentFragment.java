@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.main.fragment;
+package com.resume.horan.eugene.eugenehoranresume.ui.main;
 
 
 import android.content.Context;
@@ -17,10 +17,10 @@ import com.resume.horan.eugene.eugenehoranresume.base.BaseInterface;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.MainActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 public class ResumeParentFragment extends Fragment {
+
     public static ResumeParentFragment newInstance(
             ResumeExperienceObject experienceObject,
             ResumeSkillObject resumeSkillObject,
@@ -58,11 +58,9 @@ public class ResumeParentFragment extends Fragment {
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        mCallback.whichFragment(Common.WHICH_RESUME_FRAGMENT);
         ViewPager viewPager = v.findViewById(R.id.viewpager);
         TabLayout tabLayout = mHost.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        mCallback.showTabs(false);
         setupViewPager(viewPager);
     }
 
@@ -79,17 +77,17 @@ public class ResumeParentFragment extends Fragment {
         mCallback.showTabs(true);
     }
 
-    private ResumeParentInterface mCallback;
+    private ResumeInteraction mCallback;
 
-    public interface ResumeParentInterface extends BaseInterface {
+    public interface ResumeInteraction extends BaseInterface {
         void showTabs(boolean show);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ResumeParentInterface) {
-            mCallback = (ResumeParentInterface) context;
+        if (context instanceof ResumeInteraction) {
+            mCallback = (ResumeInteraction) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement Listener");
