@@ -29,13 +29,14 @@ import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginActivity;
 import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
+import com.squareup.picasso.Picasso;
 
 
 public class MainActivity extends BaseActivity implements
         View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener,
         MainContract.View,
-        ResumeParentFragment.ResumeInteraction{
+        ResumeParentFragment.ResumeInteraction {
 
     private static final String STATE_FRAGMENT_POSITION = "saved_state_fragment_fragment_position";
     private int mFragmentPosition = Common.WHICH_RESUME_FRAGMENT;
@@ -170,6 +171,8 @@ public class MainActivity extends BaseActivity implements
         setTitle(title);
         if (showExpandedImage) {
             mExpandedImage.setVisibility(View.VISIBLE);
+            Picasso.with(MainActivity.this).load("https://raw.githubusercontent.com/EugeneHoran/EugeneHoranResume/master/eugene_about.jpg").into(mExpandedImage);
+//            https://raw.githubusercontent.com/EugeneHoran/EugeneHoranResume/master/eugene_about.jpg
             mAppBar.setExpanded(true);
         } else {
             mAppBar.setExpanded(false);
