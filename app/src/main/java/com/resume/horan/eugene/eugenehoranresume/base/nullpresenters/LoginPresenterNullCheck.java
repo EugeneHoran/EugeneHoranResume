@@ -1,6 +1,5 @@
 package com.resume.horan.eugene.eugenehoranresume.base.nullpresenters;
 
-import com.resume.horan.eugene.eugenehoranresume.base.BasePresenterNullCheck;
 import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginContract;
 
 public class LoginPresenterNullCheck extends BasePresenterNullCheck<LoginContract.View> {

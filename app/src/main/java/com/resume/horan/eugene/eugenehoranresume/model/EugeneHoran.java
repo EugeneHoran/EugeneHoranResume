@@ -14,9 +14,8 @@ public class EugeneHoran implements Parcelable {
     private String nameMiddle;
     private String nameLast;
     private Contact contact;
-    private Goals goals;
-    private List<SocialMedia> socialMedia = null;
     private Resume resume;
+    private About about;
 
 
     /**
@@ -82,25 +81,22 @@ public class EugeneHoran implements Parcelable {
     }
 
     /**
-     * @param goals
-     * @param resume
-     * @param nameLast
-     * @param nameMiddle
-     * @param nameFirst
-     * @param socialMedia
      * @param nameFull
+     * @param nameFirst
+     * @param nameMiddle
+     * @param nameLast
      * @param contact
+     * @param resume
+     * @param about
      */
-    public EugeneHoran(String nameFull, String nameFirst, String nameMiddle, String nameLast, Contact contact, Goals goals, List<SocialMedia> socialMedia, Resume resume) {
-        super();
+    public EugeneHoran(String nameFull, String nameFirst, String nameMiddle, String nameLast, Contact contact, Resume resume, About about) {
         this.nameFull = nameFull;
         this.nameFirst = nameFirst;
         this.nameMiddle = nameMiddle;
         this.nameLast = nameLast;
         this.contact = contact;
-        this.goals = goals;
-        this.socialMedia = socialMedia;
         this.resume = resume;
+        this.about = about;
     }
 
     public String getNameFull() {
@@ -143,28 +139,20 @@ public class EugeneHoran implements Parcelable {
         this.contact = contact;
     }
 
-    public Goals getGoals() {
-        return goals;
-    }
-
-    public void setGoals(Goals goals) {
-        this.goals = goals;
-    }
-
-    public List<SocialMedia> getSocialMedia() {
-        return socialMedia;
-    }
-
-    public void setSocialMedia(List<SocialMedia> socialMedia) {
-        this.socialMedia = socialMedia;
-    }
-
     public Resume getResume() {
         return resume;
     }
 
     public void setResume(Resume resume) {
         this.resume = resume;
+    }
+
+    public About getAbout() {
+        return about;
+    }
+
+    public void setAbout(About about) {
+        this.about = about;
     }
 
 
@@ -180,9 +168,8 @@ public class EugeneHoran implements Parcelable {
         dest.writeString(this.nameMiddle);
         dest.writeString(this.nameLast);
         dest.writeParcelable(this.contact, flags);
-        dest.writeParcelable(this.goals, flags);
-        dest.writeTypedList(this.socialMedia);
         dest.writeParcelable(this.resume, flags);
+        dest.writeParcelable(this.about, flags);
     }
 
     protected EugeneHoran(Parcel in) {
@@ -191,9 +178,8 @@ public class EugeneHoran implements Parcelable {
         this.nameMiddle = in.readString();
         this.nameLast = in.readString();
         this.contact = in.readParcelable(Contact.class.getClassLoader());
-        this.goals = in.readParcelable(Goals.class.getClassLoader());
-        this.socialMedia = in.createTypedArrayList(SocialMedia.CREATOR);
         this.resume = in.readParcelable(Resume.class.getClassLoader());
+        this.about = in.readParcelable(About.class.getClassLoader());
     }
 
     public static final Creator<EugeneHoran> CREATOR = new Creator<EugeneHoran>() {

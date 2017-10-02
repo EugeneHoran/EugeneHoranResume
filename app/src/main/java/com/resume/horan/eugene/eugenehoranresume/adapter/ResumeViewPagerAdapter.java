@@ -7,9 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.ResumeEducationFragment;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.ResumeExperienceFragment;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.ResumeSkillFragment;
+import com.resume.horan.eugene.eugenehoranresume.ui.main.ResumeChildFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +35,11 @@ public class ResumeViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return ResumeExperienceFragment.newInstance(mExperienceObject);
+                return ResumeChildFragment.newInstance(mExperienceObject);
             case 1:
-                return ResumeSkillFragment.newInstance(mSkillObject);
+                return ResumeChildFragment.newInstance(mSkillObject);
             case 2:
-                return ResumeEducationFragment.newInstance(mEducationObject);
+                return ResumeChildFragment.newInstance(mEducationObject);
             default:
                 return null;
         }

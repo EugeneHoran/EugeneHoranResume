@@ -1,20 +1,20 @@
 package com.resume.horan.eugene.eugenehoranresume.base.nullpresenters;
 
-import com.resume.horan.eugene.eugenehoranresume.base.BasePresenterNullCheck;
+import com.resume.horan.eugene.eugenehoranresume.model.AboutObject;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.MainContract;
+import com.resume.horan.eugene.eugenehoranresume.ui.main.MainActivityContract;
 
-public class MainPresenterNullCheck extends BasePresenterNullCheck<MainContract.View> {
+public class MainPresenterNullCheck extends BasePresenterNullCheck<MainActivityContract.View> {
 
     @Override
-    public MainContract.View createNullView() {
-        return new MainContract.View() {
+    public MainActivityContract.View createNullView() {
+        return new MainActivityContract.View() {
 
             @Override
-            public void setPresenter(MainContract.Presenter presenter) {
+            public void setPresenter(MainActivityContract.Presenter presenter) {
 
             }
 
@@ -49,7 +49,7 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainContract.
             }
 
             @Override
-            public void showAboutFragment() {
+            public void showAboutFragment(AboutObject aboutObject) {
 
             }
 

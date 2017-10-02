@@ -6,71 +6,43 @@ import android.os.Parcelable;
 
 public class Goals implements Parcelable {
 
-    private String goalCurrent;
-    private String goalFuture;
+    private String goal;
 
-
-    /**
-     * No args constructor for use in serialization
-     */
-    public Goals() {
+    public String getGoal() {
+        return goal;
     }
 
-    /**
-     * @param goalCurrent
-     * @param goalFuture
-     */
-    public Goals(String goalCurrent, String goalFuture) {
-        super();
-        this.goalCurrent = goalCurrent;
-        this.goalFuture = goalFuture;
+    public void setGoal(String goal) {
+        this.goal = goal;
     }
 
-    public String getGoalCurrent() {
-        return goalCurrent;
-    }
 
-    public void setGoalCurrent(String goalCurrent) {
-        this.goalCurrent = goalCurrent;
-    }
-
-    public String getGoalFuture() {
-        return goalFuture;
-    }
-
-    public void setGoalFuture(String goalFuture) {
-        this.goalFuture = goalFuture;
-    }
-
-    /**
-     * Parcel
-     */
-    public final static Creator<Goals> CREATOR = new Creator<Goals>() {
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public Goals createFromParcel(Parcel in) {
-            return new Goals(in);
-        }
-
-        public Goals[] newArray(int size) {
-            return (new Goals[size]);
-        }
-
-    };
-
-    protected Goals(Parcel in) {
-        this.goalCurrent = ((String) in.readValue((String.class.getClassLoader())));
-        this.goalFuture = ((String) in.readValue((String.class.getClassLoader())));
-    }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(goalCurrent);
-        dest.writeValue(goalFuture);
-    }
-
+    @Override
     public int describeContents() {
         return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.goal);
+    }
+
+    public Goals() {
+    }
+
+    protected Goals(Parcel in) {
+        this.goal = in.readString();
+    }
+
+    public static final Creator<Goals> CREATOR = new Creator<Goals>() {
+        @Override
+        public Goals createFromParcel(Parcel source) {
+            return new Goals(source);
+        }
+
+        @Override
+        public Goals[] newArray(int size) {
+            return new Goals[size];
+        }
+    };
 }

@@ -2,12 +2,13 @@ package com.resume.horan.eugene.eugenehoranresume.ui.main;
 
 import com.resume.horan.eugene.eugenehoranresume.base.BasePresenter;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseView;
+import com.resume.horan.eugene.eugenehoranresume.model.AboutObject;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeSkillObject;
 
-public interface MainContract {
+public interface MainActivityContract {
 
     interface View extends BaseView<Presenter> {
         void showTabs(boolean show);
@@ -20,7 +21,7 @@ public interface MainContract {
 
         void showContactFragment(Contact contact);
 
-        void showAboutFragment();
+        void showAboutFragment(AboutObject aboutObject);
 
         void showLoadingError();
     }

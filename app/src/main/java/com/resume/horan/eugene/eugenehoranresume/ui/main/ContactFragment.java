@@ -8,13 +8,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -90,7 +90,6 @@ public class ContactFragment extends Fragment implements View.OnClickListener, O
         mImgCopyEmail.setOnClickListener(this);
         mImgEmail.setOnClickListener(this);
 
-
         textAddress.setText(mLocation.getStreet() + ", " + mLocation.getCity() + ", " + mLocation.getState() + " " + mLocation.getZip());
         textPhonePrimary.setText(String.format("%s (Cell)", mContact.getPhonePrimary()));
         textPhoneSecondary.setText(String.format("%s (Home)", mContact.getPhoneSecondary()));
@@ -105,7 +104,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener, O
                 public void run() {
                     initMap();
                 }
-            }, 250);
+            }, 450);
         } else {
             initMap();
         }
@@ -121,10 +120,12 @@ public class ContactFragment extends Fragment implements View.OnClickListener, O
     public void onMapReady(GoogleMap googleMap) {
         googleMap.getUiSettings().setZoomControlsEnabled(false);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        googleMap.getUiSettings().setAllGesturesEnabled(false);
         googleMap.setPadding(0, 300, 0, 0);
-        LatLng sydney = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Home"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMapView.setClickable(false);
+        LatLng home = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+        googleMap.addMarker(new MarkerOptions().position(home).title("Home"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(home));
         mMapView.setVisibility(View.VISIBLE);
         mViewAddress.setVisibility(View.VISIBLE);
     }
@@ -171,6 +172,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener, O
         ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(label, text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(getActivity(), label, Toast.LENGTH_SHORT).show();
+        Snackbar.make(mImgCopyPrimary, label, Snackbar.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), label, Toast.LENGTH_SHORT).show();
     }
 }

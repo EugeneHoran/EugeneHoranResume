@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardImageHolder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="230dp">
+
+        <ImageView
+            android:id="@+id/imagePhoto"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/textImageTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/gradient_transparent"
+            android:fontFamily="sans-serif-condensed"
+            android:padding="16dp"
+            android:text="Testing"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

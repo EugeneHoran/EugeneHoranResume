@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/scroll"
+    android:id="@+id/recycler"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="Suuhhh Dude" />
-
-    </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+    android:paddingBottom="48dp"
+    android:paddingTop="4dp" />

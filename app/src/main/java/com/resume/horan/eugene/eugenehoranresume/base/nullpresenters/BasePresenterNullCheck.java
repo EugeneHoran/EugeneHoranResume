@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.base;
+package com.resume.horan.eugene.eugenehoranresume.base.nullpresenters;
 
 import android.util.Log;
 

@@ -66,7 +66,7 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
             case HOLDER_ERROR:
                 return null;
             case HOLDER_HEADER:
-                return new ViewHolderHeader(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_header_experience, parent, false));
+                return new ViewHolderHeader(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_header, parent, false));
             case HOLDER_ACCOUNT:
                 return new ViewHolderAccount(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_account, parent, false));
             case HOLDER_EXPERIENCE:

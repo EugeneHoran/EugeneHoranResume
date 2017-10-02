@@ -1,6 +1,7 @@
 package com.resume.horan.eugene.eugenehoranresume.ui.main;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -21,6 +22,7 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseActivity;
+import com.resume.horan.eugene.eugenehoranresume.model.AboutObject;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeEducationObject;
 import com.resume.horan.eugene.eugenehoranresume.model.ResumeExperienceObject;
@@ -29,13 +31,12 @@ import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginActivity;
 import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
-import com.squareup.picasso.Picasso;
 
 
 public class MainActivity extends BaseActivity implements
         View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener,
-        MainContract.View,
+        MainActivityContract.View,
         ResumeParentFragment.ResumeInteraction {
 
     private static final String STATE_FRAGMENT_POSITION = "saved_state_fragment_fragment_position";
@@ -45,10 +46,10 @@ public class MainActivity extends BaseActivity implements
     private static final String TAG_CONTACT_FRAGMENT = "tag_contact_fragment";
     private static final String TAG_ABOUT_FRAGMENT = "tag_about_fragment";
 
-    private MainContract.Presenter mPresenter;
+    private MainActivityContract.Presenter mPresenter;
 
     @Override
-    public void setPresenter(MainContract.Presenter presenter) {
+    public void setPresenter(MainActivityContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
@@ -62,6 +63,7 @@ public class MainActivity extends BaseActivity implements
     private FirebaseAuth mAuth;
     // UI references.
 
+    private CollapsingToolbarLayout mCollapsingToolbar;
     private AppBarLayout mAppBar;
     private FrameLayout mFrameContainer;
     private TabLayout mTabLayout;
@@ -85,7 +87,7 @@ public class MainActivity extends BaseActivity implements
         mFrameContainer = findViewById(R.id.container);
         mTabLayout = findViewById(R.id.tabs);
         mProgressBar = findViewById(R.id.viewProgress);
-        CollapsingToolbarLayout mCollapsingToolbar = findViewById(R.id.collapsingToolbar);
+        mCollapsingToolbar = findViewById(R.id.collapsingToolbar);
         mCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
         mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
 
@@ -96,7 +98,7 @@ public class MainActivity extends BaseActivity implements
         if (savedInstanceState != null) {
             mFragmentPosition = savedInstanceState.getInt(STATE_FRAGMENT_POSITION, Common.WHICH_RESUME_FRAGMENT);
         }
-        new MainPresenter(this);
+        new MainActivityPresenter(this);
     }
 
     @Override
@@ -104,6 +106,7 @@ public class MainActivity extends BaseActivity implements
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(STATE_FRAGMENT_POSITION, mFragmentPosition);
     }
+
 
     @Override
     public void setFragmentPosition(int fragmentPosition) {
@@ -113,7 +116,6 @@ public class MainActivity extends BaseActivity implements
     /**
      * Start Working on Fragment Control
      */
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawer.closeDrawers();
@@ -130,9 +132,6 @@ public class MainActivity extends BaseActivity implements
                 case R.id.action_about_me:
                     mPresenter.start(Common.WHICH_ABOUT_FRAGMENT);
                     item.setChecked(true);
-                    break;
-                case R.id.action_pixabay:
-//                    startActivity(new Intent(MainActivity.this, TestingMapsActivity.class));
                     break;
             }
         }
@@ -157,11 +156,12 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
+
     @Override
-    public void showAboutFragment() {
+    public void showAboutFragment(AboutObject aboutObject) {
         AboutFragment aboutFragment = (AboutFragment) mFragmentManager.findFragmentByTag(TAG_ABOUT_FRAGMENT);
         if (aboutFragment == null) {
-            aboutFragment = AboutFragment.newInstance();
+            aboutFragment = AboutFragment.newInstance(aboutObject);
             replaceFragment(aboutFragment, TAG_ABOUT_FRAGMENT);
         }
     }
@@ -171,13 +171,24 @@ public class MainActivity extends BaseActivity implements
         setTitle(title);
         if (showExpandedImage) {
             mExpandedImage.setVisibility(View.VISIBLE);
-            Picasso.with(MainActivity.this).load("https://raw.githubusercontent.com/EugeneHoran/EugeneHoranResume/master/eugene_about.jpg").into(mExpandedImage);
-//            https://raw.githubusercontent.com/EugeneHoran/EugeneHoranResume/master/eugene_about.jpg
+            mCollapsingToolbar.setTitleEnabled(true);
+            mCollapsingToolbar.setTitle(title);
             mAppBar.setExpanded(true);
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mExpandedImage.setForeground(null);
+            }
             mAppBar.setExpanded(false);
+            mCollapsingToolbar.setTitleEnabled(false);
             mExpandedImage.setVisibility(View.GONE);
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAppBar.setExpanded(false);
     }
 
     @Override

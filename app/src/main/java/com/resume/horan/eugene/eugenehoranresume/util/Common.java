@@ -10,6 +10,7 @@ public class Common {
      */
     public static final String FB_REF_EUGENE_HORAN = "eugeneHoran";
     public static final String FB_REF_CONTACT = "eugeneHoran/contact";
+    public static final String FB_REF_ABOUT = "eugeneHoran/about";
 
     /**
      * Navigation Views
@@ -19,11 +20,19 @@ public class Common {
     public static final int WHICH_ABOUT_FRAGMENT = 2;
 
     /**
+     * Pager Fragments
+     */
+    public static final int WHICH_EXPERIENCE_FRAGMENT = 0;
+    public static final int WHICH_SKILL_FRAGMENT = 1;
+    public static final int WHICH_EDUCATION_FRAGMENT = 2;
+
+    /**
      * Common Arguments
      */
-    public static final String ARG_EUGENE_HORAN = "arg_eugene_horan_data";
+    public static final String ARG_WHICH_FRAGMENT = "arg_which_fragment";
     public static final String ARG_RESUME_EXPERIENCE = "arg_resume_experience";
     public static final String ARG_RESUME_SKILL = "arg_resume_skills";
     public static final String ARG_RESUME_EDUCATION = "arg_resume_education";
     public static final String ARG_CONTACT = "arg_contact";
+    public static final String ARG_ABOUT = "arg_about";
 }
