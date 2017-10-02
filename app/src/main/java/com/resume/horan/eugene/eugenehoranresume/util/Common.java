@@ -35,6 +35,7 @@ public class Common {
     public static final String ARG_RESUME_EDUCATION = "arg_resume_education";
     public static final String ARG_CONTACT = "arg_contact";
     public static final String ARG_ABOUT = "arg_about";
+    public static final String ARG_IMAGE = "image";
 
 
     /**

@@ -40,7 +40,7 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public interface Listener {
         void onLinkClicked(String url);
 
-        void onImageClicked(AlbumImage albumImage);
+        void onImageClicked(AlbumImage albumImage, View image, View card);
     }
 
     public void setListener(Listener listener) {
@@ -262,7 +262,7 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View view) {
             if (mListener != null) {
-                mListener.onImageClicked(object);
+                mListener.onImageClicked(object, view, mCardImageHolder);
             }
         }
     }
@@ -295,7 +295,7 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View view) {
             if (mListener != null) {
-                mListener.onImageClicked(object);
+                mListener.onImageClicked(object, view, mCardImageHolder);
             }
         }
     }

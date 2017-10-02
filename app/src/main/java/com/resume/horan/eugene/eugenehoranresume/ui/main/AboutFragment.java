@@ -1,23 +1,26 @@
 package com.resume.horan.eugene.eugenehoranresume.ui.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.adapter.AboutRecyclerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.model.AboutObject;
 import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
+import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 import java.util.ArrayList;
@@ -98,8 +101,16 @@ public class AboutFragment extends Fragment {
             }
 
             @Override
-            public void onImageClicked(AlbumImage albumImage) {
-                Toast.makeText(mHost, albumImage.getImageUrl(), Toast.LENGTH_SHORT).show();
+            public void onImageClicked(AlbumImage albumImage, View image, View card) {
+                Intent intent = new Intent(getActivity(), ViewImageActivity.class);
+                intent.putExtra(Common.ARG_IMAGE, albumImage);
+                Pair<View, String> p2 = Pair.create(image, "image");
+                Pair<View, String> p3 = Pair.create(card, "back");
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p2
+//                        , p3
+                );
+//                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), image, "image");
+                startActivity(intent, options.toBundle());
             }
         });
     }

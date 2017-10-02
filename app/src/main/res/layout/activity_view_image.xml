@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/holder"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.resume.horan.eugene.eugenehoranresume.util.ui.PullBackLayout
+        android:id="@+id/puller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context="com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:transitionName="image" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="34dp"
+            android:fitsSystemWindows="false" />
+    </com.resume.horan.eugene.eugenehoranresume.util.ui.PullBackLayout>
+</RelativeLayout>

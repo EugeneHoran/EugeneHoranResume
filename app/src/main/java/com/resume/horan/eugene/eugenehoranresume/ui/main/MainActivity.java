@@ -61,6 +61,7 @@ public class MainActivity extends BaseActivity implements
     public void onStart() {
         super.onStart();
         mPresenter.start(mFragmentPosition);
+        mAppBar.setExpanded(false);
     }
 
     private FragmentManager mFragmentManager;
@@ -100,7 +101,7 @@ public class MainActivity extends BaseActivity implements
         mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
 
         mAnimFadeInSlideUp = AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_set_fade_in_slide_up_recycler);
-        mAnimFadeInSlideUp.setStartOffset(350);
+        mAnimFadeInSlideUp.setStartOffset(400);
         mAnimFadeInSlideUp.setFillAfter(false);
 
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -206,7 +207,6 @@ public class MainActivity extends BaseActivity implements
                 .load(Common.IMG_PROFILE)
                 .into(mImageProfile);
     }
-
 
     @Override
     public void onResume() {
