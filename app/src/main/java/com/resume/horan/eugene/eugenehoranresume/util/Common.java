@@ -35,4 +35,17 @@ public class Common {
     public static final String ARG_RESUME_EDUCATION = "arg_resume_education";
     public static final String ARG_CONTACT = "arg_contact";
     public static final String ARG_ABOUT = "arg_about";
+
+
+    /**
+     * Divider
+     */
+    public static final String DIVIDER_LINE_NO_SPACE = "divider_no_space";
+    public static final String DIVIDER_LINE_WITH_SPACE = "divider_space";
+    public static final String DIVIDER_NO_LINE_WITH_SPACE = "footer";
+
+    /**
+     * Image Link
+     */
+    public static final String IMG_PROFILE = "https://firebasestorage.googleapis.com/v0/b/eugenehoranresume.appspot.com/o/eugeneProfile.jpg?alt=media&token=467c2ce9-410f-4682-9f09-b15035d25263";
 }

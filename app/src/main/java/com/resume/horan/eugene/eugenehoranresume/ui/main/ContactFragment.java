@@ -104,7 +104,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener, O
                 public void run() {
                     initMap();
                 }
-            }, 450);
+            }, 500);
         } else {
             initMap();
         }

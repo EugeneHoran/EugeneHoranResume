@@ -13,6 +13,7 @@ import com.resume.horan.eugene.eugenehoranresume.model.Bullet;
 import com.resume.horan.eugene.eugenehoranresume.model.DividerFiller;
 import com.resume.horan.eugene.eugenehoranresume.model.Experience;
 import com.resume.horan.eugene.eugenehoranresume.model.Header;
+import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -207,13 +208,13 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
 
         void initItems() {
             DividerFiller mDividerFiller = (DividerFiller) mObjectList.get(getAdapterPosition());
-            if (mDividerFiller.getFillerBreak().equalsIgnoreCase("divider_no_space")) {
+            if (mDividerFiller.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_LINE_NO_SPACE)) {
                 mSpace.setVisibility(View.GONE);
                 mLine.setVisibility(View.VISIBLE);
-            } else if (mDividerFiller.getFillerBreak().equalsIgnoreCase("divider_space")) {
+            } else if (mDividerFiller.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_LINE_WITH_SPACE)) {
                 mSpace.setVisibility(View.VISIBLE);
                 mLine.setVisibility(View.VISIBLE);
-            } else if (mDividerFiller.getFillerBreak().equalsIgnoreCase("footer")) {
+            } else if (mDividerFiller.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_NO_LINE_WITH_SPACE)) {
                 mSpace.setVisibility(View.VISIBLE);
                 mLine.setVisibility(View.GONE);
             } else {

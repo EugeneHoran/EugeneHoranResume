@@ -4,6 +4,8 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.resume.horan.eugene.eugenehoranresume.util.Common;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,11 +58,11 @@ public class EugeneHoran implements Parcelable {
         List<Object> mObjectList = new ArrayList<>();
         mObjectList.add(new Header("Public Accounts"));
         mObjectList.addAll(resume.getAccount());
-        mObjectList.add(2, new DividerFiller("divider_no_space"));
+        mObjectList.add(2, new DividerFiller(Common.DIVIDER_LINE_NO_SPACE));
         mObjectList.add(new Header("Resume"));
         for (int i = 0; i < experienceList.size(); i++) {
             if (mObjectList.size() > 5) {
-                mObjectList.add(new DividerFiller("divider_space"));
+                mObjectList.add(new DividerFiller(Common.DIVIDER_LINE_WITH_SPACE));
             }
             Experience experience = experienceList.get(i);
             List<Bullet> bullets = new ArrayList<>();
@@ -69,7 +71,7 @@ public class EugeneHoran implements Parcelable {
             mObjectList.add(experience);
             mObjectList.addAll(bullets);
         }
-        mObjectList.add(new DividerFiller("footer"));
+        mObjectList.add(new DividerFiller(Common.DIVIDER_NO_LINE_WITH_SPACE));
         return new ResumeExperienceObject(mObjectList);
     }
 

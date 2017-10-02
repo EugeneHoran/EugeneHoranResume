@@ -47,17 +47,20 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
         switch (mFragmentPosition) {
             case Common.WHICH_RESUME_FRAGMENT:
                 getView().showLoading(true);
-                getView().setToolbarTitle("Eugene Horan's Resume", false);
+                getView().setToolbarTitle("Eugene Horan's Resume");
+                getView().showAppBarExpanded(false, null);
                 break;
             case Common.WHICH_CONTACT_FRAGMENT:
                 getView().showLoading(true);
                 getView().showTabs(false);
-                getView().setToolbarTitle("Eugene J. Horan", false);
+                getView().setToolbarTitle("Eugene J. Horan");
+                getView().showAppBarExpanded(false, null);
                 break;
             case Common.WHICH_ABOUT_FRAGMENT:
                 getView().showLoading(true);
                 getView().showTabs(false);
-                getView().setToolbarTitle("About Eugene", true);
+                getView().setToolbarTitle("About Eugene");
+                getView().showAppBarExpanded(true, null);
                 break;
         }
         loadMainData();

@@ -288,13 +288,16 @@
          ],
          "goals":[  
             {  
-               "goal":"Contribute to the Open-Source community that tought me everything I know."
+               "goal":"Contribute to the Open-Source community that tought me everything I know.",
+               "visible":true
             },
             {  
-               "goal":"Keep up to date with the latest Android Libraries. Learning and implementing the latest SDK's."
+               "goal":"Keep up to date with the latest Android Libraries. Learning and implementing the latest SDK's.",
+               "visible":false
             },
             {  
-               "goal":"Become a full stack engineer. Dabble with IOS."
+               "goal":"Become a full stack engineer. Dabble with IOS.",
+               "visible":false
             }
          ],
          "socialMedia":[  
@@ -302,37 +305,37 @@
                "account":"GitHub",
                "url":"https://github.com/EugeneHoran",
                "imageInt":0,
-               "visible":"true"
+               "visible":true
             },
             {  
                "account":"Stack Overflow",
                "url":"https://stackoverflow.com/users/3904085/eugene-h",
                "imageInt":1,
-               "visible":"true"
+               "visible":true
             },
             {  
                "account":"Google+",
                "url":"https://plus.google.com/111858771255127443258",
                "imageInt":2,
-               "visible":"true"
+               "visible":false
             },
             {  
                "account":"Facebook",
                "url":"https://www.facebook.com/profile.php?id=565328301",
                "imageInt":3,
-               "visible":"false"
+               "visible":false
             },
             {  
                "account":"Twitter",
                "url":"https://twitter.com/EugeneHoran",
                "imageInt":4,
-               "visible":"fale"
+               "visible": false
             },
             {  
                "account":"LinkedIn",
                "url":"https://www.linkedin.com/in/eugene-horan-a1654752/",
                "imageInt":5,
-               "visible":"false"
+               "visible" : false
             }
          ]
       },

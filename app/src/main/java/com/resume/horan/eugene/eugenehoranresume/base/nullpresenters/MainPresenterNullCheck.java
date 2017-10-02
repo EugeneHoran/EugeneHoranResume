@@ -39,7 +39,12 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainActivityC
             }
 
             @Override
-            public void setToolbarTitle(String title, boolean showExpandedImage) {
+            public void setToolbarTitle(String title) {
+
+            }
+
+            @Override
+            public void showAppBarExpanded(boolean showAppbarExpanded, String title) {
 
             }
 

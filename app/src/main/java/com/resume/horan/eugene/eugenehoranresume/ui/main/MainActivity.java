@@ -1,7 +1,6 @@
 package com.resume.horan.eugene.eugenehoranresume.ui.main;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -13,8 +12,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,13 +31,17 @@ import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginActivity;
 import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends BaseActivity implements
         View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener,
         MainActivityContract.View,
-        ResumeParentFragment.ResumeInteraction {
+        ResumeParentFragment.ResumeInteraction,
+        AppBarLayout.OnOffsetChangedListener {
 
     private static final String STATE_FRAGMENT_POSITION = "saved_state_fragment_fragment_position";
     private int mFragmentPosition = Common.WHICH_RESUME_FRAGMENT;
@@ -65,12 +69,16 @@ public class MainActivity extends BaseActivity implements
 
     private CollapsingToolbarLayout mCollapsingToolbar;
     private AppBarLayout mAppBar;
+    private CircleImageView mImageProfile;
+    private View mExpandedView;
+
     private FrameLayout mFrameContainer;
     private TabLayout mTabLayout;
-    private ImageView mExpandedImage;
     private ProgressBar mProgressBar;
     private TextView mTextSettings;
     private TextView mTextLogout;
+
+    private Animation mAnimFadeInSlideUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +87,9 @@ public class MainActivity extends BaseActivity implements
         initMainActivity();
         mAuth = FirebaseAuth.getInstance();
         mFragmentManager = getSupportFragmentManager();
-
         mAppBar = findViewById(R.id.app_bar);
-        mExpandedImage = findViewById(R.id.expandedImage);
+        mImageProfile = findViewById(R.id.imageProfile);
+        mExpandedView = findViewById(R.id.expandedView);
         mTextSettings = findViewById(R.id.textSettings);
         mTextLogout = findViewById(R.id.textLogout);
         mFrameContainer = findViewById(R.id.container);
@@ -91,10 +99,14 @@ public class MainActivity extends BaseActivity implements
         mCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
         mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
 
+        mAnimFadeInSlideUp = AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_set_fade_in_slide_up_recycler);
+        mAnimFadeInSlideUp.setStartOffset(350);
+        mAnimFadeInSlideUp.setFillAfter(false);
+
         mNavigationView.setNavigationItemSelectedListener(this);
         mTextSettings.setOnClickListener(this);
         mTextLogout.setOnClickListener(this);
-
+        loadProfileImage();
         if (savedInstanceState != null) {
             mFragmentPosition = savedInstanceState.getInt(STATE_FRAGMENT_POSITION, Common.WHICH_RESUME_FRAGMENT);
         }
@@ -106,7 +118,6 @@ public class MainActivity extends BaseActivity implements
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(STATE_FRAGMENT_POSITION, mFragmentPosition);
     }
-
 
     @Override
     public void setFragmentPosition(int fragmentPosition) {
@@ -167,21 +178,33 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void setToolbarTitle(String title, boolean showExpandedImage) {
+    public void setToolbarTitle(String title) {
         setTitle(title);
-        if (showExpandedImage) {
-            mExpandedImage.setVisibility(View.VISIBLE);
-            mCollapsingToolbar.setTitleEnabled(true);
-            mCollapsingToolbar.setTitle(title);
-            mAppBar.setExpanded(true);
+    }
+
+    @Override
+    public void showAppBarExpanded(boolean showAppbarExpanded, String title) {
+        mCollapsingToolbar.setTitle(title);
+        mCollapsingToolbar.setTitleEnabled(showAppbarExpanded);
+        mExpandedView.setVisibility(showAppbarExpanded ? View.VISIBLE : View.GONE);
+        mCollapsingToolbar.setTitleEnabled(showAppbarExpanded);
+        mAppBar.setExpanded(showAppbarExpanded, false);
+        findViewById(R.id.viewAnchor).setVisibility(showAppbarExpanded ? View.VISIBLE : View.GONE);
+        mImageProfile.setVisibility(showAppbarExpanded ? View.VISIBLE : View.GONE);
+        if (showAppbarExpanded) {
+            mImageProfile.startAnimation(mAnimFadeInSlideUp);
+            mAppBar.addOnOffsetChangedListener(this);
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mExpandedImage.setForeground(null);
-            }
-            mAppBar.setExpanded(false);
-            mCollapsingToolbar.setTitleEnabled(false);
-            mExpandedImage.setVisibility(View.GONE);
+            mAnimFadeInSlideUp.cancel();
+            mAppBar.removeOnOffsetChangedListener(this);
         }
+        mMaxScrollSize = mAppBar.getTotalScrollRange();
+    }
+
+    private void loadProfileImage() {
+        Picasso.with(MainActivity.this)
+                .load(Common.IMG_PROFILE)
+                .into(mImageProfile);
     }
 
 
@@ -226,8 +249,45 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        if (mFragmentPosition != Common.WHICH_EXPERIENCE_FRAGMENT) {
+            mPresenter.start(Common.WHICH_EXPERIENCE_FRAGMENT);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         mPresenter.onDestroy();
         super.onDestroy();
+    }
+
+
+    /**
+     * Collapsing Toolbar Listener
+     */
+    private static final int PERCENTAGE_TO_ANIMATE_AVATAR = 20;
+    private boolean mIsAvatarShown = true;
+    private int mMaxScrollSize;
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+        if (mMaxScrollSize == 0)
+            mMaxScrollSize = appBarLayout.getTotalScrollRange();
+        int percentage = (Math.abs(i)) * 100 / mMaxScrollSize;
+        if (percentage >= PERCENTAGE_TO_ANIMATE_AVATAR && mIsAvatarShown) {
+            mIsAvatarShown = false;
+            mImageProfile.animate()
+                    .scaleY(0).scaleX(0)
+                    .setDuration(100)
+                    .start();
+        }
+        if (percentage <= PERCENTAGE_TO_ANIMATE_AVATAR && !mIsAvatarShown) {
+            mIsAvatarShown = true;
+            mImageProfile.animate()
+                    .scaleY(1).scaleX(1)
+                    .start();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.resume.horan.eugene.eugenehoranresume.adapter;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +15,9 @@ import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
 import com.resume.horan.eugene.eugenehoranresume.model.DividerFiller;
 import com.resume.horan.eugene.eugenehoranresume.model.Goals;
 import com.resume.horan.eugene.eugenehoranresume.model.Header;
+import com.resume.horan.eugene.eugenehoranresume.model.LoaderObject;
 import com.resume.horan.eugene.eugenehoranresume.model.SocialMedia;
+import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,7 +30,8 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public static final int HOLDER_SOCIAL_MEDIA = 3;
     public static final int HOLDER_IMAGES = 4;
     public static final int HOLDER_IMAGES_LARGE = 5;
-    public static final int HOLDER_DIVIDER = 6;
+    public static final int HOLDER_LOADER = 6;
+    public static final int HOLDER_DIVIDER = 7;
 
     private List<Object> mObjectList = new ArrayList<>();
 
@@ -66,6 +70,8 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
         } else if (mObjectList.get(position) instanceof DividerFiller) {
             return HOLDER_DIVIDER;
+        } else if (mObjectList.get(position) instanceof LoaderObject) {
+            return HOLDER_LOADER;
         } else {
             return HOLDER_ERROR;
         }
@@ -86,6 +92,8 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 return new ViewHolderImageLarge(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_about_images_large, parent, false));
             case HOLDER_IMAGES:
                 return new ViewHolderImages(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_about_images_normal, parent, false));
+            case HOLDER_LOADER:
+                return new ViewHolderLoader(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_loader, parent, false));
             case HOLDER_DIVIDER:
                 return new ViewHolderDivider(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_divider, parent, false));
             default:
@@ -110,6 +118,9 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         } else if (holder instanceof ViewHolderImages) {
             ViewHolderImages mHolder = (ViewHolderImages) holder;
             mHolder.initItems();
+        } else if (holder instanceof ViewHolderLoader) {
+            ViewHolderLoader mHolder = (ViewHolderLoader) holder;
+            mHolder.initItems();
         } else if (holder instanceof ViewHolderDivider) {
             ViewHolderDivider mHolder = (ViewHolderDivider) holder;
             mHolder.initItems();
@@ -124,6 +135,43 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     /**
      * ViewHolders
      */
+
+    private class ViewHolderLoader extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView mTextLoadMore;
+        private LoaderObject object;
+
+        ViewHolderLoader(View v) {
+            super(v);
+            mTextLoadMore = v.findViewById(R.id.textLoadMore);
+            mTextLoadMore.setOnClickListener(this);
+        }
+
+        void initItems() {
+            object = (LoaderObject) mObjectList.get(getAdapterPosition());
+            mTextLoadMore.setText(object.isExpanded() ? R.string.show_less : R.string.show_more);
+            mTextLoadMore.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    !object.isExpanded()
+                            ? ContextCompat.getDrawable(mTextLoadMore.getContext(), R.drawable.ic_expand_more)
+                            : ContextCompat.getDrawable(mTextLoadMore.getContext(), R.drawable.ic_expand_less),
+                    null);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (object.isExpanded()) {
+                mObjectList.removeAll(object.getObjectList());
+                notifyItemRangeRemoved(getAdapterPosition() - object.getObjectList().size() - 1, object.getObjectList().size());
+                object.setExpanded(false);
+            } else {
+                mObjectList.addAll(getAdapterPosition() - 1, object.getObjectList());
+                notifyItemRangeInserted(getAdapterPosition() - 1, object.getObjectList().size());
+                object.setExpanded(true);
+            }
+            notifyItemChanged(getAdapterPosition());
+        }
+    }
 
     private class ViewHolderHeader extends RecyclerView.ViewHolder {
         private TextView mTextHeader;
@@ -264,13 +312,13 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         void initItems() {
             DividerFiller object = (DividerFiller) mObjectList.get(getAdapterPosition());
-            if (object.getFillerBreak().equalsIgnoreCase("divider_no_space")) {
+            if (object.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_LINE_NO_SPACE)) {
                 mSpace.setVisibility(View.GONE);
                 mLine.setVisibility(View.VISIBLE);
-            } else if (object.getFillerBreak().equalsIgnoreCase("divider_space")) {
+            } else if (object.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_LINE_WITH_SPACE)) {
                 mSpace.setVisibility(View.VISIBLE);
                 mLine.setVisibility(View.VISIBLE);
-            } else if (object.getFillerBreak().equalsIgnoreCase("footer")) {
+            } else if (object.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_NO_LINE_WITH_SPACE)) {
                 mSpace.setVisibility(View.VISIBLE);
                 mLine.setVisibility(View.GONE);
             } else {

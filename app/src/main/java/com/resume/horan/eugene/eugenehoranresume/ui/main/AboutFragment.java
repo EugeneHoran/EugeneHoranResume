@@ -65,6 +65,10 @@ public class AboutFragment extends Fragment {
                 switch (mAboutAdapter.getItemViewType(position)) {
                     case AboutRecyclerAdapter.HOLDER_HEADER:
                         return 2;
+                    case AboutRecyclerAdapter.HOLDER_DIVIDER:
+                        return 2;
+                    case AboutRecyclerAdapter.HOLDER_LOADER:
+                        return 2;
                     case AboutRecyclerAdapter.HOLDER_GOAL:
                         return 2;
                     case AboutRecyclerAdapter.HOLDER_SOCIAL_MEDIA:

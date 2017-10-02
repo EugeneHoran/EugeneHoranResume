@@ -16,6 +16,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- Profile Image-->
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
@@ -94,4 +95,6 @@
     <string name="about_eugene">About Eugene</string>
     <string name="eugene_j_horan">Eugene J. Horan</string>
     <string name="i_will_be_moving_in_the_next_few_months_to_nassau_county">* I will be moving in the next few months to Nassau county.</string>
+    <string name="show_less">Show less</string>
+    <string name="show_more">Show more</string>
 </resources>

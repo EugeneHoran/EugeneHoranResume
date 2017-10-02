@@ -11,7 +11,7 @@ public class SocialMedia implements Parcelable {
     private String account;
     private String url;
     private Integer imageInt;
-    private String visible;
+    private boolean visible;
 
 
     public int getLogo() {
@@ -47,7 +47,7 @@ public class SocialMedia implements Parcelable {
      * @param url
      */
 
-    public SocialMedia(String account, String url, Integer imageInt, String visible) {
+    public SocialMedia(String account, String url, Integer imageInt, boolean visible) {
         this.account = account;
         this.url = url;
         this.imageInt = imageInt;
@@ -79,11 +79,11 @@ public class SocialMedia implements Parcelable {
         this.imageInt = imageInt;
     }
 
-    public String getVisible() {
+    public boolean getVisible() {
         return visible;
     }
 
-    public void setVisible(String visible) {
+    public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
@@ -98,14 +98,14 @@ public class SocialMedia implements Parcelable {
         dest.writeString(this.account);
         dest.writeString(this.url);
         dest.writeValue(this.imageInt);
-        dest.writeString(this.visible);
+        dest.writeByte(this.visible ? (byte) 1 : (byte) 0);
     }
 
     protected SocialMedia(Parcel in) {
         this.account = in.readString();
         this.url = in.readString();
         this.imageInt = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.visible = in.readString();
+        this.visible = in.readByte() != 0;
     }
 
     public static final Creator<SocialMedia> CREATOR = new Creator<SocialMedia>() {

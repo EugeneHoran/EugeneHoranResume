@@ -13,7 +13,9 @@ public interface MainActivityContract {
     interface View extends BaseView<Presenter> {
         void showTabs(boolean show);
 
-        void setToolbarTitle(String title, boolean showExpandedImage);
+        void setToolbarTitle(String title);
+
+        void showAppBarExpanded(boolean showAppbarExpanded, String title);
 
         void setFragmentPosition(int fragmentPosition);
 

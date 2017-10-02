@@ -4,6 +4,8 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.resume.horan.eugene.eugenehoranresume.util.Common;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +14,32 @@ public class About implements Parcelable {
     private List<SocialMedia> socialMedia = null;
     private List<AlbumImage> albumImage = null;
 
-
     public AboutObject getFilteredAbout() {
         List<Object> mObjectList = new ArrayList<>();
         mObjectList.add(new Header("Goals"));
-        mObjectList.addAll(getGoals());
+        List<Object> mExpandGoalItems = new ArrayList<>();
+        for (int i = 0; i < getGoals().size(); i++) {
+            Goals gObject = getGoals().get(i);
+            if (gObject.isVisible()) {
+                mObjectList.add(gObject);
+            } else {
+                mExpandGoalItems.add(gObject);
+            }
+        }
+        mObjectList.add(new DividerFiller(Common.DIVIDER_LINE_NO_SPACE));
+        mObjectList.add(new LoaderObject(mExpandGoalItems, false));
         mObjectList.add(new Header("Social Media"));
-        mObjectList.addAll(getSocialMedia());
+        List<Object> mExpandSocialItems = new ArrayList<>();
+        for (int i = 0; i < getSocialMedia().size(); i++) {
+            SocialMedia smObject = getSocialMedia().get(i);
+            if (smObject.getVisible()) {
+                mObjectList.add(smObject);
+            } else {
+                mExpandSocialItems.add(smObject);
+            }
+        }
+        mObjectList.add(new DividerFiller(Common.DIVIDER_LINE_NO_SPACE));
+        mObjectList.add(new LoaderObject(mExpandSocialItems, false));
         mObjectList.add(new Header("Photos"));
         mObjectList.addAll(getAlbumImage());
         return new AboutObject(mObjectList);

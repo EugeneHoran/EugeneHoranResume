@@ -7,6 +7,7 @@ import android.os.Parcelable;
 public class Goals implements Parcelable {
 
     private String goal;
+    private boolean visible;
 
     public String getGoal() {
         return goal;
@@ -16,6 +17,16 @@ public class Goals implements Parcelable {
         this.goal = goal;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public Goals() {
+    }
 
     @Override
     public int describeContents() {
@@ -25,13 +36,12 @@ public class Goals implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.goal);
-    }
-
-    public Goals() {
+        dest.writeByte(this.visible ? (byte) 1 : (byte) 0);
     }
 
     protected Goals(Parcel in) {
         this.goal = in.readString();
+        this.visible = in.readByte() != 0;
     }
 
     public static final Creator<Goals> CREATOR = new Creator<Goals>() {
