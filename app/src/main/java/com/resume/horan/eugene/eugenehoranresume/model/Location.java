@@ -4,6 +4,8 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Location implements Parcelable {
 
     private String country;
@@ -14,6 +16,10 @@ public class Location implements Parcelable {
     private Double latitude;
     private Double longitude;
 
+
+    public LatLng getLatLng() {
+        return new LatLng(latitude, longitude);
+    }
 
     /**
      * No args constructor for use in serialization
