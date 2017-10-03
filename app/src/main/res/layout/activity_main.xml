@@ -92,6 +92,14 @@
             app:layout_anchor="@id/viewAnchor"
             app:layout_anchorGravity="top|center_horizontal"
             app:layout_scrollFlags="scroll" />
+
+        <!--<android.support.design.widget.BottomNavigationView-->
+            <!--android:id="@+id/navigation"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:background="?android:attr/windowBackground"-->
+            <!--app:menu="@menu/nav_bottom_bar_main_activity" />-->
     </android.support.design.widget.CoordinatorLayout>
 
 

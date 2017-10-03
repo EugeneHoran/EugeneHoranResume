@@ -1,5 +1,6 @@
 package com.resume.horan.eugene.eugenehoranresume.base.nullpresenters;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginContract;
 
 public class LoginPresenterNullCheck extends BasePresenterNullCheck<LoginContract.View> {
@@ -63,6 +64,11 @@ public class LoginPresenterNullCheck extends BasePresenterNullCheck<LoginContrac
 
             @Override
             public void loginSuccessfulFingerprint() {
+
+            }
+
+            @Override
+            public void showEmailRequired() {
 
             }
         };

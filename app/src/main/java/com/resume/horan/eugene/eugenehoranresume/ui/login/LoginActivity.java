@@ -21,14 +21,13 @@ import com.google.android.gms.common.SignInButton;
 import com.mattprecious.swirl.SwirlView;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.ui.main.MainActivity;
-import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.MultiTextWatcher;
 import com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView;
 
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View, OnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class LoginActivity extends AppCompatActivity implements LoginRequestDataBSFragment.Listener, LoginContract.View, OnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private LoginContract.Presenter mPresenter;
     private boolean mCreateAccountVisible = false;
@@ -157,6 +156,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         mPresenter.onDestroy();
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
+    }
+
+    @Override
+    public void showEmailRequired() {
+        LoginRequestDataBSFragment.newInstance().show(getSupportFragmentManager(), "DIALOG");
+    }
+
+    @Override
+    public void updateUserEmail(String email) {
+        mPresenter.userEmailUpdated(email);
     }
 
     @Override

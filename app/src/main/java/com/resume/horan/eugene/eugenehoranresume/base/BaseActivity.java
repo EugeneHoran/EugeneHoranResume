@@ -8,11 +8,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public abstract class BaseActivity extends AppCompatActivity {
     protected FirebaseUser mFirebaseUser;
@@ -33,13 +37,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
         mNavigationView = findViewById(R.id.navView);
+        CircleImageView imageView = mNavigationView.getHeaderView(0).findViewById(R.id.imageView);
+        Picasso.with(this).load(mFirebaseUser.getPhotoUrl()).into(imageView);
         TextView mTextEmail = mNavigationView.getHeaderView(0).findViewById(R.id.textEmail);
         mTextEmail.setText(!TextUtils.isEmpty(mFirebaseUser.getEmail()) ? mFirebaseUser.getEmail() : "null");
     }
 
     public void replaceFragment(Fragment fragment, String TAG) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.setCustomAnimations(R.anim.anim_set_fade_in_slide_up_recycler, R.anim.anim_fade_out);
+//        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+//        transaction.setCustomAnimations(R.anim.anim_show_frag, R.anim.anim_hide_frag);
         transaction.replace(R.id.container, fragment, TAG).commit();
     }
 

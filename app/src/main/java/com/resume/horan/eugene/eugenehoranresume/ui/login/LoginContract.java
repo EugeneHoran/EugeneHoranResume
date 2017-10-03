@@ -3,6 +3,7 @@ package com.resume.horan.eugene.eugenehoranresume.ui.login;
 
 import android.content.Intent;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.resume.horan.eugene.eugenehoranresume.base.BasePresenter;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseView;
 
@@ -27,6 +28,8 @@ public interface LoginContract {
 
         void showFingerprintMessage(String message, boolean isError);
 
+        void showEmailRequired();
+
         void fingerprintAuthError();
     }
 
@@ -41,6 +44,8 @@ public interface LoginContract {
         void signInEmail(LoginActivity loginView, String email, String password);
 
         void createAccountEmail(LoginActivity loginView, String email, String password);
+
+        void userEmailUpdated(String email);
 
         void initFingerprint(LoginActivity loginView);
 

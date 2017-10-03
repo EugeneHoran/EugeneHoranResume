@@ -29,6 +29,8 @@ public class Common {
     /**
      * Common Arguments
      */
+    public static final String ARG_FIREBASE_USER_EMAIL = "arg_firebase_user_email";
+    public static final String ARG_FIREBASE_USER_NAME = "arg_firebase_user_name";
     public static final String ARG_WHICH_FRAGMENT = "arg_which_fragment";
     public static final String ARG_RESUME_EXPERIENCE = "arg_resume_experience";
     public static final String ARG_RESUME_SKILL = "arg_resume_skills";

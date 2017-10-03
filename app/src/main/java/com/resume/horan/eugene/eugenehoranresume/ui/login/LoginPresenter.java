@@ -49,8 +49,6 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         GoogleApiClient.OnConnectionFailedListener,
         FingerprintAuthListener {
     private static final int RC_SIGN_IN_G = 133;
-    // Prevent mAuthListener being called twice (Only happens when NightMode = Yes)
-    private boolean mAuthFlag = true;
 
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mFacebookCallbackManager;
@@ -232,20 +230,48 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             FirebaseUser mUser = firebaseAuth.getCurrentUser();
-            if (mUser != null && mAuthFlag) {
-                getView().showLoading(true);
-                writeNewUserIfNeeded(mUser.getUid(), "test@email.com", "Eugene Horan");
+            if (mUser != null) {
+                if (TextUtils.isEmpty(mUser.getEmail())) {
+                    getView().showEmailRequired();
+                    getView().showLoading(false);
+                } else {
+                    getView().showLoading(true);
+                    writeNewUserIfNeeded(mUser.getUid(), mUser.getEmail());
+                }
             }
         }
     };
 
-    private void writeNewUserIfNeeded(final String userId, final String username, final String name) {
+    @Override
+    public void userEmailUpdated(final String email) {
+        getView().showLoading(true);
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+            user.updateEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                writeNewUserIfNeeded(user.getUid(), email);
+                            } else {
+                                getView().showToast("Problem Updating email");
+                                getView().showLoading(false);
+                            }
+                        }
+                    });
+        else {
+            getView().showLoading(false);
+            getView().showToast("Problem with data");
+        }
+    }
+
+    private void writeNewUserIfNeeded(final String userId, final String email) {
         final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(userId)) {
-                    usersRef.child(userId).setValue(new User(username, name));
+                    usersRef.child(userId).setValue(new User(email));
                 }
                 if (!Prefs.getBoolean(Common.PREF_FINGERPRINT, false)) {
                     getView().loginSuccessful();
@@ -269,6 +295,10 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     }
 
 
+    /**
+     * Fingerprint
+     */
+
     @Override
     public void initFingerprint(LoginActivity loginView) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -279,9 +309,6 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         }
     }
 
-    /**
-     * Fingerprint
-     */
     @Override
     public void onAuthentication(int helpOrErrorCode, CharSequence infoString, FingerprintManager.AuthenticationResult authenticationResult, int authCode) {
         switch (authCode) {
