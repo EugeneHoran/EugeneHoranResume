@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -102,9 +101,6 @@ public class MainActivity extends BaseActivity implements
         mCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
         mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
 
-//        BottomNavigationView navigation = findViewById(R.id.navigation);
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         mAnimFadeInSlideUp = AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_set_fade_in_slide_up_recycler);
         mAnimFadeInSlideUp.setStartOffset(400);
         mAnimFadeInSlideUp.setFillAfter(false);
@@ -154,30 +150,6 @@ public class MainActivity extends BaseActivity implements
         }
         return false;
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            if (!item.isChecked()) {
-                switch (item.getItemId()) {
-                    case R.id.action_resume:
-                        mPresenter.start(Common.WHICH_RESUME_FRAGMENT);
-                        item.setChecked(true);
-                        return true;
-                    case R.id.action_contact:
-                        mPresenter.start(Common.WHICH_CONTACT_FRAGMENT);
-                        item.setChecked(true);
-                        return true;
-                    case R.id.action_about_me:
-                        mPresenter.start(Common.WHICH_ABOUT_FRAGMENT);
-                        item.setChecked(true);
-                        break;
-                }
-            }
-            return false;
-        }
-    };
 
     @Override
     public void showResumeFragment(ResumeExperienceObject experienceObject, ResumeSkillObject resumeSkillObject, ResumeEducationObject resumeEducationObject) {

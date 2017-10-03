@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/action_resume"
@@ -16,19 +15,4 @@
             android:icon="@drawable/ic_mood"
             android:title="@string/about_eugene" />
     </group>
-
-    <!--<item android:title="Sample Projects">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/action_pixabay"-->
-                <!--android:title="Pixabay API" />-->
-            <!--<item-->
-                <!--android:id="@+id/nav_Pokemon"-->
-                <!--android:title="Send" />-->
-            <!--<item android:title="" />-->
-            <!--<item android:title="" />-->
-            <!--<item android:title="" />-->
-        <!--</menu>-->
-    <!--</item>-->
-
 </menu>
