@@ -1,8 +1,17 @@
 
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.databinding.BindingAdapter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.resume.horan.eugene.eugenehoranresume.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -15,6 +24,25 @@ public class Education implements Parcelable {
     private String major;
     private String logoUrl;
     private List<EducationActivity> educationActivity;
+    private int position;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public boolean isPositionOne() {
+        return position == 0;
+    }
+
+    @BindingAdapter("logo")
+    public static void loadBackground(ImageView view, Education object) {
+        Picasso.with(view.getContext()).load(object.getLogoUrl()).into(view);
+    }
+
 
     public Education() {
     }
@@ -28,6 +56,7 @@ public class Education implements Parcelable {
         this.logoUrl = logoUrl;
         this.educationActivity = educationActivity;
     }
+
 
     public String getOrder() {
         return order;

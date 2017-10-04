@@ -1,71 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="1dp"
-    android:layout_marginRight="1dp"
-    android:background="@color/white"
-    android:elevation="1dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <View
-        android:id="@+id/viewLine"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#EEEEEE" />
+    <data>
 
+        <import type="android.view.View" />
 
-    <ImageView
-        android:id="@+id/imageLogo"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp" />
+        <variable
+            name="object"
+            type="com.resume.horan.eugene.eugenehoranresume.model.Education" />
+    </data>
 
+    <!--Education-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_marginTop="6dp"
-        android:layout_toRightOf="@+id/imageLogo">
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:background="@color/white"
+        android:elevation="1dp">
 
-        <TextView
-            android:id="@+id/textUniversity"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:visibility="@{object.positionOne ? View.VISIBLE : View.VISIBLE}" />
+
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            app:logo="@{object}" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:fontFamily="sans-serif-medium"
-            android:maxLines="1"
-            android:text="Testing"
-            android:textSize="18sp" />
+            android:layout_marginLeft="50dp"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/textLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textUniversity"
-            android:clickable="true"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:text="Testing"
-            android:textSize="14sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:text="@{object.university}"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/textDateRange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textLocation"
-            android:fontFamily="sans-serif"
-            android:text="Testing"
-            android:textSize="14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@{object.location}"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/textMajor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textDateRange"
-            android:fontFamily="sans-serif"
-            android:text="Testing"
-            android:textSize="14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@{object.dateRange}"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@{object.major}"
+                android:textSize="14sp" />
+        </LinearLayout>
     </RelativeLayout>
-</RelativeLayout>
+</layout>

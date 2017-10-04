@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/viewSocialMediaHolder"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:background="@color/white"
-    android:clickable="true"
-    android:elevation="1dp"
-    android:foreground="?attr/selectableItemBackground"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    tools:targetApi="lollipop">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/textSocialMedia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/imageLogo"
-        android:drawablePadding="16dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center_vertical"
-        android:text="Testing"
-        android:textSize="16sp" />
+    <data>
 
-    <ImageView
-        android:id="@+id/imageLink"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="?selectableItemBackgroundBorderless"
+        <variable
+            name="handler"
+            type="com.resume.horan.eugene.eugenehoranresume.main.about.AboutRecyclerAdapter.ViewHolderSocialMedia" />
+
+        <variable
+            name="object"
+            type="com.resume.horan.eugene.eugenehoranresume.model.SocialMedia" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/viewSocialMediaHolder"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
         android:clickable="true"
-        android:padding="7dp"
-        app:srcCompat="@drawable/ic_link" />
-</RelativeLayout>
+        android:elevation="1dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{handler::onLinkClicked}"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:id="@+id/textSocialMedia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:drawablePadding="16dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:text="@{object.account}"
+            android:textSize="16sp"
+            app:load_image="@{object}" />
+
+        <ImageView
+            android:id="@+id/imageLink"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:onClick="@{handler::onLinkClicked}"
+            android:padding="7dp"
+            app:srcCompat="@drawable/ic_link" />
+    </RelativeLayout>
+</layout>

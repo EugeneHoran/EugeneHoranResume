@@ -1,8 +1,15 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.databinding.BindingAdapter;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
+import android.widget.TextView;
+
+import com.resume.horan.eugene.eugenehoranresume.R;
 
 public class SkillItem implements Parcelable {
 
@@ -17,12 +24,15 @@ public class SkillItem implements Parcelable {
         this.skillColorHEX = skillColorHEX;
     }
 
-    public int getChipColor() {
-        return Color.parseColor(skillColorHEX);
+    @BindingAdapter("background_tint")
+    public static void loadBackground(TextView view, SkillItem skill) {
+        Drawable drawable = ContextCompat.getDrawable(view.getContext(), R.drawable.shape_chip_drawable);
+        drawable.setColorFilter(skill.getChipColor(), PorterDuff.Mode.SRC_ATOP);
+        view.setBackground(drawable);
     }
 
-    public String getSkillName() {
-        return skillName;
+    public int getChipColor() {
+        return Color.parseColor(skillColorHEX);
     }
 
     public void setSkillName(String skillName) {
@@ -37,6 +47,9 @@ public class SkillItem implements Parcelable {
         this.skillColorHEX = skillColorHEX;
     }
 
+    public String getSkillName() {
+        return skillName;
+    }
 
     @Override
     public int describeContents() {

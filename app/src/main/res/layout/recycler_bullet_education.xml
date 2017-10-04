@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/textBullet"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="1dp"
-    android:layout_marginRight="1dp"
-    android:background="@color/white"
-    android:drawableLeft="@drawable/ic_circle"
-    android:drawablePadding="16dp"
-    android:elevation="1dp"
-    android:fontFamily="sans-serif-light"
-    android:gravity="center_vertical"
-    android:paddingBottom="16dp"
-    android:paddingLeft="64dp"
-    android:paddingRight="16dp"
-    android:text="Testing"
-    android:textSize="13sp" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="object"
+            type="com.resume.horan.eugene.eugenehoranresume.model.EducationActivity" />
+    </data>
+
+    <TextView
+        android:id="@+id/textBullet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:background="@color/white"
+        android:drawableLeft="@drawable/ic_circle"
+        android:drawablePadding="16dp"
+        android:elevation="1dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="64dp"
+        android:paddingRight="16dp"
+        android:text="@{object.description}"
+        android:textSize="13sp" />
+</layout>

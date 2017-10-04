@@ -43,7 +43,7 @@ public class ContactFragment extends Fragment implements OnMapReadyCallback {
         mContactViewModel = new ContactViewModel(getActivity(), mContact);
         mContactBinding.setContactViewModel(mContactViewModel);
         mContactBinding.mapView.onCreate(savedInstanceState);
-        
+
         mContactBinding.mapView.getMapAsync(ContactFragment.this);
         return mContactBinding.getRoot();
     }

@@ -8,6 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerAccountBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerBulletBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerDividerBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerExperienceBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerHeaderBinding;
 import com.resume.horan.eugene.eugenehoranresume.model.Account;
 import com.resume.horan.eugene.eugenehoranresume.model.Bullet;
 import com.resume.horan.eugene.eugenehoranresume.model.DividerFiller;
@@ -63,19 +68,20 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case HOLDER_ERROR:
                 return null;
             case HOLDER_HEADER:
-                return new ViewHolderHeader(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_header, parent, false));
+                return new ViewHolderHeader(RecyclerHeaderBinding.inflate(layoutInflater, parent, false));
             case HOLDER_ACCOUNT:
-                return new ViewHolderAccount(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_account, parent, false));
+                return new ViewHolderAccount(RecyclerAccountBinding.inflate(layoutInflater, parent, false));
             case HOLDER_EXPERIENCE:
-                return new ViewHolderExperience(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_experience, parent, false));
+                return new ViewHolderExperience(RecyclerExperienceBinding.inflate(layoutInflater, parent, false));
             case HOLDER_BULLET:
-                return new ViewHolderBullet(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_bullet, parent, false));
+                return new ViewHolderBullet(RecyclerBulletBinding.inflate(layoutInflater, parent, false));
             case HOLDER_DIVIDER:
-                return new ViewHolderDivider(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_divider, parent, false));
+                return new ViewHolderDivider(RecyclerDividerBinding.inflate(layoutInflater, parent, false));
             default:
                 return null;
         }
@@ -85,19 +91,19 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderHeader) {
             ViewHolderHeader mHolder = (ViewHolderHeader) holder;
-            mHolder.initItems();
+            mHolder.bindItems();
         } else if (holder instanceof ViewHolderAccount) {
             ViewHolderAccount mHolder = (ViewHolderAccount) holder;
-            mHolder.initItems();
+            mHolder.bindItems();
         } else if (holder instanceof ViewHolderExperience) {
             ViewHolderExperience mHolder = (ViewHolderExperience) holder;
-            mHolder.initItems();
+            mHolder.bindItems();
         } else if (holder instanceof ViewHolderBullet) {
             ViewHolderBullet mHolder = (ViewHolderBullet) holder;
-            mHolder.initItems();
+            mHolder.bindItems();
         } else if (holder instanceof ViewHolderDivider) {
             ViewHolderDivider mHolder = (ViewHolderDivider) holder;
-            mHolder.initItems();
+            mHolder.bindItems();
         }
     }
 
@@ -111,38 +117,37 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
      */
 
     private class ViewHolderHeader extends RecyclerView.ViewHolder {
-        private TextView mTextHeader;
+        private RecyclerHeaderBinding binding;
 
-        ViewHolderHeader(View v) {
-            super(v);
-            mTextHeader = v.findViewById(R.id.textHeader);
+        ViewHolderHeader(RecyclerHeaderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
+        void bindItems() {
             Header object = (Header) mObjectList.get(getAdapterPosition());
-            mTextHeader.setText(object.getHeaderTitle());
+            binding.setObject(object);
         }
     }
 
-    private class ViewHolderAccount extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mTextAccount;
+    public class ViewHolderAccount extends RecyclerView.ViewHolder {
+        private RecyclerAccountBinding binding;
 
-        ViewHolderAccount(View v) {
-            super(v);
-            mTextAccount = v.findViewById(R.id.textAccount);
-            mTextAccount.setOnClickListener(this);
+        ViewHolderAccount(RecyclerAccountBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         private Account mAccount;
 
-        void initItems() {
+        void bindItems() {
             mAccount = (Account) mObjectList.get(getAdapterPosition());
-            mTextAccount.setText(mAccount.getName());
-            mTextAccount.setCompoundDrawablesWithIntrinsicBounds(mAccount.getImage(mAccount.getType()), 0, R.drawable.ic_chevron_right, 0);
+            binding.setObject(mAccount);
+            binding.setHolder(this);
+            binding.executePendingBindings();
         }
 
-        @Override
-        public void onClick(View v) {
+        public void onAccountClicked(View view) {
             if (mListener != null) {
                 mListener.onItemClicked(mAccount.getUrl());
             }
@@ -150,32 +155,24 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
     }
 
 
-    private class ViewHolderExperience extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mTextPosition;
-        private TextView mTextExperience;
-        private TextView mTextDateRange;
-        private ImageView mImageLink;
+    public class ViewHolderExperience extends RecyclerView.ViewHolder {
+        private RecyclerExperienceBinding binding;
 
-        ViewHolderExperience(View v) {
-            super(v);
-            mTextPosition = v.findViewById(R.id.textPosition);
-            mTextExperience = v.findViewById(R.id.textExperience);
-            mTextDateRange = v.findViewById(R.id.textDateRange);
-            mImageLink = v.findViewById(R.id.imageLink);
-            mImageLink.setOnClickListener(this);
+        ViewHolderExperience(RecyclerExperienceBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         private Experience mExperience;
 
-        void initItems() {
+        void bindItems() {
             mExperience = (Experience) mObjectList.get(getAdapterPosition());
-            mTextPosition.setText(mExperience.getPosition());
-            mTextExperience.setText(mExperience.getPositionFormatted());
-            mTextDateRange.setText(mExperience.getDateRange());
+            binding.setHolder(this);
+            binding.setObject(mExperience);
+            binding.executePendingBindings();
         }
 
-        @Override
-        public void onClick(View v) {
+        public void onLinkClicked(View view) {
             if (mListener != null) {
                 mListener.onItemClicked(mExperience.getLinkApp());
             }
@@ -183,44 +180,32 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
     }
 
     private class ViewHolderBullet extends RecyclerView.ViewHolder {
-        private TextView mTextBullet;
+        private RecyclerBulletBinding binding;
 
-        ViewHolderBullet(View v) {
-            super(v);
-            mTextBullet = v.findViewById(R.id.textBullet);
+        ViewHolderBullet(RecyclerBulletBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
-            Bullet mExperience = (Bullet) mObjectList.get(getAdapterPosition());
-            mTextBullet.setText(mExperience.getBullet());
+        void bindItems() {
+            Bullet object = (Bullet) mObjectList.get(getAdapterPosition());
+            binding.setObject(object);
+            binding.executePendingBindings();
         }
     }
 
     private class ViewHolderDivider extends RecyclerView.ViewHolder {
-        private View mSpace;
-        private View mLine;
+        private RecyclerDividerBinding binding;
 
-        ViewHolderDivider(View v) {
-            super(v);
-            mSpace = v.findViewById(R.id.space);
-            mLine = v.findViewById(R.id.line);
+        ViewHolderDivider(RecyclerDividerBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
-            DividerFiller mDividerFiller = (DividerFiller) mObjectList.get(getAdapterPosition());
-            if (mDividerFiller.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_LINE_NO_SPACE)) {
-                mSpace.setVisibility(View.GONE);
-                mLine.setVisibility(View.VISIBLE);
-            } else if (mDividerFiller.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_LINE_WITH_SPACE)) {
-                mSpace.setVisibility(View.VISIBLE);
-                mLine.setVisibility(View.VISIBLE);
-            } else if (mDividerFiller.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_NO_LINE_WITH_SPACE)) {
-                mSpace.setVisibility(View.VISIBLE);
-                mLine.setVisibility(View.GONE);
-            } else {
-                mSpace.setVisibility(View.VISIBLE);
-                mLine.setVisibility(View.VISIBLE);
-            }
+        void bindItems() {
+            DividerFiller object = (DividerFiller) mObjectList.get(getAdapterPosition());
+            binding.setObject(object);
+            binding.executePendingBindings();
         }
     }
 }

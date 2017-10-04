@@ -1,19 +1,33 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.databinding.BindingAdapter;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.TextView;
+
+import com.resume.horan.eugene.eugenehoranresume.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LoaderObject implements Parcelable {
     private List<Object> objectList;
-    boolean expanded;
+    private boolean expanded;
+
+    @BindingAdapter("load_image")
+    public static void loadImage(TextView view, LoaderObject object) {
+        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, object.isExpanded() ? R.drawable.ic_expand_less : R.drawable.ic_expand_more, 0);
+    }
+
+    public String getLoaderText() {
+        return isExpanded() ? "Show less" : "Show more";
+    }
 
     public LoaderObject(List<Object> objectList, boolean expanded) {
         this.objectList = objectList;
         this.expanded = expanded;
     }
+
 
     public List<Object> getObjectList() {
         return objectList;

@@ -1,35 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cardImageHolder"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:transitionName="back">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
+    <data>
+
+        <variable
+            name="handler"
+            type="com.resume.horan.eugene.eugenehoranresume.main.about.AboutRecyclerAdapter.ViewHolderImageLarge" />
+
+        <variable
+            name="object"
+            type="com.resume.horan.eugene.eugenehoranresume.model.AlbumImage" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardImageHolder"
         android:layout_width="match_parent"
-        android:layout_height="230dp">
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@{object.cardBackgroundColor}">
 
-        <ImageView
-            android:id="@+id/imagePhoto"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="230dp"
-            android:adjustViewBounds="true"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:scaleType="centerCrop"
-            android:transitionName="image" />
+            android:layout_height="230dp">
 
-        <TextView
-            android:id="@+id/textImageTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/gradient_transparent"
-            android:fontFamily="sans-serif-condensed"
-            android:padding="16dp"
-            android:text="Testing"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+            <ImageView
+                android:id="@+id/imagePhoto"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="@{handler::onImageClicked}"
+                android:scaleType="centerCrop"
+                android:transitionName="image"
+                app:load_image="@{object}" />
+
+            <TextView
+                android:id="@+id/textImageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/gradient_transparent"
+                android:fontFamily="sans-serif-condensed"
+                android:padding="16dp"
+                android:text="@{object.imageName}"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

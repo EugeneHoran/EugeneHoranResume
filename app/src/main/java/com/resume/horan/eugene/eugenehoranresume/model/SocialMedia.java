@@ -1,8 +1,10 @@
 
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.databinding.BindingAdapter;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.TextView;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 
@@ -12,6 +14,11 @@ public class SocialMedia implements Parcelable {
     private String url;
     private Integer imageInt;
     private boolean visible;
+
+    @BindingAdapter("load_image")
+    public static void loadImage(TextView view, SocialMedia object) {
+        view.setCompoundDrawablesWithIntrinsicBounds(object.getLogo(), 0, 0, 0);
+    }
 
 
     public int getLogo() {

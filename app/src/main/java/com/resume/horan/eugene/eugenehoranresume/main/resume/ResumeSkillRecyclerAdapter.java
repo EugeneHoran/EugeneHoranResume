@@ -10,6 +10,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerHeaderSkillBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerSkillsBinding;
 import com.resume.horan.eugene.eugenehoranresume.model.Skill;
 import com.resume.horan.eugene.eugenehoranresume.model.SkillItem;
 
@@ -50,13 +52,14 @@ public class ResumeSkillRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case HOLDER_ERROR:
                 return null;
             case HOLDER_HEADER:
-                return new ViewHolderSkillHeader(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_header_skill, parent, false));
+                return new ViewHolderSkillHeader(RecyclerHeaderSkillBinding.inflate(layoutInflater, parent, false));
             case HOLDER_SKILL:
-                return new ViewHolderSkill(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_skills, parent, false));
+                return new ViewHolderSkill(RecyclerSkillsBinding.inflate(layoutInflater, parent, false));
             default:
                 return null;
         }
@@ -66,7 +69,7 @@ public class ResumeSkillRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderSkillHeader) {
             ViewHolderSkillHeader mHolder = (ViewHolderSkillHeader) holder;
-            mHolder.initItems();
+            mHolder.bindItem();
         } else if (holder instanceof ViewHolderSkill) {
             ViewHolderSkill mHolder = (ViewHolderSkill) holder;
             mHolder.initItems();
@@ -76,33 +79,33 @@ public class ResumeSkillRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     private class ViewHolderSkillHeader extends RecyclerView.ViewHolder {
-        private TextView mTextHeader;
+        private RecyclerHeaderSkillBinding binding;
 
-        ViewHolderSkillHeader(View v) {
-            super(v);
-            mTextHeader = v.findViewById(R.id.textHeader);
+        ViewHolderSkillHeader(RecyclerHeaderSkillBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
+        void bindItem() {
             Skill object = (Skill) mObjectList.get(getAdapterPosition());
-            mTextHeader.setText(object.getSkillGroupName());
-            mTextHeader.setCompoundDrawablesWithIntrinsicBounds(object.getIconDrawable(itemView.getContext()), null, null, null);
-            mTextHeader.setTextColor(object.getTextColor());
+            binding.setObject(object);
+            binding.executePendingBindings();
         }
     }
 
     private class ViewHolderSkill extends RecyclerView.ViewHolder {
-        private TextView mTextTitle;
 
-        ViewHolderSkill(View v) {
-            super(v);
-            mTextTitle = v.findViewById(R.id.title);
+        private RecyclerSkillsBinding binding;
+
+        ViewHolderSkill(RecyclerSkillsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         void initItems() {
             SkillItem object = (SkillItem) mObjectList.get(getAdapterPosition());
-            mTextTitle.setText(object.getSkillName());
-            mTextTitle.getBackground().setColorFilter(object.getChipColor(), PorterDuff.Mode.SRC_ATOP);
+            binding.setObject(object);
+            binding.executePendingBindings();
         }
     }
 }

@@ -1,8 +1,17 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
 
+import android.app.Activity;
+import android.databinding.BindingAdapter;
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 public class AlbumImage implements Parcelable {
     private int imageType;
@@ -15,6 +24,38 @@ public class AlbumImage implements Parcelable {
     private float rotate;
     private String imageOrientation;
     private String imageLocation;
+
+    @BindingAdapter("load_image")
+    public static void loadImage(final ImageView view, AlbumImage object) {
+        Picasso.with(view.getContext())
+                .load(object.getImageUrl())
+                .rotate(object.getRotate())
+                .resize(object.getFormattedWidth(), object.getFormattedHeight())
+                .onlyScaleDown()
+                .centerInside()
+                .into(view, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        if (view.getContext() instanceof ViewImageActivity) {
+                            ViewImageActivity activity = (ViewImageActivity) view.getContext();
+                            activity.supportStartPostponedEnterTransition();
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+                        if (view.getContext() instanceof ViewImageActivity) {
+                            ViewImageActivity activity = (ViewImageActivity) view.getContext();
+                            activity.supportStartPostponedEnterTransition();
+                        }
+                    }
+                });
+    }
+
+
+    public int getCardBackgroundColor() {
+        return Color.parseColor(imageColorHEX);
+    }
 
     public int getFormattedWidth() {
         return (int) Integer.parseInt(getImageWidth()) / 3;

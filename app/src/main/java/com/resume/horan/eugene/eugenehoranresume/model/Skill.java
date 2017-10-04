@@ -1,6 +1,6 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
-import android.content.Context;
+import android.databinding.BindingAdapter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
+import android.widget.TextView;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 
@@ -23,23 +24,21 @@ public class Skill implements Parcelable {
     private String textColorName;
     private List<SkillItem> skillItem;
 
-    public Skill() {
-    }
 
+    @BindingAdapter("load_image")
+    public static void loadImage(TextView view, Skill skill) {
+        Drawable mDrawable = ContextCompat.getDrawable(view.getContext(), skill.getTitleDrawable());
+        mDrawable.mutate();
+        mDrawable.setColorFilter(new PorterDuffColorFilter(skill.getTextColor(), PorterDuff.Mode.MULTIPLY));
+        view.setCompoundDrawablesWithIntrinsicBounds(mDrawable, null, null, null);
+    }
 
     public int getTextColor() {
-        return Color.parseColor(textColorHEX);
+        return Color.parseColor(getTextColorHEX());
     }
 
 
-    public Drawable getIconDrawable(Context context) {
-        Drawable mDrawable = ContextCompat.getDrawable(context, getDrawable());
-        mDrawable.mutate();
-        mDrawable.setColorFilter(new PorterDuffColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY));
-        return mDrawable;
-    }
-
-    public int getDrawable() {
+    public int getTitleDrawable() {
         switch (order) {
             case "0":
                 return R.drawable.ic_devices;
@@ -54,6 +53,8 @@ public class Skill implements Parcelable {
         }
     }
 
+    public Skill() {
+    }
 
     public Skill(String order, String skillGroupName, String skillColorHEX, String skillColorName, String textColorHEX, String textColorName, List<SkillItem> skillItem) {
         this.order = order;
@@ -69,48 +70,25 @@ public class Skill implements Parcelable {
         return order;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
-    }
-
     public String getSkillGroupName() {
         return skillGroupName;
-    }
-
-    public void setSkillGroupName(String skillGroupName) {
-        this.skillGroupName = skillGroupName;
     }
 
     public String getSkillColorHEX() {
         return skillColorHEX;
     }
 
-    public void setSkillColorHEX(String skillColorHEX) {
-        this.skillColorHEX = skillColorHEX;
-    }
-
     public String getSkillColorName() {
         return skillColorName;
-    }
-
-    public void setSkillColorName(String skillColorName) {
-        this.skillColorName = skillColorName;
     }
 
     public String getTextColorHEX() {
         return textColorHEX;
     }
 
-    public void setTextColorHEX(String textColorHEX) {
-        this.textColorHEX = textColorHEX;
-    }
 
     public String getTextColorName() {
         return textColorName;
-    }
-
-    public void setTextColorName(String textColorName) {
-        this.textColorName = textColorName;
     }
 
     public List<SkillItem> getSkillItem() {

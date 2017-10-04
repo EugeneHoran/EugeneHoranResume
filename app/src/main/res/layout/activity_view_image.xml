@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/holder"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    tools:context="com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity">
 
-    <com.resume.horan.eugene.eugenehoranresume.util.ui.PullBackLayout
-        android:id="@+id/puller"
+    <data>
+
+        <variable
+            name="object"
+            type="com.resume.horan.eugene.eugenehoranresume.model.AlbumImage" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context="com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <com.resume.horan.eugene.eugenehoranresume.util.ui.PullBackLayout
+            android:id="@+id/puller"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:transitionName="image" />
+            android:background="@{object.cardBackgroundColor}">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="34dp"
-            android:fitsSystemWindows="false" />
-    </com.resume.horan.eugene.eugenehoranresume.util.ui.PullBackLayout>
-</RelativeLayout>
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:transitionName="image"
+                app:load_image="@{object}" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="34dp"
+                android:fitsSystemWindows="false" />
+        </com.resume.horan.eugene.eugenehoranresume.util.ui.PullBackLayout>
+    </RelativeLayout>
+</layout>

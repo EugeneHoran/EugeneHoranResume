@@ -1,24 +1,23 @@
 package com.resume.horan.eugene.eugenehoranresume.main.about;
 
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerAboutGoalsBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerAboutImagesLargeBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerAboutImagesSmallBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerAboutSocialMediaBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerDividerBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerHeaderBinding;
+import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerLoaderBinding;
 import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
 import com.resume.horan.eugene.eugenehoranresume.model.DividerFiller;
 import com.resume.horan.eugene.eugenehoranresume.model.Goals;
 import com.resume.horan.eugene.eugenehoranresume.model.Header;
 import com.resume.horan.eugene.eugenehoranresume.model.LoaderObject;
 import com.resume.horan.eugene.eugenehoranresume.model.SocialMedia;
-import com.resume.horan.eugene.eugenehoranresume.util.Common;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,23 +78,24 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case HOLDER_ERROR:
                 return null;
             case HOLDER_HEADER:
-                return new ViewHolderHeader(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_header, parent, false));
+                return new ViewHolderHeader(RecyclerHeaderBinding.inflate(layoutInflater, parent, false));
             case HOLDER_GOAL:
-                return new ViewHolderGoals(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_about_goals, parent, false));
+                return new ViewHolderGoals(RecyclerAboutGoalsBinding.inflate(layoutInflater, parent, false));
             case HOLDER_SOCIAL_MEDIA:
-                return new ViewHolderSocialMedia(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_about_social_media, parent, false));
+                return new ViewHolderSocialMedia(RecyclerAboutSocialMediaBinding.inflate(layoutInflater, parent, false));
             case HOLDER_IMAGES_LARGE:
-                return new ViewHolderImageLarge(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_about_images_large, parent, false));
+                return new ViewHolderImageLarge(RecyclerAboutImagesLargeBinding.inflate(layoutInflater, parent, false));
             case HOLDER_IMAGES:
-                return new ViewHolderImages(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_about_images_normal, parent, false));
+                return new ViewHolderImageSmall(RecyclerAboutImagesSmallBinding.inflate(layoutInflater, parent, false));
             case HOLDER_LOADER:
-                return new ViewHolderLoader(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_loader, parent, false));
+                return new ViewHolderLoader(RecyclerLoaderBinding.inflate(layoutInflater, parent, false));
             case HOLDER_DIVIDER:
-                return new ViewHolderDivider(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_divider, parent, false));
+                return new ViewHolderDivider(RecyclerDividerBinding.inflate(layoutInflater, parent, false));
             default:
                 return null;
         }
@@ -105,25 +105,25 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderHeader) {
             ViewHolderHeader mHolder = (ViewHolderHeader) holder;
-            mHolder.initItems();
+            mHolder.bindItem();
         } else if (holder instanceof ViewHolderGoals) {
             ViewHolderGoals mHolder = (ViewHolderGoals) holder;
-            mHolder.initItems();
+            mHolder.bindItem();
         } else if (holder instanceof ViewHolderSocialMedia) {
             ViewHolderSocialMedia mHolder = (ViewHolderSocialMedia) holder;
-            mHolder.initItems();
+            mHolder.bindItem();
         } else if (holder instanceof ViewHolderImageLarge) {
             ViewHolderImageLarge mHolder = (ViewHolderImageLarge) holder;
-            mHolder.initItems();
-        } else if (holder instanceof ViewHolderImages) {
-            ViewHolderImages mHolder = (ViewHolderImages) holder;
-            mHolder.initItems();
+            mHolder.bindItem();
+        } else if (holder instanceof ViewHolderImageSmall) {
+            ViewHolderImageSmall mHolder = (ViewHolderImageSmall) holder;
+            mHolder.bindItem();
         } else if (holder instanceof ViewHolderLoader) {
             ViewHolderLoader mHolder = (ViewHolderLoader) holder;
-            mHolder.initItems();
+            mHolder.bindItem();
         } else if (holder instanceof ViewHolderDivider) {
             ViewHolderDivider mHolder = (ViewHolderDivider) holder;
-            mHolder.initItems();
+            mHolder.bindItem();
         }
     }
 
@@ -135,31 +135,37 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     /**
      * ViewHolders
      */
+    private class ViewHolderHeader extends RecyclerView.ViewHolder {
+        private RecyclerHeaderBinding binding;
 
-    private class ViewHolderLoader extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mTextLoadMore;
+        ViewHolderHeader(RecyclerHeaderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        void bindItem() {
+            Header object = (Header) mObjectList.get(getAdapterPosition());
+            binding.setObject(object);
+        }
+    }
+
+    public class ViewHolderLoader extends RecyclerView.ViewHolder {
+        private RecyclerLoaderBinding binding;
         private LoaderObject object;
 
-        ViewHolderLoader(View v) {
-            super(v);
-            mTextLoadMore = v.findViewById(R.id.textLoadMore);
-            mTextLoadMore.setOnClickListener(this);
+        ViewHolderLoader(RecyclerLoaderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
+        void bindItem() {
             object = (LoaderObject) mObjectList.get(getAdapterPosition());
-            mTextLoadMore.setText(object.isExpanded() ? R.string.show_less : R.string.show_more);
-            mTextLoadMore.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    !object.isExpanded()
-                            ? ContextCompat.getDrawable(mTextLoadMore.getContext(), R.drawable.ic_expand_more)
-                            : ContextCompat.getDrawable(mTextLoadMore.getContext(), R.drawable.ic_expand_less),
-                    null);
+            binding.setObject(object);
+            binding.setHolder(this);
+            binding.executePendingBindings();
         }
 
-        @Override
-        public void onClick(View view) {
+        public void onExpandClicked(View view) {
             if (object.isExpanded()) {
                 mObjectList.removeAll(object.getObjectList());
                 notifyItemRangeRemoved(getAdapterPosition() - object.getObjectList().size() - 1, object.getObjectList().size());
@@ -173,158 +179,104 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    private class ViewHolderHeader extends RecyclerView.ViewHolder {
-        private TextView mTextHeader;
-
-        ViewHolderHeader(View v) {
-            super(v);
-            mTextHeader = v.findViewById(R.id.textHeader);
-        }
-
-        void initItems() {
-            Header object = (Header) mObjectList.get(getAdapterPosition());
-            mTextHeader.setText(object.getHeaderTitle());
-        }
-    }
-
     private class ViewHolderGoals extends RecyclerView.ViewHolder {
-        private TextView mTextGoal;
+        private RecyclerAboutGoalsBinding binding;
 
-        ViewHolderGoals(View v) {
-            super(v);
-            mTextGoal = v.findViewById(R.id.textGoal);
+        ViewHolderGoals(RecyclerAboutGoalsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
+        void bindItem() {
             Goals object = (Goals) mObjectList.get(getAdapterPosition());
-            mTextGoal.setText(object.getGoal());
+            binding.setObject(object);
+            binding.executePendingBindings();
         }
     }
 
 
-    private class ViewHolderSocialMedia extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolderSocialMedia extends RecyclerView.ViewHolder {
+        private RecyclerAboutSocialMediaBinding binding;
         private SocialMedia object;
-        private View mViewSocialMediaHolder;
-        private TextView mTextSocialMedia;
-        private ImageView mImageLink;
 
-        ViewHolderSocialMedia(View v) {
-            super(v);
-            mViewSocialMediaHolder = v.findViewById(R.id.viewSocialMediaHolder);
-            mTextSocialMedia = v.findViewById(R.id.textSocialMedia);
-            mImageLink = v.findViewById(R.id.imageLink);
-            mViewSocialMediaHolder.setOnClickListener(this);
-            mImageLink.setOnClickListener(this);
+        ViewHolderSocialMedia(RecyclerAboutSocialMediaBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
+        void bindItem() {
             object = (SocialMedia) mObjectList.get(getAdapterPosition());
-            mTextSocialMedia.setText(object.getAccount());
-            mTextSocialMedia.setCompoundDrawablesWithIntrinsicBounds(object.getLogo(), 0, 0, 0);
+            binding.setObject(object);
+            binding.setHandler(this);
+            binding.executePendingBindings();
         }
 
-        @Override
-        public void onClick(View view) {
+        public void onLinkClicked(View view) {
             if (mListener != null) {
                 mListener.onLinkClicked(object.getUrl());
             }
         }
     }
 
-    private class ViewHolderImageLarge extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolderImageLarge extends RecyclerView.ViewHolder {
+        private RecyclerAboutImagesLargeBinding binding;
         private AlbumImage object;
-        private CardView mCardImageHolder;
-        private ImageView mImagePhoto;
-        private TextView mTextImageTitle;
 
-
-        ViewHolderImageLarge(View v) {
-            super(v);
-            mCardImageHolder = v.findViewById(R.id.cardImageHolder);
-            mImagePhoto = v.findViewById(R.id.imagePhoto);
-            mTextImageTitle = v.findViewById(R.id.textImageTitle);
-            mImagePhoto.setOnClickListener(this);
+        ViewHolderImageLarge(RecyclerAboutImagesLargeBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
+        void bindItem() {
             object = (AlbumImage) mObjectList.get(getAdapterPosition());
-            mTextImageTitle.setText(object.getImageName());
-            mCardImageHolder.setCardBackgroundColor(Color.parseColor(object.getImageColorHEX()));
-            Picasso.with(mImagePhoto.getContext())
-                    .load(object.getImageUrl())
-                    .rotate(object.getRotate())
-                    .resize(object.getFormattedWidth(), object.getFormattedHeight())
-                    .onlyScaleDown()
-                    .centerInside()
-                    .into(mImagePhoto);
+            binding.setHandler(this);
+            binding.setObject(object);
+            binding.executePendingBindings();
         }
 
-        @Override
-        public void onClick(View view) {
+        public void onImageClicked(View view) {
             if (mListener != null) {
-                mListener.onImageClicked(object, view, mCardImageHolder);
+                mListener.onImageClicked(object, binding.imagePhoto, binding.cardImageHolder);
             }
         }
+
     }
 
-    private class ViewHolderImages extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolderImageSmall extends RecyclerView.ViewHolder {
+        private RecyclerAboutImagesSmallBinding binding;
         private AlbumImage object;
-        private CardView mCardImageHolder;
-        private ImageView mImagePhoto;
 
-
-        ViewHolderImages(View v) {
-            super(v);
-            mCardImageHolder = v.findViewById(R.id.cardImageHolder);
-            mImagePhoto = v.findViewById(R.id.imagePhoto);
-            mImagePhoto.setOnClickListener(this);
+        ViewHolderImageSmall(RecyclerAboutImagesSmallBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
+        void bindItem() {
             object = (AlbumImage) mObjectList.get(getAdapterPosition());
-            mCardImageHolder.setCardBackgroundColor(Color.parseColor(object.getImageColorHEX()));
-            Picasso.with(mImagePhoto.getContext())
-                    .load(object.getImageUrl())
-                    .rotate(object.getRotate())
-                    .resize(object.getFormattedWidth(), object.getFormattedHeight())
-                    .onlyScaleDown()
-                    .centerInside()
-                    .into(mImagePhoto);
+            binding.setObject(object);
+            binding.setHandler(this);
+            binding.executePendingBindings();
         }
 
-        @Override
-        public void onClick(View view) {
+        public void onImageClicked(View view) {
             if (mListener != null) {
-                mListener.onImageClicked(object, view, mCardImageHolder);
+                mListener.onImageClicked(object, binding.imagePhoto, binding.cardImageHolder);
             }
         }
     }
 
     private class ViewHolderDivider extends RecyclerView.ViewHolder {
-        private View mSpace;
-        private View mLine;
+        private RecyclerDividerBinding binding;
 
-        ViewHolderDivider(View v) {
-            super(v);
-            mSpace = v.findViewById(R.id.space);
-            mLine = v.findViewById(R.id.line);
+        ViewHolderDivider(RecyclerDividerBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        void initItems() {
+        void bindItem() {
             DividerFiller object = (DividerFiller) mObjectList.get(getAdapterPosition());
-            if (object.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_LINE_NO_SPACE)) {
-                mSpace.setVisibility(View.GONE);
-                mLine.setVisibility(View.VISIBLE);
-            } else if (object.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_LINE_WITH_SPACE)) {
-                mSpace.setVisibility(View.VISIBLE);
-                mLine.setVisibility(View.VISIBLE);
-            } else if (object.getFillerBreak().equalsIgnoreCase(Common.DIVIDER_NO_LINE_WITH_SPACE)) {
-                mSpace.setVisibility(View.VISIBLE);
-                mLine.setVisibility(View.GONE);
-            } else {
-                mSpace.setVisibility(View.VISIBLE);
-                mLine.setVisibility(View.VISIBLE);
-            }
+            binding.setObject(object);
+            binding.executePendingBindings();
         }
     }
 }

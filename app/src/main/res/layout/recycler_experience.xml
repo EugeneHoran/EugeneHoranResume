@@ -1,52 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="1dp"
-    android:layout_marginRight="1dp"
-    android:background="@color/white"
-    android:elevation="1dp"
-    android:orientation="vertical"
-    android:padding="16dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/textPosition"
+    <data>
+
+        <variable
+            name="object"
+            type="com.resume.horan.eugene.eugenehoranresume.model.Experience" />
+
+        <variable
+            name="holder"
+            type="com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeExperienceRecyclerAdapter.ViewHolderExperience" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center_vertical"
-        android:text="Testing"
-        android:textSize="16sp" />
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:background="@color/white"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textExperience"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textPosition"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center_vertical"
-        android:text="Testing"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/textPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@{object.position}"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/textDateRange"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textExperience"
-        android:fontFamily="sans-serif"
-        android:gravity="center_vertical"
-        android:text="Testing"
-        android:textSize="13sp" />
+        <TextView
+            android:id="@+id/textExperience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textPosition"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@{object.positionFormatted}"
+            android:textSize="14sp" />
 
-    <ImageView
-        android:id="@+id/imageLink"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="?selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:padding="7dp"
-        app:srcCompat="@drawable/ic_link" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textDateRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textExperience"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:text="@{object.dateRange}"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/imageLink"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:onClick="@{holder::onLinkClicked}"
+            android:padding="7dp"
+            app:srcCompat="@drawable/ic_link" />
+    </RelativeLayout>
+</layout>

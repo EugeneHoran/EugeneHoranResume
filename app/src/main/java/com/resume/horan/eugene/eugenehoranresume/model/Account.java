@@ -1,7 +1,13 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import android.databinding.BindingAdapter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
+import android.widget.TextView;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 
@@ -17,6 +23,11 @@ public class Account implements Parcelable {
         this.type = type;
         this.name = name;
         this.url = url;
+    }
+
+    @BindingAdapter("load_image")
+    public static void loadImage(TextView view, Account object) {
+        view.setCompoundDrawablesWithIntrinsicBounds(object.getImage(), 0, R.drawable.ic_chevron_right, 0);
     }
 
     public String getType() {
@@ -43,7 +54,7 @@ public class Account implements Parcelable {
         this.url = url;
     }
 
-    public int getImage(String type) {
+    public int getImage() {
         switch (type) {
             case "0":
                 return R.drawable.ic_stackoverflow;
