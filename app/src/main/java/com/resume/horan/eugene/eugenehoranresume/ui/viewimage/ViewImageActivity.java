@@ -7,11 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
-import com.resume.horan.eugene.eugenehoranresume.ui.main.MainActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.ui.PullBackLayout;
 import com.squareup.picasso.Callback;

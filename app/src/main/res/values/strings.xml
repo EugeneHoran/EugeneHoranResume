@@ -16,6 +16,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- Titles -->
+    <string name="resume_experience">Experience</string>
+    <string name="resume_skills">Skills</string>
+    <string name="resume_education">Education</string>
+
+
     <!-- Profile Image-->
 
     <!-- Strings related to Settings -->

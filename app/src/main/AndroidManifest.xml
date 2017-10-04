@@ -70,12 +70,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_login_title" />
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.main.MainActivity"
+            android:parentActivityName=".main.MainActivity"
             android:theme="@style/Settings" />
         <activity
             android:name=".ui.viewimage.ViewImageActivity"

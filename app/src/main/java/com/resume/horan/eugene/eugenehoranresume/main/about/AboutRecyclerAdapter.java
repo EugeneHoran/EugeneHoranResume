@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.adapter;
+package com.resume.horan.eugene.eugenehoranresume.main.about;
 
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;

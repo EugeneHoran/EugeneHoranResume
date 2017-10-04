@@ -4,6 +4,7 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 import java.util.ArrayList;
@@ -19,41 +20,10 @@ public class EugeneHoran implements Parcelable {
     private Resume resume;
     private About about;
 
-
     /**
-     * Filters
+     * Filters New
      */
-    public ResumeEducationObject getFilteredEducations() {
-        List<Education> educationList = resume.getEducation();
-        List<Object> mObjectList = new ArrayList<>();
-        for (int i = 0; i < educationList.size(); i++) {
-            Education education = educationList.get(i);
-            List<EducationActivity> eductionActivity = new ArrayList<>();
-            if (education.getEducationActivity() != null) {
-                eductionActivity.addAll(education.getEducationActivity());
-                education.setEducationActivity(null);
-            }
-            mObjectList.add(education);
-            mObjectList.addAll(eductionActivity);
-        }
-        return new ResumeEducationObject(mObjectList);
-    }
-
-    public ResumeSkillObject getFilteredSkills() {
-        List<Skill> skillList = resume.getSkill();
-        List<Object> mObjectList = new ArrayList<>();
-        for (int i = 0; i < skillList.size(); i++) {
-            Skill skill = skillList.get(i);
-            List<SkillItem> skillItemList = new ArrayList<>();
-            skillItemList.addAll(skill.getSkillItem());
-            skill.setSkillItem(null);
-            mObjectList.add(skill);
-            mObjectList.addAll(skillItemList);
-        }
-        return new ResumeSkillObject(mObjectList);
-    }
-
-    public ResumeExperienceObject getFilteredExperiences() {
+    public ResumeBaseObject getExperienceObject() {
         List<Experience> experienceList = resume.getExperience();
         List<Object> mObjectList = new ArrayList<>();
         mObjectList.add(new Header("Public Accounts"));
@@ -72,9 +42,38 @@ public class EugeneHoran implements Parcelable {
             mObjectList.addAll(bullets);
         }
         mObjectList.add(new DividerFiller(Common.DIVIDER_NO_LINE_WITH_SPACE));
-        return new ResumeExperienceObject(mObjectList);
+        return new ResumeBaseObject(mObjectList);
     }
 
+    public ResumeBaseObject getSkillsObject() {
+        List<Skill> skillList = resume.getSkill();
+        List<Object> mObjectList = new ArrayList<>();
+        for (int i = 0; i < skillList.size(); i++) {
+            Skill skill = skillList.get(i);
+            List<SkillItem> skillItemList = new ArrayList<>();
+            skillItemList.addAll(skill.getSkillItem());
+            skill.setSkillItem(null);
+            mObjectList.add(skill);
+            mObjectList.addAll(skillItemList);
+        }
+        return new ResumeBaseObject(mObjectList);
+    }
+
+    public ResumeBaseObject getEducationObject() {
+        List<Education> educationList = resume.getEducation();
+        List<Object> mObjectList = new ArrayList<>();
+        for (int i = 0; i < educationList.size(); i++) {
+            Education education = educationList.get(i);
+            List<EducationActivity> eductionActivity = new ArrayList<>();
+            if (education.getEducationActivity() != null) {
+                eductionActivity.addAll(education.getEducationActivity());
+                education.setEducationActivity(null);
+            }
+            mObjectList.add(education);
+            mObjectList.addAll(eductionActivity);
+        }
+        return new ResumeBaseObject(mObjectList);
+    }
 
     /**
      * No args constructor for use in serialization

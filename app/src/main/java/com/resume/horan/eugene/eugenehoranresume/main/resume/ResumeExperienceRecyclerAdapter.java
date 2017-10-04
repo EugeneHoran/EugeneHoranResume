@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.adapter;
+package com.resume.horan.eugene.eugenehoranresume.main.resume;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

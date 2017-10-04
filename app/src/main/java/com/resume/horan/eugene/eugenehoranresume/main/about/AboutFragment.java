@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.main;
+package com.resume.horan.eugene.eugenehoranresume.main.about;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
-import com.resume.horan.eugene.eugenehoranresume.adapter.AboutRecyclerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.model.AboutObject;
 import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
 import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;

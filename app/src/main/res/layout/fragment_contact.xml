@@ -8,7 +8,7 @@
 
         <variable
             name="contactViewModel"
-            type="com.resume.horan.eugene.eugenehoranresume.ui.main.ContactViewModel" />
+            type="com.resume.horan.eugene.eugenehoranresume.main.contact.ContactViewModel" />
     </data>
 
 

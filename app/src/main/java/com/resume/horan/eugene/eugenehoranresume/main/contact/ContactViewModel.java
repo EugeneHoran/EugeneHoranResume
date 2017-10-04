@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.main;
+package com.resume.horan.eugene.eugenehoranresume.main.contact;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
