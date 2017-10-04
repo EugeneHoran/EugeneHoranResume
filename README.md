@@ -1,6 +1,10 @@
 # Eugene Horan Resume
 Interactive Resume Application. 
 
+TODO:
+- Convert project to MVVM DataBinding
+- Other ...
+
 [youtube video of app in action](https://www.youtube.com/watch?v=7IJ8SwpVU9E&feature=youtu.be)
 
 
