@@ -1,7 +1,9 @@
 package com.resume.horan.eugene.eugenehoranresume.main.resume;
 
+import android.databinding.BindingAdapter;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,29 @@ public class ResumeBaseObject implements Parcelable {
     public ResumeBaseObject(List<Object> objectList) {
         this.objectList = objectList;
     }
+
+    @BindingAdapter("set_adapter")
+    public static void setRecyclerAdapter(RecyclerView view, RecyclerView.Adapter adapter) {
+        view.setAdapter(adapter);
+    }
+
+    @BindingAdapter("set_items")
+    public static void setAdapterItems(RecyclerView recyclerView, ResumeBaseObject object) {
+        if (recyclerView.getAdapter() != null) {
+            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+            if (adapter instanceof ResumeSkillRecyclerAdapter) {
+                ResumeSkillRecyclerAdapter mAdapter = (ResumeSkillRecyclerAdapter) adapter;
+                mAdapter.setItems(object.getObjectList());
+            } else if (adapter instanceof ResumeEducationRecyclerAdapter) {
+                ResumeEducationRecyclerAdapter mAdapter = (ResumeEducationRecyclerAdapter) adapter;
+                mAdapter.setItems(object.getObjectList());
+            } else if (adapter instanceof ResumeExperienceRecyclerAdapter) {
+                ResumeExperienceRecyclerAdapter mAdapter = (ResumeExperienceRecyclerAdapter) adapter;
+                mAdapter.setItems(object.getObjectList());
+            }
+        }
+    }
+
 
     public List<Object> getObjectList() {
         return objectList;

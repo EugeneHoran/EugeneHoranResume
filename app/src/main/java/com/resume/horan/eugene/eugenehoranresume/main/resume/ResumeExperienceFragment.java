@@ -2,6 +2,7 @@ package com.resume.horan.eugene.eugenehoranresume.main.resume;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.databinding.FragmentRecyclerviewBinding;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 
@@ -30,29 +32,23 @@ public class ResumeExperienceFragment extends ResumeBaseInfoFragment {
     }
 
     private Activity mHost;
-    private ResumeBaseObject resumeExperienceObject;
+    private ResumeBaseObject mObject;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHost = getParentFragment().getActivity();
         if (getArguments() != null) {
-            resumeExperienceObject = getArguments().getParcelable(Common.ARG_RESUME_EXPERIENCE);
+            mObject = getArguments().getParcelable(Common.ARG_RESUME_EXPERIENCE);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_recyclerview, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(v, savedInstanceState);
-        RecyclerView mRecycler = v.findViewById(R.id.recycler);
+        FragmentRecyclerviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recyclerview, container, false);
         ResumeExperienceRecyclerAdapter mAdapter = new ResumeExperienceRecyclerAdapter();
-        mRecycler.setAdapter(mAdapter);
-        mAdapter.setItems(resumeExperienceObject.getObjectList());
+        binding.setAdapter(mAdapter);
+        binding.setObject(mObject);
         mAdapter.setListener(new ResumeExperienceRecyclerAdapter.Listener() {
             @Override
             public void onItemClicked(String url) {
@@ -64,6 +60,7 @@ public class ResumeExperienceFragment extends ResumeBaseInfoFragment {
                 customTabsIntent.launchUrl(mHost, Uri.parse(url));
             }
         });
+        return binding.getRoot();
     }
 
     @Override
