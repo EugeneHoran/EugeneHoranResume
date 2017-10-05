@@ -70,7 +70,8 @@
         </activity>
         <activity
             android:name=".main.MainActivity"
-            android:label="@string/app_login_title" />
+            android:label="@string/app_login_title"
+            android:theme="@style/AppTheme.TransNav" />
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"

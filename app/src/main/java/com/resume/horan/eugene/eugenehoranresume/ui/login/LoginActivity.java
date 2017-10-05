@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
         mBtnGoogleSignIn.setOnClickListener(this);
 
         // Init Presenter
-        new LoginPresenter(this);
+        new LoginPresenter(this, this);
         mPresenter.createGoogleClient(this);
         mPresenter.createFacebookClient();
     }

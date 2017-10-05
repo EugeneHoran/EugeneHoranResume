@@ -13,26 +13,26 @@
 
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:paddingBottom="88dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
             android:background="@color/white"
             android:elevation="1dp">
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mapView"
+            <ImageView
+                android:id="@+id/imageMap"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:visibility="@{contactViewModel.mapReady ? View.VISIBLE : View.VISIBLE}"
-                app:cameraZoom="15"
-                app:liteMode="true"
-                app:mapType="normal" />
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:load_image="@{contactViewModel.location}" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -55,7 +55,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/mapView"
+                android:layout_below="@+id/imageMap"
                 android:orientation="vertical"
                 android:visibility="visible">
 

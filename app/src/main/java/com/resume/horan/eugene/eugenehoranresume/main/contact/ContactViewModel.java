@@ -5,11 +5,18 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.databinding.BindingAdapter;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.Location;
+import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 
 public class ContactViewModel extends BaseObservable {
@@ -23,6 +30,10 @@ public class ContactViewModel extends BaseObservable {
         this.mContext = context;
         this.mContact = contact;
         this.mLocation = this.mContact.getLocation();
+    }
+
+    public Location getLocation() {
+        return mLocation;
     }
 
     public String getAddress() {
@@ -84,4 +95,13 @@ public class ContactViewModel extends BaseObservable {
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
         mContext.startActivity(Intent.createChooser(intent, "Send Email"));
     }
+
+
+    @BindingAdapter("load_image")
+    public static void loadImage(final ImageView view, Location object) {
+        Picasso.with(view.getContext())
+                .load(object.getMapUrlString())
+                .into(view);
+    }
+
 }

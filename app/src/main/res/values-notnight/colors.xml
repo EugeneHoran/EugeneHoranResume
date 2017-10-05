@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorBackground">#FAFAFA</color>
+    <color name="colorBackground">#EEEEEE</color>
     <color name="colorAccent">#616161</color>
     <color name="colorButtonPrimaryText">#EEEEEE</color>
 </resources>

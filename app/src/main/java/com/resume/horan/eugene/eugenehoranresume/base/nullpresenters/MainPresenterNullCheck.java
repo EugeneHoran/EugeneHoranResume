@@ -42,7 +42,7 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainActivityC
             }
 
             @Override
-            public void showAppBarExpanded(boolean showAppbarExpanded, String title) {
+            public void expandAppbar() {
 
             }
 

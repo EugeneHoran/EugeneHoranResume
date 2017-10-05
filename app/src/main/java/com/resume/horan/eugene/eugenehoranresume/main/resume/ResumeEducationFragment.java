@@ -1,6 +1,5 @@
 package com.resume.horan.eugene.eugenehoranresume.main.resume;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

@@ -1,5 +1,6 @@
 package com.resume.horan.eugene.eugenehoranresume.base.nullpresenters;
 
+import android.databinding.BaseObservable;
 import android.util.Log;
 
 
@@ -10,7 +11,7 @@ import android.util.Log;
  *
  * @param <T>
  */
-public abstract class BasePresenterNullCheck<T> {
+public abstract class BasePresenterNullCheck<T> extends BaseObservable {
     private T mView;
     private T mNullView;
 

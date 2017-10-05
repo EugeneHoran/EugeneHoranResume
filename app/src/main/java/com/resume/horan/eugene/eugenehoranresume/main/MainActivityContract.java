@@ -13,7 +13,7 @@ public interface MainActivityContract {
 
         void setToolbarTitle(String title);
 
-        void showAppBarExpanded(boolean showAppbarExpanded, String title);
+        void expandAppbar();
 
         void setFragmentPosition(int fragmentPosition);
 

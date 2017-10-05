@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        icon="@drawable/ic_assignment"
+        id="@+id/action_resume"
+        title="@string/resume" />
+    <tab
+        icon="@drawable/ic_mood"
+        id="@+id/action_about_me"
+        title="@string/about_eugene" />
+    <tab
+        icon="@drawable/ic_contacts"
+        id="@+id/action_contact"
+        title="@string/contact" />
+</tabs>

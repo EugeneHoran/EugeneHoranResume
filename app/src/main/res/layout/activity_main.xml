@@ -1,147 +1,70 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".main.MainActivity"
-    tools:openDrawer="start">
+    android:layout_height="match_parent">
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|snap"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageUserProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="11dp"
+                android:layout_marginTop="-45dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="2.75dp"
+                android:visibility="invisible"
+                app:border_color="@color/white"
+                app:border_width="1dp"
+                app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabMode="fixed" />
+    </android.support.design.widget.AppBarLayout>
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:fitsSystemWindows="false"
+        app:bb_behavior="shy|underNavbar"
+        app:bb_showShadow="true"
+        app:bb_tabXmlResource="@xml/nav_bottom_tabs" />
+
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsingToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="false"
-                app:contentScrim="?attr/colorPrimary"
-                app:expandedTitleGravity="center_horizontal|bottom"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:titleEnabled="false">
-
-                <View
-                    android:id="@+id/expandedView"
-                    android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:background="@drawable/gradient_primary"
-                    android:visibility="gone"
-                    app:layout_collapseMode="parallax" />
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
-            </android.support.design.widget.CollapsingToolbarLayout>
-
-            <View
-                android:id="@+id/viewAnchor"
-                android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:layout_marginTop="-88dp"
-                android:visibility="gone"
-                app:layout_scrollFlags="scroll|enterAlways|snap" />
-
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@android:color/white"
-                app:tabMode="fixed" />
-        </android.support.design.widget.AppBarLayout>
-
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        <ProgressBar
-            android:id="@+id/viewProgress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="visible" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageProfile"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:elevation="8dp"
-            android:visibility="gone"
-            app:border_color="#FFF"
-            app:border_width="2dp"
-            app:layout_anchor="@id/viewAnchor"
-            app:layout_anchorGravity="top|center_horizontal"
-            app:layout_scrollFlags="scroll" />
-
-        <!--<android.support.design.widget.BottomNavigationView-->
-            <!--android:id="@+id/navigation"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:background="?android:attr/windowBackground"-->
-            <!--app:menu="@menu/nav_bottom_bar_main_activity" />-->
-    </android.support.design.widget.CoordinatorLayout>
-
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navView"
+    <ProgressBar
+        android:id="@+id/viewProgress"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_drawer"
-        app:menu="@menu/nav_bar_main_activity">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/white"
-            android:elevation="2dp"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/textSettings"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:clickable="true"
-                android:fontFamily="sans-serif-medium"
-                android:foreground="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:text="@string/settings" />
-
-            <TextView
-                android:id="@+id/textLogout"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:clickable="true"
-                android:fontFamily="sans-serif-medium"
-                android:foreground="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:text="@string/logout" />
-        </LinearLayout>
-    </android.support.design.widget.NavigationView>
-</android.support.v4.widget.DrawerLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</android.support.design.widget.CoordinatorLayout>

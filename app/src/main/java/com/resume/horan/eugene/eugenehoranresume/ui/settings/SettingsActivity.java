@@ -1,189 +1,202 @@
 package com.resume.horan.eugene.eugenehoranresume.ui.settings;
 
 
-import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.model.User;
+import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginActivity;
+import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
+import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.helper.FingerprintHelper;
+import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.FingerprintResponseCode;
 
-import java.util.List;
 
-/**
- * A {@link PreferenceActivity} that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
- * <p>
- * See <a href="http://developer.android.com/design/patterns/settings.html">
- * Android Design: Settings</a> for design guidelines and the <a
- * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
- * API Guide</a> for more information on developing a Settings UI.
- */
 public class SettingsActivity extends AppCompatPreferenceActivity {
-    /**
-     * TODO was in main activity
-     */
 
-    private void initMainActivityData() {
-
-        // TODO Require Fingerprint
-//        CheckBox mCheckboxFingerprint = findViewById(R.id.checkboxFingerprint);
-//        mCheckboxFingerprint.setChecked(Prefs.getBoolean(Common.PREF_FINGERPRINT, false));
-//        mCheckboxFingerprint.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                Prefs.putBoolean(Common.PREF_FINGERPRINT, b);
-//            }
-//        });
-
-        // TODO logout
-//        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        Button mBtnLogout = findViewById(R.id.btnLogout);
-//        mBtnLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Prefs.putBoolean(Common.PREF_FINGERPRINT, false);
-//                mAuth.signOut();
-//                LoginManager.getInstance().logOut();
-//                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//                finish();
-//
-//            }
-//        });
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionBar();
-    }
-
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        GeneralPreferenceFragment generalPreferenceFragment = new GeneralPreferenceFragment();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, generalPreferenceFragment).commit();
     }
 
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+    public static class GeneralPreferenceFragment extends PreferenceFragment {
+        private Preference fingerPrintSwitch;
+        private Preference userEmail;
+        private SharedPreferences sharedPref;
+        private DatabaseReference mUserReference;
+        private FingerprintHelper fingerPrintHelper;
+
         @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
-
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
-
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
-
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_general);
+            FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            userEmail = findPreference("user_email");
+            fingerPrintSwitch = findPreference(getString(R.string.pref_key_fingerprint_oauth));
+            if (mFirebaseUser != null && !TextUtils.isEmpty(mFirebaseUser.getUid())) {
+                mUserReference = FirebaseDatabase.getInstance().getReference("users").child(mFirebaseUser.getUid());
+                mUserReference.addListenerForSingleValueEvent(mUserEventListener);
             } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
+                userEmail.setSummary("null");
             }
+            initSignOut();
+            registerForFingerprintService(getActivity());
+        }
+
+        public void enableFingerprint(boolean enable) {
+            if (enable) {
+                initFingerprint();
+            } else {
+                fingerPrintSwitch.setSummary("Not enabled");
+                fingerPrintSwitch.setShouldDisableView(true);
+                fingerPrintSwitch.setDefaultValue(false);
+            }
+        }
+
+        @Override
+        public void onDestroy() {
+            mUserReference.removeEventListener(mUserEventListener);
+            super.onDestroy();
+        }
+
+        private ValueEventListener mUserEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User mUser = dataSnapshot.getValue(User.class);
+                if (mUser != null) {
+                    userEmail.setSummary(mUser.email);
+                } else {
+                    userEmail.setSummary("null");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                userEmail.setSummary("null");
+            }
+        };
+
+        private void initFingerprint() {
+            fingerPrintSwitch.setEnabled(true);
+            boolean fingerPrintEnabled = sharedPref.getBoolean(getString(R.string.pref_key_fingerprint_oauth), false);
+            fingerPrintSwitch.setShouldDisableView(false);
+            if (fingerPrintEnabled) {
+                fingerPrintSwitch.setSummary("Fingerprint Enabled");
+            } else {
+                fingerPrintSwitch.setSummary("Enable Fingerprint for login");
+            }
+            fingerPrintSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    if (o.equals(true)) {
+                        fingerPrintSwitch.setSummary("Fingerprint Enabled");
+                    } else {
+                        fingerPrintSwitch.setSummary("Enable Fingerprint for login");
+                    }
+                    return true;
+                }
+            });
+        }
+
+
+        private void initSignOut() {
+            Preference button = findPreference(getString(R.string.pref_key_logout));
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setTitle("Sign Out");
+                    alertDialog.setMessage("Are you sure you want to sign out?");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Sign Out",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Prefs.putBoolean(Common.PREF_FINGERPRINT, false);
+                                    FirebaseAuth.getInstance().signOut();
+                                    LoginManager.getInstance().logOut();
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    return true;
+                }
+            });
+        }
+
+        private void registerForFingerprintService(Context context) {
+            fingerPrintHelper = new FingerprintHelper(context, Common.KEY_FINGERPRINT);
+            switch (fingerPrintHelper.checkAndEnableFingerPrintService()) {
+                case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        enableFingerprint(true);
+                    } else {
+                        enableFingerprint(false);
+                    }
+                    break;
+                case FingerprintResponseCode.OS_NOT_SUPPORTED:
+                case FingerprintResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE:
+                case FingerprintResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS:
+                case FingerprintResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED:
+                case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED:
+                case FingerprintResponseCode.DEVICE_NOT_KEY_GUARD_SECURED:
+                    enableFingerprint(false);
+                    break;
+            }
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            overridePendingTransition(R.anim.anim_nothing, R.anim.anim_slide_down);
             return true;
         }
-    };
-
-    /**
-     * Helper method to determine if the device has an extra-large screen. For
-     * example, 10" tablets are extra-large.
-     */
-    private static boolean isXLargeTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+        return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public boolean onIsMultiPane() {
-        return isXLargeTablet(this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.anim_slide_down);
     }
 
     /**
@@ -192,99 +205,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || GeneralPreferenceFragment.class.getName().equals(fragmentName)
-                || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
-                || NotificationPreferenceFragment.class.getName().equals(fragmentName);
-    }
-
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * This fragment shows data and sync preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
+                || GeneralPreferenceFragment.class.getName().equals(fragmentName);
     }
 }

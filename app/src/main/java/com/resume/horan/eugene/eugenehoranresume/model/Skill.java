@@ -43,7 +43,7 @@ public class Skill implements Parcelable {
             case "0":
                 return R.drawable.ic_devices;
             case "1":
-                return R.drawable.ic_assignment;
+                return R.drawable.ic_assignment_vector;
             case "2":
                 return R.drawable.ic_android;
             case "3":

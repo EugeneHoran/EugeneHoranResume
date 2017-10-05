@@ -1,9 +1,12 @@
 package com.resume.horan.eugene.eugenehoranresume.ui.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -37,7 +40,6 @@ import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.LoginPresenterNullCheck;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
-import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
 import com.resume.horan.eugene.eugenehoranresume.util.Verify;
 import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.helper.FingerprintHelper;
 import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.helper.FingerprintResultsHandler;
@@ -56,8 +58,12 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     private FingerprintResultsHandler fingerprintResultsHandler;
 
     private FirebaseAuth mAuth;
+    private Context mContext;
+    private SharedPreferences mSharedPref;
 
-    LoginPresenter(LoginContract.View view) {
+    LoginPresenter(Context context, LoginContract.View view) {
+        mContext = context;
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         onAttachView(view);
         getView().setPresenter(this);
     }
@@ -273,7 +279,7 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                 if (!dataSnapshot.hasChild(userId)) {
                     usersRef.child(userId).setValue(new User(email));
                 }
-                if (!Prefs.getBoolean(Common.PREF_FINGERPRINT, false)) {
+                if (!mSharedPref.getBoolean(mContext.getString(R.string.pref_key_fingerprint_oauth), false)) {
                     getView().loginSuccessful();
                 } else {
                     getView().showFingerprint();
@@ -298,7 +304,6 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     /**
      * Fingerprint
      */
-
     @Override
     public void initFingerprint(LoginActivity loginView) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -319,6 +324,7 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                         fingerprintResultsHandler.stopListening();
                     }
                 }
+                mSharedPref.edit().putBoolean(mContext.getString(R.string.pref_key_fingerprint_oauth), false).apply();
                 mAuth.signOut();
                 LoginManager.getInstance().logOut();
                 getView().fingerprintAuthError();

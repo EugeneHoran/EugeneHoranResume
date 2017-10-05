@@ -4,8 +4,6 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class Location implements Parcelable {
 
     private String country;
@@ -17,8 +15,8 @@ public class Location implements Parcelable {
     private Double longitude;
 
 
-    public LatLng getLatLng() {
-        return new LatLng(latitude, longitude);
+    public String getMapUrlString() {
+        return "https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x400&maptype=roadmap&markers=color:blue%7Clabel:S%7C" + latitude + "," + longitude + "&key=AIzaSyADB4npZO7NgdyOGniM3Hl7AETODFVR3CE";
     }
 
     /**

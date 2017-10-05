@@ -6,6 +6,9 @@
     <color name="colorButtonPrimary">#607D8B</color>
     <color name="colorButtonDark">#00695C</color>
 
+    <color name="colorBottomNav">#E0F2F1</color>
+    <color name="colorBottomNavDark">#B2DFDB</color>
+
     <!--Chip -->
     <color name="colorChipViewBackground">#E0E0E0</color>
     <color name="white_transparency">#b9ffffff</color>
@@ -28,7 +31,7 @@
 
     <!-- Generic Colors -->
     <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
+    <color name="white">#FAFAFA</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="redError">#D50000</color>
 </resources>
