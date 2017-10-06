@@ -2,15 +2,14 @@ package com.resume.horan.eugene.eugenehoranresume.util;
 
 
 public class Common {
-    public static final String PREF_FINGERPRINT = "pref_fingerprint";
-    public static final String KEY_FINGERPRINT = "key_eugene_fingerprint";
 
     /**
      * Firebase Database References
      */
     public static final String FB_REF_EUGENE_HORAN = "eugeneHoran";
-    public static final String FB_REF_CONTACT = "eugeneHoran/contact";
-    public static final String FB_REF_ABOUT = "eugeneHoran/about";
+    public static final String FB_REF_CONTACT = "contact";
+    public static final String FB_REF_ABOUT = "about";
+    public static final String FB_REF_USERS = "users";
 
     /**
      * Navigation Views
@@ -25,12 +24,17 @@ public class Common {
     public static final int WHICH_EXPERIENCE_FRAGMENT = 0;
     public static final int WHICH_SKILL_FRAGMENT = 1;
     public static final int WHICH_EDUCATION_FRAGMENT = 2;
-
+    /**
+     * Fingerprint Types
+     */
+    public static final int FINGERPRINT_RESULT = 100;
+    public static final int WHICH_FINGERPRINT_LOGIN = 0;
+    public static final int WHICH_FINGERPRINT_SETTINGS = 1;
     /**
      * Common Arguments
      */
-    public static final String ARG_FIREBASE_USER_EMAIL = "arg_firebase_user_email";
-    public static final String ARG_FIREBASE_USER_NAME = "arg_firebase_user_name";
+    public static final String ARG_FINGERPRINT_TYPE = "arg_fingerprint_type";
+    public static final String ARG_FINGERPRINT_RETURN_ERROR = "arg_fingerprint_return_error";
     public static final String ARG_WHICH_FRAGMENT = "arg_which_fragment";
     public static final String ARG_RESUME_EXPERIENCE = "arg_resume_experience";
     public static final String ARG_RESUME_SKILL = "arg_resume_skills";

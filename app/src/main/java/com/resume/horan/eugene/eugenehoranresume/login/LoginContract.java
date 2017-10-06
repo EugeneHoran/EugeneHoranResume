@@ -1,9 +1,8 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.login;
+package com.resume.horan.eugene.eugenehoranresume.login;
 
 
 import android.content.Intent;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.resume.horan.eugene.eugenehoranresume.base.BasePresenter;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseView;
 
@@ -26,11 +25,9 @@ public interface LoginContract {
 
         void showFingerprint();
 
-        void showFingerprintMessage(String message, boolean isError);
-
         void showEmailRequired();
 
-        void fingerprintAuthError();
+
     }
 
     interface Presenter extends BasePresenter {
@@ -47,8 +44,8 @@ public interface LoginContract {
 
         void userEmailUpdated(String email);
 
-        void initFingerprint(LoginActivity loginView);
-
         void onActivityResult(LoginActivity loginView, int requestCode, int resultCode, Intent data);
+
+        void resetEmail(LoginActivity loginView, String email);
     }
 }

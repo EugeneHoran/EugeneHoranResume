@@ -1,10 +1,9 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.login;
+package com.resume.horan.eugene.eugenehoranresume.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.hardware.fingerprint.FingerprintManager;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -31,32 +30,24 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.LoginPresenterNullCheck;
-import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.Verify;
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.helper.FingerprintHelper;
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.helper.FingerprintResultsHandler;
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.interfaces.FingerprintAuthListener;
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.FingerprintResponseCode;
+
+import java.util.HashMap;
+import java.util.Map;
 
 class LoginPresenter extends LoginPresenterNullCheck implements
         LoginContract.Presenter,
-        GoogleApiClient.OnConnectionFailedListener,
-        FingerprintAuthListener {
+        GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN_G = 133;
 
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mFacebookCallbackManager;
-    private FingerprintHelper fingerPrintHelper;
-    private FingerprintResultsHandler fingerprintResultsHandler;
-
     private FirebaseAuth mAuth;
     private Context mContext;
     private SharedPreferences mSharedPref;
@@ -78,11 +69,6 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         onDetachView();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (fingerprintResultsHandler != null) {
-                fingerprintResultsHandler.stopListening();
-            }
         }
     }
 
@@ -163,6 +149,7 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     public void createAccountEmail(LoginActivity loginView, String email, String password) {
         if (fieldsVerified(loginView, email, password)) {
             getView().showLoading(true);
+
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ConstantConditions"})
                 @Override
@@ -202,6 +189,19 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         }
     }
 
+    private boolean verifyEmail(LoginActivity loginView, String email) {
+        if (TextUtils.isEmpty(email)) {
+            Log.e("Testing", "email isEmpty");
+            getView().showEmailError(loginView.getString(R.string.error_field_required));
+            return false;
+        } else if (!Verify.isEmailValid(email)) {
+            Log.e("Testing", "isEmailValid");
+            getView().showEmailError(loginView.getString(R.string.error_invalid_email));
+            return false;
+        }
+        return true;
+    }
+
     /**
      * returns the login status
      * <p>
@@ -211,6 +211,7 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     @Override
     public void onActivityResult(LoginActivity loginView, int requestCode, int resultCode, Intent data) {
         getView().showLoading(true);
+         /* Google Handler */
         if (requestCode == RC_SIGN_IN_G) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) { // Google Sign In was successful, authenticate with Firebase
@@ -221,9 +222,27 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                 getView().showLoading(false);
                 getView().showToast("Signed Out or Failure to Login");
             }
-        } else if (FacebookSdk.isFacebookRequestCode(requestCode)) {
+        }
+         /* Facebook Handler */
+        else if (FacebookSdk.isFacebookRequestCode(requestCode)) {
             mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
             loginView.overridePendingTransition(0, 0);
+        }
+        /* Fingerprint Handler */
+        else if (requestCode == Common.FINGERPRINT_RESULT) {
+            if (resultCode == Activity.RESULT_OK) {
+                getView().loginSuccessful();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                mSharedPref.edit().putBoolean(mContext.getString(R.string.pref_key_fingerprint_oauth), false).apply();
+                mAuth.signOut();
+                if (data != null) {
+                    String reason = data.getExtras().getString(Common.ARG_FINGERPRINT_RETURN_ERROR);
+                    getView().showToast(reason);
+                }
+                LoginManager.getInstance().logOut();
+                getView().showLogin();
+                getView().showLoading(false);
+            }
         } else {
             getView().showLoading(false);
         }
@@ -242,54 +261,76 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                     getView().showLoading(false);
                 } else {
                     getView().showLoading(true);
-                    writeNewUserIfNeeded(mUser.getUid(), mUser.getEmail());
+                    writeNewUserIfNeeded();
                 }
             }
         }
     };
 
     @Override
+    public void resetEmail(LoginActivity loginView, String email) {
+        if (verifyEmail(loginView, email)) {
+            getView().showLoading(true);
+            FirebaseUtil.getAuth().sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            getView().showLoading(false);
+                            if (task.isSuccessful()) {
+                                getView().showLogin();
+                                getView().showToast("Check your email");
+                            } else {
+                                getView().showLogin();
+                                getView().showToast("There was an error");
+                            }
+                        }
+                    });
+        }
+    }
+
+    @Override
     public void userEmailUpdated(final String email) {
         getView().showLoading(true);
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null)
-            user.updateEmail(email)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                writeNewUserIfNeeded(user.getUid(), email);
-                            } else {
-                                getView().showToast("Problem Updating email");
-                                getView().showLoading(false);
-                            }
-                        }
-                    });
+            user.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        writeNewUserIfNeeded();
+                    } else {
+                        getView().showToast("Problem Updating email");
+                        getView().showLoading(false);
+                    }
+                }
+            });
         else {
             getView().showLoading(false);
             getView().showToast("Problem with data");
         }
     }
 
-    private void writeNewUserIfNeeded(final String userId, final String email) {
-        final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void writeNewUserIfNeeded() {
+        FirebaseUser firebaseUser = FirebaseUtil.getUser();
+        Map<String, Object> updateValues = new HashMap<>();
+        updateValues.put("email", firebaseUser.getEmail() != null ? firebaseUser.getEmail() : "no_email");
+        updateValues.put("displayName", !TextUtils.isEmpty(firebaseUser.getDisplayName()) ? firebaseUser.getDisplayName() : "Anonymous");
+        updateValues.put("imageUrl", firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null);
+        FirebaseUtil.getCurrentUserRef().updateChildren(updateValues, new DatabaseReference.CompletionListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild(userId)) {
-                    usersRef.child(userId).setValue(new User(email));
-                }
-                if (!mSharedPref.getBoolean(mContext.getString(R.string.pref_key_fingerprint_oauth), false)) {
-                    getView().loginSuccessful();
-                } else {
-                    getView().showFingerprint();
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    getView().showToast("Couldn't save user data: " + databaseError.getMessage());
                     getView().showLoading(false);
+                    getView().showLogin();
+                } else {
+                    if (!mSharedPref.getBoolean(mContext.getString(R.string.pref_key_fingerprint_oauth), false)) {
+                        getView().loginSuccessful();
+                    } else {
+                        getView().showFingerprint();
+                        getView().showLoading(false);
+                    }
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                getView().showLoading(false);
             }
         });
     }
@@ -301,78 +342,4 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     }
 
 
-    /**
-     * Fingerprint
-     */
-    @Override
-    public void initFingerprint(LoginActivity loginView) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            registerForFingerprintService(loginView);
-            if (fingerprintResultsHandler != null && !fingerprintResultsHandler.isAlreadyListening()) {
-                fingerprintResultsHandler.startListening(fingerPrintHelper.getFingerprintManager(), fingerPrintHelper.getCryptoObject());
-            }
-        }
-    }
-
-    @Override
-    public void onAuthentication(int helpOrErrorCode, CharSequence infoString, FingerprintManager.AuthenticationResult authenticationResult, int authCode) {
-        switch (authCode) {
-            case FingerprintResponseCode.AUTH_ERROR:
-                // Called when an unrecoverable error has been encountered and the operation is complete.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (fingerprintResultsHandler != null) {
-                        fingerprintResultsHandler.stopListening();
-                    }
-                }
-                mSharedPref.edit().putBoolean(mContext.getString(R.string.pref_key_fingerprint_oauth), false).apply();
-                mAuth.signOut();
-                LoginManager.getInstance().logOut();
-                getView().fingerprintAuthError();
-                getView().showToast("Too many tries. Please login");
-                break;
-            case FingerprintResponseCode.AUTH_FAILED:
-                // Called when a fingerprint is valid but not recognized.
-                getView().showFingerprintMessage("Fingerprint Authentication Failed", true);
-                break;
-            case FingerprintResponseCode.AUTH_HELP:
-                // Called when a recoverable error has been encountered during authentication.
-                getView().showFingerprintMessage("Make sure your finger is on the scanner", false);
-                break;
-            case FingerprintResponseCode.AUTH_SUCCESS:
-                // Do whatever you want
-                getView().showFingerprintMessage("Login successful", false);
-                getView().loginSuccessfulFingerprint();
-                break;
-        }
-    }
-
-    //TODO work on this
-    private void registerForFingerprintService(LoginActivity loginView) {
-        fingerPrintHelper = new FingerprintHelper(loginView, Common.KEY_FINGERPRINT);
-        switch (fingerPrintHelper.checkAndEnableFingerPrintService()) {
-            case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    fingerprintResultsHandler = new FingerprintResultsHandler(loginView);
-                    fingerprintResultsHandler.setFingerprintAuthListener(this);
-                    fingerprintResultsHandler.startListening(fingerPrintHelper.getFingerprintManager(), fingerPrintHelper.getCryptoObject());
-                }
-                getView().showToast("Fingerprint sensor started scanning");
-                break;
-            case FingerprintResponseCode.OS_NOT_SUPPORTED:
-                getView().showToast("OS doesn't support fingerprint api");
-                break;
-            case FingerprintResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE:
-                getView().showToast("Fingerprint sensor not found");
-                break;
-            case FingerprintResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS:
-                getView().showToast("Give access to use fingerprint sensor");
-                break;
-            case FingerprintResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED:
-                break;
-            case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED:
-                break;
-            case FingerprintResponseCode.DEVICE_NOT_KEY_GUARD_SECURED:
-                break;
-        }
-    }
 }

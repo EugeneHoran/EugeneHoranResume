@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.login;
+package com.resume.horan.eugene.eugenehoranresume.login;
 
 
 import android.app.Activity;
@@ -18,8 +18,6 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.resume.horan.eugene.eugenehoranresume.R;
-import com.resume.horan.eugene.eugenehoranresume.util.Common;
-import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
 import com.resume.horan.eugene.eugenehoranresume.util.Verify;
 
 public class LoginRequestDataBSFragment extends BottomSheetDialogFragment implements View.OnClickListener {
@@ -90,7 +88,6 @@ public class LoginRequestDataBSFragment extends BottomSheetDialogFragment implem
     public void onDestroy() {
         super.onDestroy();
         if (!mBtnClicked) {
-            Prefs.putBoolean(Common.PREF_FINGERPRINT, false);
             FirebaseAuth.getInstance().signOut();
             LoginManager.getInstance().logOut();
         }

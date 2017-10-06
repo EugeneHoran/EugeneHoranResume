@@ -1,15 +1,20 @@
 package com.resume.horan.eugene.eugenehoranresume.main;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.MainPresenterNullCheck;
 import com.resume.horan.eugene.eugenehoranresume.model.About;
+import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.EugeneHoran;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 
 class MainActivityPresenter extends MainPresenterNullCheck implements MainActivityContract.Presenter {
     private DatabaseReference myResumeReference;
@@ -19,10 +24,9 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
     private int mFragmentPosition = Common.WHICH_RESUME_FRAGMENT;
 
     MainActivityPresenter(MainActivityContract.View view) {
-        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        myResumeReference = mDatabase.getReference(Common.FB_REF_EUGENE_HORAN);
-        myContactReference = mDatabase.getReference(Common.FB_REF_CONTACT);
-        myAboutReference = mDatabase.getReference(Common.FB_REF_ABOUT);
+        myResumeReference = FirebaseUtil.getResumeRef();
+        myContactReference = FirebaseUtil.getContactRef();
+        myAboutReference = FirebaseUtil.getAboutRef();
         onAttachView(view);
         getView().setPresenter(this);
     }
@@ -35,11 +39,15 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
 
     @Override
     public void onDestroy() {
+        myResumeReference.removeEventListener(mResumeEventListener);
+        myContactReference.removeEventListener(mContactEventListener);
+        myAboutReference.removeEventListener(mAboutEventListener);
         onDetachView();
     }
 
     @Override
     public void onStart() {
+
         getView().setFragmentPosition(mFragmentPosition);
         getView().expandAppbar();
         getView().showLoading(true);

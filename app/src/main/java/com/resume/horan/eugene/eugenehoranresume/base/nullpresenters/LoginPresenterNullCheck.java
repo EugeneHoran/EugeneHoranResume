@@ -1,7 +1,6 @@
 package com.resume.horan.eugene.eugenehoranresume.base.nullpresenters;
 
-import com.google.firebase.auth.FirebaseUser;
-import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginContract;
+import com.resume.horan.eugene.eugenehoranresume.login.LoginContract;
 
 public class LoginPresenterNullCheck extends BasePresenterNullCheck<LoginContract.View> {
     @Override
@@ -49,16 +48,6 @@ public class LoginPresenterNullCheck extends BasePresenterNullCheck<LoginContrac
 
             @Override
             public void showFingerprint() {
-
-            }
-
-            @Override
-            public void showFingerprintMessage(String message, boolean isError) {
-
-            }
-
-            @Override
-            public void fingerprintAuthError() {
 
             }
 

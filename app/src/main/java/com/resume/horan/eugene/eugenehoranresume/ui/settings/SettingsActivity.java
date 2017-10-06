@@ -1,19 +1,18 @@
 package com.resume.horan.eugene.eugenehoranresume.ui.settings;
 
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,12 +23,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.fingerprint.FingerprintActivity;
+import com.resume.horan.eugene.eugenehoranresume.login.LoginActivity;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
-import com.resume.horan.eugene.eugenehoranresume.ui.login.LoginActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
-import com.resume.horan.eugene.eugenehoranresume.util.Prefs;
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.helper.FingerprintHelper;
-import com.resume.horan.eugene.eugenehoranresume.util.fingerprintassistant.util.FingerprintResponseCode;
+import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
+import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
@@ -46,45 +45,59 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, generalPreferenceFragment).commit();
     }
 
+
     public static class GeneralPreferenceFragment extends PreferenceFragment {
-        private Preference fingerPrintSwitch;
+        private SwitchPreference fingerPrintSwitch;
         private Preference userEmail;
-        private SharedPreferences sharedPref;
         private DatabaseReference mUserReference;
-        private FingerprintHelper fingerPrintHelper;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
-            FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
             userEmail = findPreference("user_email");
-            fingerPrintSwitch = findPreference(getString(R.string.pref_key_fingerprint_oauth));
-            if (mFirebaseUser != null && !TextUtils.isEmpty(mFirebaseUser.getUid())) {
-                mUserReference = FirebaseDatabase.getInstance().getReference("users").child(mFirebaseUser.getUid());
+            fingerPrintSwitch = (SwitchPreference) findPreference(getString(R.string.pref_key_fingerprint_oauth));
+            if (FirebaseUtil.getUser() != null) {
+                mUserReference = FirebaseUtil.getCurrentUserRef();
                 mUserReference.addListenerForSingleValueEvent(mUserEventListener);
             } else {
                 userEmail.setSummary("null");
             }
-            initSignOut();
-            registerForFingerprintService(getActivity());
-        }
-
-        public void enableFingerprint(boolean enable) {
-            if (enable) {
+            if (LayoutUtil.isM()) {
                 initFingerprint();
             } else {
-                fingerPrintSwitch.setSummary("Not enabled");
-                fingerPrintSwitch.setShouldDisableView(true);
+                fingerPrintSwitch.setEnabled(false);
+                fingerPrintSwitch.setChecked(false);
                 fingerPrintSwitch.setDefaultValue(false);
             }
+            initFingerprintSummary();
+            initSignOut();
         }
 
         @Override
         public void onDestroy() {
             mUserReference.removeEventListener(mUserEventListener);
             super.onDestroy();
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            /* Fingerprint Handler */
+            if (requestCode == Common.FINGERPRINT_RESULT) {
+                if (resultCode == Activity.RESULT_OK) {
+                    Toast.makeText(getActivity(), "Fingerprint enabled", Toast.LENGTH_SHORT).show();
+                    fingerPrintSwitch.setChecked(true);
+                    initFingerprintSummary();
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    if (data != null) {
+                        String reason = data.getExtras().getString(Common.ARG_FINGERPRINT_RETURN_ERROR);
+                        Toast.makeText(getActivity(), reason, Toast.LENGTH_SHORT).show();
+                    }
+                    fingerPrintSwitch.setChecked(false);
+                    initFingerprintSummary();
+                }
+            }
         }
 
         private ValueEventListener mUserEventListener = new ValueEventListener() {
@@ -104,29 +117,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
         };
 
-        private void initFingerprint() {
-            fingerPrintSwitch.setEnabled(true);
-            boolean fingerPrintEnabled = sharedPref.getBoolean(getString(R.string.pref_key_fingerprint_oauth), false);
-            fingerPrintSwitch.setShouldDisableView(false);
-            if (fingerPrintEnabled) {
-                fingerPrintSwitch.setSummary("Fingerprint Enabled");
-            } else {
-                fingerPrintSwitch.setSummary("Enable Fingerprint for login");
-            }
-            fingerPrintSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object o) {
-                    if (o.equals(true)) {
-                        fingerPrintSwitch.setSummary("Fingerprint Enabled");
-                    } else {
-                        fingerPrintSwitch.setSummary("Enable Fingerprint for login");
-                    }
-                    return true;
-                }
-            });
-        }
-
-
         private void initSignOut() {
             Preference button = findPreference(getString(R.string.pref_key_logout));
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -144,7 +134,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Sign Out",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Prefs.putBoolean(Common.PREF_FINGERPRINT, false);
+                                    fingerPrintSwitch.setChecked(false);
                                     FirebaseAuth.getInstance().signOut();
                                     LoginManager.getInstance().logOut();
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -159,27 +149,30 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             });
         }
 
-        private void registerForFingerprintService(Context context) {
-            fingerPrintHelper = new FingerprintHelper(context, Common.KEY_FINGERPRINT);
-            switch (fingerPrintHelper.checkAndEnableFingerPrintService()) {
-                case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_SUCCESS:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        enableFingerprint(true);
-                    } else {
-                        enableFingerprint(false);
-                    }
-                    break;
-                case FingerprintResponseCode.OS_NOT_SUPPORTED:
-                case FingerprintResponseCode.FINGER_PRINT_SENSOR_UNAVAILABLE:
-                case FingerprintResponseCode.ENABLE_FINGER_PRINT_SENSOR_ACCESS:
-                case FingerprintResponseCode.NO_FINGER_PRINTS_ARE_ENROLLED:
-                case FingerprintResponseCode.FINGERPRINT_SERVICE_INITIALISATION_FAILED:
-                case FingerprintResponseCode.DEVICE_NOT_KEY_GUARD_SECURED:
-                    enableFingerprint(false);
-                    break;
+        private void initFingerprintSummary() {
+            if (fingerPrintSwitch.isChecked()) {
+                fingerPrintSwitch.setSummary("Fingerprint Enabled");
+            } else {
+                fingerPrintSwitch.setSummary("Fingerprint Disabled");
             }
         }
 
+        private void initFingerprint() {
+            fingerPrintSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    if (o.equals(true)) {
+                        Intent intent = new Intent(getActivity(), FingerprintActivity.class);
+                        intent.putExtra(Common.ARG_FINGERPRINT_TYPE, Common.WHICH_FINGERPRINT_SETTINGS);
+                        startActivityForResult(intent, Common.FINGERPRINT_RESULT);
+                        fingerPrintSwitch.setChecked(false);
+                    } else {
+                        fingerPrintSwitch.setSummary("Fingerprint Disabled");
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     @Override

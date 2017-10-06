@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.resume.horan.eugene.eugenehoranresume.fingerprint.FingerprintActivity">
+
+    <data>
+
+        <variable
+            name="holder"
+            type="com.resume.horan.eugene.eugenehoranresume.fingerprint.FingerprintViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:animateLayoutChanges="true"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:visibility="gone"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <com.mattprecious.swirl.SwirlView
+            android:id="@+id/swirlFinger"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="-88dp"
+            app:swirl_state="off"
+            tools:targetApi="N" />
+
+        <TextView
+            android:id="@+id/textFingerprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/swirlFinger"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="88dp"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@{holder.fingerprintMessage}"
+            android:textColor="@{holder.textColor}"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</layout>

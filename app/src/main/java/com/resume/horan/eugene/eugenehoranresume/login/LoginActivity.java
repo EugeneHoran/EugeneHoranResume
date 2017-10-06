@@ -1,7 +1,6 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.login;
+package com.resume.horan.eugene.eugenehoranresume.login;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +12,16 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
-import com.mattprecious.swirl.SwirlView;
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.fingerprint.FingerprintActivity;
 import com.resume.horan.eugene.eugenehoranresume.main.MainActivity;
+import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.MultiTextWatcher;
 import com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView;
@@ -29,18 +30,14 @@ import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements LoginRequestDataBSFragment.Listener, LoginContract.View, OnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
+
     private LoginContract.Presenter mPresenter;
     private boolean mCreateAccountVisible = false;
+    private boolean mResetPasswordVisible = false;
 
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mPresenter.onStart();
     }
 
     @Override
@@ -63,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mPresenter.onActivityResult(this, requestCode, resultCode, data);
+
     }
 
     // UI references.
@@ -79,8 +77,8 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
     private Button mBtnEmailSignIn;
     private Button mBtnEmailCreateAccount;
     private SignInButton mBtnGoogleSignIn;
-    private View mViewFingerprintHolder;
-    private TextView mTextFingerprint;
+    private LinearLayout mViewSocialLayout;
+    private Button mBtnEmailForgot;
     private View mViewProgress;
 
 
@@ -103,10 +101,10 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
         mBtnEmailSignIn = findViewById(R.id.btnEmailSignIn);
         mBtnEmailCreateAccount = findViewById(R.id.btnEmailCreateAccount);
         mBtnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        mBtnEmailForgot = findViewById(R.id.btnEmailForgot);
+        mViewSocialLayout = findViewById(R.id.viewSocialLayout);
         LoginButton mBtnFacebookSignIn = findViewById(R.id.btnFacebookSignIn);
         mBtnFacebookSignIn.setReadPermissions(Arrays.asList("email", "public_profile"));
-        mViewFingerprintHolder = findViewById(R.id.viewFingerprintHolder);
-        mTextFingerprint = findViewById(R.id.textFingerprint);
         mViewProgress = findViewById(R.id.viewProgress);
 
         // Init Listeners
@@ -120,11 +118,13 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
         mBtnEmailSignIn.setOnClickListener(this);
         mBtnEmailCreateAccount.setOnClickListener(this);
         mBtnGoogleSignIn.setOnClickListener(this);
+        mBtnEmailForgot.setOnClickListener(this);
 
         // Init Presenter
         new LoginPresenter(this, this);
         mPresenter.createGoogleClient(this);
         mPresenter.createFacebookClient();
+        mPresenter.onStart();
     }
 
     /**
@@ -144,6 +144,12 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
             }
         } else if (v == mBtnGoogleSignIn) {
             mPresenter.signInGoogle(this);
+        } else if (v == mBtnEmailForgot) {
+            if (mResetPasswordVisible) {
+                mPresenter.resetEmail(this, mEditEmail.getText().toString().trim());
+            } else {
+                showForgotPassword();
+            }
         }
         // Toolbar Nav Click
         else {
@@ -191,11 +197,18 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
     public void showLogin() {
         onLayoutTypeChange();
         mCreateAccountVisible = false;
+        mResetPasswordVisible = false;
         mToolbar.setTitle(null);
         setUpEnabled(false);
+        mViewSocialLayout.setVisibility(View.VISIBLE);
+        mEditPassword.setVisibility(View.VISIBLE);
         mTextTitle.setVisibility(View.VISIBLE);
         mBtnEmailSignIn.setVisibility(View.VISIBLE);
+        mBtnEmailCreateAccount.setVisibility(View.VISIBLE);
         mBtnEmailCreateAccount.setBackgroundResource(R.color.transparent);
+        mBtnEmailForgot.setVisibility(View.VISIBLE);
+        mBtnEmailForgot.setText(R.string.forgot_password);
+        mBtnEmailForgot.setBackgroundResource(R.color.transparent);
     }
 
 
@@ -203,11 +216,33 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
     public void showCreateAccount() {
         onLayoutTypeChange();
         mCreateAccountVisible = true;
-        mToolbar.setTitle("Create Account");
+        mResetPasswordVisible = false;
+        mToolbar.setTitle(R.string.create_account);
         setUpEnabled(true);
+        mEditPassword.setVisibility(View.VISIBLE);
+        mViewSocialLayout.setVisibility(View.VISIBLE);
         mTextTitle.setVisibility(View.GONE);
         mBtnEmailSignIn.setVisibility(View.GONE);
         mBtnEmailCreateAccount.setBackgroundResource(R.drawable.button_normal);
+        mBtnEmailForgot.setVisibility(View.GONE);
+        mBtnEmailForgot.setText(R.string.forgot_password);
+        mBtnEmailForgot.setBackgroundResource(R.color.transparent);
+    }
+
+    public void showForgotPassword() {
+        mCreateAccountVisible = false;
+        mResetPasswordVisible = true;
+        onLayoutTypeChange();
+        setUpEnabled(true);
+        mToolbar.setTitle(R.string.reset_password);
+        mBtnEmailForgot.setText(R.string.reset_password);
+        mBtnEmailForgot.setBackgroundResource(R.drawable.button_normal);
+        mViewSocialLayout.setVisibility(View.GONE);
+        mTextTitle.setVisibility(View.GONE);
+        mBtnEmailSignIn.setVisibility(View.GONE);
+        mBtnEmailCreateAccount.setVisibility(View.GONE);
+        mBtnEmailForgot.setVisibility(View.VISIBLE);
+        mEditPassword.setVisibility(View.GONE);
     }
 
     private void onLayoutTypeChange() {
@@ -221,27 +256,9 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
 
     @Override
     public void showFingerprint() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ((SwirlView) findViewById(R.id.swirlFinger)).setState(SwirlView.State.ON);
-            mPresenter.initFingerprint(this);
-            mViewMainHolder.setVisibility(View.GONE);
-            mViewFingerprintHolder.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void fingerprintAuthError() {
-        mViewMainHolder.setVisibility(View.VISIBLE);
-        mViewFingerprintHolder.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showFingerprintMessage(String message, boolean isError) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mTextFingerprint.setText(message);
-            mTextFingerprint.setTextColor(ContextCompat.getColor(LoginActivity.this, isError ? R.color.redError : R.color.white));
-            ((SwirlView) findViewById(R.id.swirlFinger)).setState(isError ? SwirlView.State.ERROR : SwirlView.State.ON);
-        }
+        Intent intent = new Intent(this, FingerprintActivity.class);
+        intent.putExtra(Common.ARG_FINGERPRINT_TYPE, Common.WHICH_FINGERPRINT_LOGIN);
+        startActivityForResult(intent, Common.FINGERPRINT_RESULT);
     }
 
     @Override
@@ -324,7 +341,7 @@ public class LoginActivity extends AppCompatActivity implements LoginRequestData
         if (heightDiff > LayoutUtil.dpToPx(LoginActivity.this, 200)) { // if more than 200 dp, it's probably a keyboard...
             mTextTitle.setVisibility(View.GONE);
         } else {
-            if (mCreateAccountVisible) {
+            if (mCreateAccountVisible || mResetPasswordVisible) {
                 mTextTitle.setVisibility(View.GONE);
             } else {
                 mTextTitle.setVisibility(View.VISIBLE);

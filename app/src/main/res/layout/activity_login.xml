@@ -5,7 +5,7 @@
     android:id="@+id/viewRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity">
+    tools:context=".login.LoginActivity">
 
     <View
         android:id="@+id/viewGetFocus"
@@ -98,6 +98,7 @@
                 android:theme="@style/Login.ButtonFlat" />
 
             <LinearLayout
+                android:id="@+id/viewSocialLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -131,6 +132,19 @@
                     android:paddingTop="12dp"
                     facebook:com_facebook_login_text="Sign In" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnEmailForgot"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/transparent"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="@string/forgot_password"
+                android:theme="@style/Login.ButtonFlat" />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
@@ -150,28 +164,4 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <RelativeLayout
-        android:id="@+id/viewFingerprintHolder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="-88dp"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/imageFingerprint"
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:layout_centerInParent="true"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/textFingerprint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imageFingerprint"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="88dp"
-            android:text="Scan Fingerprint"
-            android:textSize="16sp" />
-    </RelativeLayout>
 </FrameLayout>

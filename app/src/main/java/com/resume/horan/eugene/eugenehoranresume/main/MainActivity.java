@@ -4,30 +4,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseActivity;
 import com.resume.horan.eugene.eugenehoranresume.main.about.AboutFragment;
 import com.resume.horan.eugene.eugenehoranresume.main.contact.ContactFragment;
 import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject;
 import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumePagerFragment;
-import com.resume.horan.eugene.eugenehoranresume.model.AboutObject;
+import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.squareup.picasso.Callback;
@@ -38,7 +35,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity implements
         View.OnClickListener,
-        BottomNavigationView.OnNavigationItemSelectedListener,
         MainActivityContract.View,
         ResumePagerFragment.ResumeInteraction {
 
@@ -57,12 +53,6 @@ public class MainActivity extends BaseActivity implements
         mPresenter = presenter;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mPresenter.start(mFragmentPosition);
-    }
-
     private Context mContext;
     private FragmentManager mFragmentManager;
     // UI references.
@@ -71,7 +61,9 @@ public class MainActivity extends BaseActivity implements
     private BottomBar mBottomBar;
     private FrameLayout mFrameContainer;
     private TabLayout mTabLayout;
-    private ProgressBar mProgressBar;
+
+    // Bottom Nav library selects the first view onCreate
+    private boolean mBottomNavClickable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,30 +73,32 @@ public class MainActivity extends BaseActivity implements
         initMainActivity();
         mFragmentManager = getSupportFragmentManager();
         mAppBar = findViewById(R.id.app_bar);
-        mAppBar.setPadding(0, getStatusBarHeight(), 0, 0);
         mFrameContainer = findViewById(R.id.container);
         mTabLayout = findViewById(R.id.tabs);
-        mProgressBar = findViewById(R.id.viewProgress);
         mImageUserProfile = findViewById(R.id.imageUserProfile);
         initProfileImage();
         mImageUserProfile.setOnClickListener(this);
         mBottomBar = findViewById(R.id.bottomBar);
-        if (savedInstanceState != null) {
-            mFragmentPosition = savedInstanceState.getInt(STATE_FRAGMENT_POSITION, Common.WHICH_RESUME_FRAGMENT);
-        }
-        new MainActivityPresenter(this);
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.action_resume) {
-                    mPresenter.start(Common.WHICH_RESUME_FRAGMENT);
-                } else if (tabId == R.id.action_about_me) {
-                    mPresenter.start(Common.WHICH_ABOUT_FRAGMENT);
-                } else if (tabId == R.id.action_contact) {
-                    mPresenter.start(Common.WHICH_CONTACT_FRAGMENT);
+                if (mBottomNavClickable) {
+                    if (tabId == R.id.action_resume) {
+                        mPresenter.start(Common.WHICH_RESUME_FRAGMENT);
+                    } else if (tabId == R.id.action_about_me) {
+                        mPresenter.start(Common.WHICH_ABOUT_FRAGMENT);
+                    } else if (tabId == R.id.action_contact) {
+                        mPresenter.start(Common.WHICH_CONTACT_FRAGMENT);
+                    }
                 }
             }
         });
+        new MainActivityPresenter(this);
+        if (savedInstanceState != null) {
+            mFragmentPosition = savedInstanceState.getInt(STATE_FRAGMENT_POSITION, Common.WHICH_RESUME_FRAGMENT);
+        }
+        mPresenter.start(mFragmentPosition);
+        mBottomNavClickable = true;
     }
 
     @Override
@@ -116,53 +110,6 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void setFragmentPosition(int fragmentPosition) {
         mFragmentPosition = fragmentPosition;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (!item.isChecked()) {
-            switch (item.getItemId()) {
-                case R.id.action_resume:
-                    mPresenter.start(Common.WHICH_RESUME_FRAGMENT);
-                    item.setChecked(true);
-                    return true;
-                case R.id.action_contact:
-                    mPresenter.start(Common.WHICH_CONTACT_FRAGMENT);
-                    item.setChecked(true);
-                    return true;
-                case R.id.action_about_me:
-                    mPresenter.start(Common.WHICH_ABOUT_FRAGMENT);
-                    item.setChecked(true);
-                    break;
-            }
-        }
-        return false;
-    }
-
-    private void initProfileImage() {
-        String profileUrl = mFirebaseUser.getPhotoUrl() != null ? mFirebaseUser.getPhotoUrl().toString() : "null";
-        Picasso.with(mContext)
-                .load(profileUrl)
-                .error(R.drawable.ic_account_circle)
-                .noFade()
-                .into(mImageUserProfile, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        mImageUserProfile.setVisibility(View.VISIBLE);
-                        Animation fadeIn = AnimationUtils.loadAnimation(mContext, R.anim.anim_set_fade_in_slide_up_recycler);
-                        fadeIn.setDuration(350);
-                        mImageUserProfile.startAnimation(fadeIn);
-                    }
-
-                    @Override
-                    public void onError() {
-                        mImageUserProfile.setBorderColorResource(R.color.transparent);
-                        mImageUserProfile.setVisibility(View.VISIBLE);
-                        Animation fadeIn = AnimationUtils.loadAnimation(mContext, R.anim.anim_set_fade_in_slide_up_recycler);
-                        fadeIn.setDuration(350);
-                        mImageUserProfile.startAnimation(fadeIn);
-                    }
-                });
     }
 
     @Override
@@ -223,6 +170,32 @@ public class MainActivity extends BaseActivity implements
                 mPresenter.onStart();
             }
         });
+    }
+
+    private void initProfileImage() {
+        String profileUrl = FirebaseUtil.getUser().getPhotoUrl() != null ? FirebaseUtil.getUser().getPhotoUrl().toString() : "null";
+        Picasso.with(mContext)
+                .load(profileUrl)
+                .error(R.drawable.ic_account_circle)
+                .noFade()
+                .into(mImageUserProfile, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        mImageUserProfile.setVisibility(View.VISIBLE);
+                        Animation fadeIn = AnimationUtils.loadAnimation(mContext, R.anim.anim_set_fade_in_slide_up_recycler);
+                        fadeIn.setDuration(350);
+                        mImageUserProfile.startAnimation(fadeIn);
+                    }
+
+                    @Override
+                    public void onError() {
+                        mImageUserProfile.setBorderColorResource(R.color.transparent);
+                        mImageUserProfile.setVisibility(View.VISIBLE);
+                        Animation fadeIn = AnimationUtils.loadAnimation(mContext, R.anim.anim_set_fade_in_slide_up_recycler);
+                        fadeIn.setDuration(350);
+                        mImageUserProfile.startAnimation(fadeIn);
+                    }
+                });
     }
 
     @Override

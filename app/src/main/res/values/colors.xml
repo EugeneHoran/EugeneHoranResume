@@ -9,6 +9,8 @@
     <color name="colorBottomNav">#E0F2F1</color>
     <color name="colorBottomNavDark">#B2DFDB</color>
 
+    <color name="colorBottomNavGray">#999999</color>
+
     <!--Chip -->
     <color name="colorChipViewBackground">#E0E0E0</color>
     <color name="white_transparency">#b9ffffff</color>

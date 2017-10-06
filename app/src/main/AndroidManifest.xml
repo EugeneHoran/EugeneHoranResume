@@ -58,7 +58,7 @@
 
         <!-- App Activities, Keep at bottom of application -->
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:label="@string/app_login_title"
             android:theme="@style/Login"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
@@ -80,6 +80,9 @@
         <activity
             android:name=".ui.viewimage.ViewImageActivity"
             android:theme="@style/ViewImageTheme" />
+        <activity
+            android:name=".fingerprint.FingerprintActivity"
+            android:theme="@style/Login" />
     </application>
 
 </manifest>
