@@ -17,6 +17,7 @@ public class LayoutUtil {
     public static void hideKeyboard(View v) {
         Context context = v.getContext();
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
