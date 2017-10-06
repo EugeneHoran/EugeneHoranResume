@@ -52,7 +52,7 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainActivityC
             }
 
             @Override
-            public void showAboutFragment(AboutObject aboutObject) {
+            public void showAboutFragment(ResumeBaseObject aboutObject) {
 
             }
 

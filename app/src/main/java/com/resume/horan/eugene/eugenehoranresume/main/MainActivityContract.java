@@ -21,7 +21,7 @@ public interface MainActivityContract {
 
         void showContactFragment(Contact contact);
 
-        void showAboutFragment(AboutObject aboutObject);
+        void showAboutFragment(ResumeBaseObject aboutObject);
 
         void showLoadingError();
     }

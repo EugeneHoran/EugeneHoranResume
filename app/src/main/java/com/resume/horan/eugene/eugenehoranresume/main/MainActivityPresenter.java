@@ -116,7 +116,7 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
         public void onDataChange(DataSnapshot dataSnapshot) {
             About mAboutValue = dataSnapshot.getValue(About.class);
             myAboutReference.keepSynced(true);
-            getView().showAboutFragment(mAboutValue.getFilteredAbout());
+            getView().showAboutFragment(mAboutValue.getFilteredAboutList());
             getView().showLoading(false);
         }
 

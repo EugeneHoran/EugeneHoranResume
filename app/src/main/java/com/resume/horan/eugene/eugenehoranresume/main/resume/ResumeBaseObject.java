@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 
+import com.resume.horan.eugene.eugenehoranresume.main.about.AboutRecyclerAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,9 @@ public class ResumeBaseObject implements Parcelable {
                 mAdapter.setItems(object.getObjectList());
             } else if (adapter instanceof ResumeExperienceRecyclerAdapter) {
                 ResumeExperienceRecyclerAdapter mAdapter = (ResumeExperienceRecyclerAdapter) adapter;
+                mAdapter.setItems(object.getObjectList());
+            } else if (adapter instanceof AboutRecyclerAdapter) {
+                AboutRecyclerAdapter mAdapter = (AboutRecyclerAdapter) adapter;
                 mAdapter.setItems(object.getObjectList());
             }
         }

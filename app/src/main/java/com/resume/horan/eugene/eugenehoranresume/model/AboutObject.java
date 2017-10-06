@@ -1,17 +1,27 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
 
+import android.databinding.BaseObservable;
+import android.databinding.BindingAdapter;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.widget.RecyclerView;
+
+import com.resume.horan.eugene.eugenehoranresume.main.about.AboutRecyclerAdapter;
+import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject;
+import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeEducationRecyclerAdapter;
+import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeExperienceRecyclerAdapter;
+import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeSkillRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AboutObject implements Parcelable {
+public class AboutObject extends BaseObservable implements Parcelable {
     private List<Object> mObjectList = null;
 
     public AboutObject() {
     }
+
 
     public AboutObject(List<Object> mObjectList) {
         this.mObjectList = mObjectList;

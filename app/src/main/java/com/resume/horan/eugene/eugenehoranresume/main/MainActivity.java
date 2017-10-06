@@ -176,6 +176,15 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
+    public void showAboutFragment(ResumeBaseObject aboutObject) {
+        AboutFragment aboutFragment = (AboutFragment) mFragmentManager.findFragmentByTag(TAG_ABOUT_FRAGMENT);
+        if (aboutFragment == null) {
+            aboutFragment = AboutFragment.newInstance(aboutObject);
+            replaceFragment(aboutFragment, TAG_ABOUT_FRAGMENT);
+        }
+    }
+
+    @Override
     public void showContactFragment(Contact contact) {
         ContactFragment contactFragment = (ContactFragment) mFragmentManager.findFragmentByTag(TAG_CONTACT_FRAGMENT);
         if (contactFragment == null) {
@@ -184,14 +193,6 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    @Override
-    public void showAboutFragment(AboutObject aboutObject) {
-        AboutFragment aboutFragment = (AboutFragment) mFragmentManager.findFragmentByTag(TAG_ABOUT_FRAGMENT);
-        if (aboutFragment == null) {
-            aboutFragment = AboutFragment.newInstance(aboutObject);
-            replaceFragment(aboutFragment, TAG_ABOUT_FRAGMENT);
-        }
-    }
 
     @Override
     public void setToolbarTitle(String title) {

@@ -4,6 +4,7 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class About implements Parcelable {
     private List<SocialMedia> socialMedia = null;
     private List<AlbumImage> albumImage = null;
 
-    public AboutObject getFilteredAbout() {
+    public ResumeBaseObject getFilteredAboutList() {
         List<Object> mObjectList = new ArrayList<>();
         mObjectList.add(new Header("Goals"));
         List<Object> mExpandGoalItems = new ArrayList<>();
@@ -42,7 +43,7 @@ public class About implements Parcelable {
         mObjectList.add(new LoaderObject(mExpandSocialItems, false));
         mObjectList.add(new Header("Photos"));
         mObjectList.addAll(getAlbumImage());
-        return new AboutObject(mObjectList);
+        return new ResumeBaseObject(mObjectList);
     }
 
 
