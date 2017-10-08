@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="handler"
+            type="com.resume.horan.eugene.eugenehoranresume.main.feed.FeedRecyclerAdapter.ViewHolderNewPost" />
+
+        <variable
+            name="object"
+            type="com.resume.horan.eugene.eugenehoranresume.model.FeedNewPost" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImage"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="12dp"
+                    app:error="@{@drawable/ic_account_circle}"
+                    app:imageUrl="@{object.url}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:fontFamily="sans-serif"
+                    android:padding="16dp"
+                    android:text="Whats on your mind?"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/top"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:background="#E0E0E0" />
+
+            <TextView
+                android:id="@+id/textPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_camera_alt"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/colorAccentBlue"
+                android:gravity="center_vertical"
+                android:onClick="@{handler::onAddImageClick}"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="Photo" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>

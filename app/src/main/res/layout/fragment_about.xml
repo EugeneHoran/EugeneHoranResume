@@ -20,6 +20,8 @@
         android:clipToPadding="false"
         android:paddingBottom="88dp"
         android:paddingTop="4dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:set_adapter="@{adapter}"
         app:set_items="@{object}" />
+
 </layout>

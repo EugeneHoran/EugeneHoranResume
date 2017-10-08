@@ -11,6 +11,7 @@ import com.resume.horan.eugene.eugenehoranresume.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
     protected FirebaseUser mFirebaseUser;
+    protected Toolbar mToolbar;
 
     private void initFirebaseUser() {
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -18,7 +19,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void initMainActivity() {
         initFirebaseUser();
-        Toolbar mToolbar = findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
     }
 

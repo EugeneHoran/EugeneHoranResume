@@ -3,10 +3,15 @@ package com.resume.horan.eugene.eugenehoranresume.util;
 import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.login.LoginActivity;
 
 
 public class LayoutUtil {

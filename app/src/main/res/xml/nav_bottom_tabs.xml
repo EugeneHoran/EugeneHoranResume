@@ -12,4 +12,8 @@
         icon="@drawable/ic_contacts"
         id="@+id/action_contact"
         title="@string/contact" />
+    <tab
+        icon="@drawable/ic_view_day"
+        id="@+id/action_feed"
+        title="@string/action_news_feed" />
 </tabs>

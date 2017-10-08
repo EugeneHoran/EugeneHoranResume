@@ -45,4 +45,17 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="reset_password">Reset Password</string>
     <string name="create_account">Create Account</string>
+    <string name="action_news_feed">Feed</string>
+
+    <!--Feed-->
+    <string name="picture_chooser_title">Select or take picture to post</string>
+    <string name="error_upload_task_create">Couldn\'t create upload task.</string>
+    <string name="default_progress_message">Please wait...</string>
+    <string name="profile_progress_message">Signing in...</string>
+    <string name="post_upload_progress_message">Uploading...</string>
+    <string name="user_logged_out_error">You must be logged in to do that.</string>
+    <string name="error_user_not_signed_in">Error user not signed in.</string>
+    <string name="user_info_no_name">Unknown user</string>
+    <string name="error_required_field">Required</string>
+    <string name="display_name">Display Name</string>
 </resources>

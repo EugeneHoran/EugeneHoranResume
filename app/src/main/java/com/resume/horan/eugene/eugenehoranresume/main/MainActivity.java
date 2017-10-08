@@ -12,20 +12,20 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseActivity;
 import com.resume.horan.eugene.eugenehoranresume.main.about.AboutFragment;
 import com.resume.horan.eugene.eugenehoranresume.main.contact.ContactFragment;
+import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedFragment;
 import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject;
 import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumePagerFragment;
-import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -45,6 +45,7 @@ public class MainActivity extends BaseActivity implements
     private static final String TAG_RESUME_PARENT_FRAGMENT = "tag_resume_fragment";
     private static final String TAG_CONTACT_FRAGMENT = "tag_contact_fragment";
     private static final String TAG_ABOUT_FRAGMENT = "tag_about_fragment";
+    private static final String TAG_FEED_FRAGMENT = "tag_feed_fragment";
 
     private MainActivityContract.Presenter mPresenter;
 
@@ -79,6 +80,7 @@ public class MainActivity extends BaseActivity implements
         initProfileImage();
         mImageUserProfile.setOnClickListener(this);
         mBottomBar = findViewById(R.id.bottomBar);
+
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -89,6 +91,8 @@ public class MainActivity extends BaseActivity implements
                         mPresenter.start(Common.WHICH_ABOUT_FRAGMENT);
                     } else if (tabId == R.id.action_contact) {
                         mPresenter.start(Common.WHICH_CONTACT_FRAGMENT);
+                    } else if (tabId == R.id.action_feed) {
+                        mPresenter.start(Common.WHICH_FEED_FRAGMENT);
                     }
                 }
             }
@@ -99,6 +103,8 @@ public class MainActivity extends BaseActivity implements
         }
         mPresenter.start(mFragmentPosition);
         mBottomNavClickable = true;
+        BottomBarTab nearby = mBottomBar.getTabWithId(R.id.action_feed);
+        nearby.setBadgeCount(2);
     }
 
     @Override
@@ -119,6 +125,9 @@ public class MainActivity extends BaseActivity implements
             resumePagerFragment = ResumePagerFragment.newInstance(experienceObject, resumeSkillObject, resumeEducationObject);
             replaceFragment(resumePagerFragment, TAG_RESUME_PARENT_FRAGMENT);
         }
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS); // list other flags here by |
+        mToolbar.setLayoutParams(params);
 
     }
 
@@ -129,6 +138,9 @@ public class MainActivity extends BaseActivity implements
             aboutFragment = AboutFragment.newInstance(aboutObject);
             replaceFragment(aboutFragment, TAG_ABOUT_FRAGMENT);
         }
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS); // list other flags here by |
+        mToolbar.setLayoutParams(params);
     }
 
     @Override
@@ -138,8 +150,22 @@ public class MainActivity extends BaseActivity implements
             contactFragment = ContactFragment.newInstance(contact);
             replaceFragment(contactFragment, TAG_CONTACT_FRAGMENT);
         }
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS); // list other flags here by |
+        mToolbar.setLayoutParams(params);
     }
 
+    @Override
+    public void showFeedFragment() {
+        FeedFragment feedFragment = (FeedFragment) mFragmentManager.findFragmentByTag(TAG_FEED_FRAGMENT);
+        if (feedFragment == null) {
+            feedFragment = FeedFragment.newInstance();
+            replaceFragment(feedFragment, TAG_FEED_FRAGMENT);
+        }
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP); // list other flags here by |
+        mToolbar.setLayoutParams(params);
+    }
 
     @Override
     public void setToolbarTitle(String title) {

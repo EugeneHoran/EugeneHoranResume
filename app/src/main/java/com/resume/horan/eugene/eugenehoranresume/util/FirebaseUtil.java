@@ -15,13 +15,19 @@ public class FirebaseUtil {
         return FirebaseDatabase.getInstance().getReference();
     }
 
+    public static String getCurrentUserId() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            return user.getUid();
+        }
+        return null;
+    }
+
+
     public static FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public static String getCurrentUserId() {
-        return getUser().getUid();
-    }
 
     /**
      * Main Data References

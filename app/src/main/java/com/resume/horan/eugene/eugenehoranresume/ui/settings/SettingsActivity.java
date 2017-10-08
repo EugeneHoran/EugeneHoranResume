@@ -26,6 +26,7 @@ import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.fingerprint.FingerprintActivity;
 import com.resume.horan.eugene.eugenehoranresume.login.LoginActivity;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
+import com.resume.horan.eugene.eugenehoranresume.start.StartActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
@@ -137,7 +138,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     fingerPrintSwitch.setChecked(false);
                                     FirebaseAuth.getInstance().signOut();
                                     LoginManager.getInstance().logOut();
-                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    Intent intent = new Intent(getActivity(), StartActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                     dialog.dismiss();

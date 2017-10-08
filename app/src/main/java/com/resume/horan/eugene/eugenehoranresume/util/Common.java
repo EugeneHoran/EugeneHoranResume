@@ -2,6 +2,10 @@ package com.resume.horan.eugene.eugenehoranresume.util;
 
 
 public class Common {
+    /**
+     * Google
+     */
+    public static final int RC_SIGN_IN_G = 133;
 
     /**
      * Firebase Database References
@@ -17,6 +21,7 @@ public class Common {
     public static final int WHICH_RESUME_FRAGMENT = 0;
     public static final int WHICH_CONTACT_FRAGMENT = 1;
     public static final int WHICH_ABOUT_FRAGMENT = 2;
+    public static final int WHICH_FEED_FRAGMENT = 3;
 
     /**
      * Pager Fragments

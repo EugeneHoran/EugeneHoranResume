@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.databinding.FragmentAboutBinding;
 import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject;
-import com.resume.horan.eugene.eugenehoranresume.model.AboutObject;
 import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
 import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;

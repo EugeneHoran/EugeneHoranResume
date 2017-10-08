@@ -23,6 +23,8 @@ public interface MainActivityContract {
 
         void showAboutFragment(ResumeBaseObject aboutObject);
 
+        void showFeedFragment();
+
         void showLoadingError();
     }
 

@@ -31,7 +31,7 @@
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:onClick="@{handler::onImageClicked}"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:transitionName="image"
                 app:load_image="@{object}" />
 

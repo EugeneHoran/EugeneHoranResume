@@ -23,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -30,8 +31,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.LoginPresenterNullCheck;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
@@ -51,10 +51,12 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     private FirebaseAuth mAuth;
     private Context mContext;
     private SharedPreferences mSharedPref;
+    private boolean requiresFingerprint;
 
     LoginPresenter(Context context, LoginContract.View view) {
         mContext = context;
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        requiresFingerprint = mSharedPref.getBoolean(context.getString(R.string.pref_key_fingerprint_oauth), false);
         onAttachView(view);
         getView().setPresenter(this);
     }
@@ -78,7 +80,7 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     @Override
     public void createGoogleClient(LoginActivity loginView) {
         GoogleSignInOptions mGso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("142506979309-i9ugc7p696e97vl6c5ats62j8f0t4ep3.apps.googleusercontent.com")
+                .requestIdToken(loginView.getResources().getString(R.string.gso_token_id))
                 .requestEmail()
                 .requestProfile()
                 .build();
@@ -149,7 +151,6 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     public void createAccountEmail(LoginActivity loginView, String email, String password) {
         if (fieldsVerified(loginView, email, password)) {
             getView().showLoading(true);
-
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ConstantConditions"})
                 @Override
@@ -161,45 +162,6 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                 }
             });
         }
-    }
-
-    /**
-     * Verify Fields
-     * return boolean
-     */
-    private boolean fieldsVerified(LoginActivity loginView, String email, String password) {
-        if (TextUtils.isEmpty(email)) {
-            Log.e("Testing", "email isEmpty");
-            getView().showEmailError(loginView.getString(R.string.error_field_required));
-            return false;
-        } else if (!Verify.isEmailValid(email)) {
-            Log.e("Testing", "isEmailValid");
-            getView().showEmailError(loginView.getString(R.string.error_invalid_email));
-            return false;
-        } else if (TextUtils.isEmpty(password)) {
-            Log.e("Testing", "password isEmpty");
-            getView().showPasswordError(loginView.getString(R.string.error_field_required));
-            return false;
-        } else if (!Verify.isPasswordValid(password)) {
-            Log.e("Testing", "isPasswordValid");
-            getView().showPasswordError(loginView.getString(R.string.error_incorrect_password));
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private boolean verifyEmail(LoginActivity loginView, String email) {
-        if (TextUtils.isEmpty(email)) {
-            Log.e("Testing", "email isEmpty");
-            getView().showEmailError(loginView.getString(R.string.error_field_required));
-            return false;
-        } else if (!Verify.isEmailValid(email)) {
-            Log.e("Testing", "isEmailValid");
-            getView().showEmailError(loginView.getString(R.string.error_invalid_email));
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -261,8 +223,11 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                     getView().showLoading(false);
                 } else {
                     getView().showLoading(true);
-                    writeNewUserIfNeeded();
+                    writeNewUserIfNeeded(mUser);
                 }
+            } else {
+                getView().showLoading(false);
+                Log.e("Testing", "Error");
             }
         }
     };
@@ -271,20 +236,19 @@ class LoginPresenter extends LoginPresenterNullCheck implements
     public void resetEmail(LoginActivity loginView, String email) {
         if (verifyEmail(loginView, email)) {
             getView().showLoading(true);
-            FirebaseUtil.getAuth().sendPasswordResetEmail(email)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            getView().showLoading(false);
-                            if (task.isSuccessful()) {
-                                getView().showLogin();
-                                getView().showToast("Check your email");
-                            } else {
-                                getView().showLogin();
-                                getView().showToast("There was an error");
-                            }
-                        }
-                    });
+            FirebaseUtil.getAuth().sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    getView().showLoading(false);
+                    if (task.isSuccessful()) {
+                        getView().showLogin();
+                        getView().showToast("Check your email");
+                    } else {
+                        getView().showLogin();
+                        getView().showToast("There was an error");
+                    }
+                }
+            });
         }
     }
 
@@ -297,7 +261,7 @@ class LoginPresenter extends LoginPresenterNullCheck implements
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        writeNewUserIfNeeded();
+                        writeNewUserIfNeeded(user);
                     } else {
                         getView().showToast("Problem Updating email");
                         getView().showLoading(false);
@@ -310,29 +274,46 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         }
     }
 
-    private void writeNewUserIfNeeded() {
-        FirebaseUser firebaseUser = FirebaseUtil.getUser();
-        Map<String, Object> updateValues = new HashMap<>();
-        updateValues.put("email", firebaseUser.getEmail() != null ? firebaseUser.getEmail() : "no_email");
-        updateValues.put("displayName", !TextUtils.isEmpty(firebaseUser.getDisplayName()) ? firebaseUser.getDisplayName() : "Anonymous");
-        updateValues.put("imageUrl", firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null);
-        FirebaseUtil.getCurrentUserRef().updateChildren(updateValues, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    getView().showToast("Couldn't save user data: " + databaseError.getMessage());
-                    getView().showLoading(false);
-                    getView().showLogin();
-                } else {
-                    if (!mSharedPref.getBoolean(mContext.getString(R.string.pref_key_fingerprint_oauth), false)) {
-                        getView().loginSuccessful();
-                    } else {
-                        getView().showFingerprint();
-                        getView().showLoading(false);
+    private Map<String, Object> getUserDetails(FirebaseUser firebaseUser) {
+        Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("email", firebaseUser.getEmail() != null ? firebaseUser.getEmail() : "no_email");
+        userDetails.put("displayName", !TextUtils.isEmpty(firebaseUser.getDisplayName()) ? firebaseUser.getDisplayName() : "Anonymous");
+        userDetails.put("imageUrl", firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null);
+        return userDetails;
+    }
+
+    private void writeNewUserIfNeeded(FirebaseUser firebaseUser) {
+        FirebaseDatabase.getInstance().getReference()
+                .child(Common.FB_REF_USERS)
+                .child(firebaseUser.getUid())
+                .updateChildren(getUserDetails(firebaseUser))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // No Response
+                        if (!task.isSuccessful()) {
+                            getView().showLoading(false);
+                            getView().showLogin();
+                            getView().showToast(task.getException().getMessage());
+                        } else {
+                            if (requiresFingerprint) {
+                                getView().showFingerprint();
+                                getView().showLoading(false);
+                            } else {
+                                getView().loginSuccessful();
+                            }
+                        }
                     }
-                }
-            }
-        });
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // No Response
+                        getView().showLoading(false);
+                        getView().showLogin();
+                        getView().showToast(e.getMessage());
+                    }
+                });
     }
 
     @Override
@@ -341,5 +322,43 @@ class LoginPresenter extends LoginPresenterNullCheck implements
         getView().showLoading(false);
     }
 
+    /**
+     * Verify Fields
+     * return boolean
+     */
+    private boolean fieldsVerified(LoginActivity loginView, String email, String password) {
+        if (TextUtils.isEmpty(email)) {
+            Log.e("Testing", "email isEmpty");
+            getView().showEmailError(loginView.getString(R.string.error_field_required));
+            return false;
+        } else if (!Verify.isEmailValid(email)) {
+            Log.e("Testing", "isEmailValid");
+            getView().showEmailError(loginView.getString(R.string.error_invalid_email));
+            return false;
+        } else if (TextUtils.isEmpty(password)) {
+            Log.e("Testing", "password isEmpty");
+            getView().showPasswordError(loginView.getString(R.string.error_field_required));
+            return false;
+        } else if (!Verify.isPasswordValid(password)) {
+            Log.e("Testing", "isPasswordValid");
+            getView().showPasswordError(loginView.getString(R.string.error_incorrect_password));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean verifyEmail(LoginActivity loginView, String email) {
+        if (TextUtils.isEmpty(email)) {
+            Log.e("Testing", "email isEmpty");
+            getView().showEmailError(loginView.getString(R.string.error_field_required));
+            return false;
+        } else if (!Verify.isEmailValid(email)) {
+            Log.e("Testing", "isEmailValid");
+            getView().showEmailError(loginView.getString(R.string.error_invalid_email));
+            return false;
+        }
+        return true;
+    }
 
 }

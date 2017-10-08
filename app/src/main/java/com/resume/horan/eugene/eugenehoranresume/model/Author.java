@@ -18,8 +18,8 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
 public class Author {
-    private String email;
-    private String profile_picture;
+    private String userName;
+    private String profilePicture;
 
     private String uid;
 
@@ -27,9 +27,9 @@ public class Author {
 
     }
 
-    public Author(String email, String profile_picture, String uid) {
-        this.email = email;
-        this.profile_picture = profile_picture;
+    public Author(String userName, String profilePicture, String uid) {
+        this.userName = userName;
+        this.profilePicture = profilePicture;
         this.uid = uid;
     }
 
@@ -37,11 +37,11 @@ public class Author {
         return uid;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getProfile_picture() {
-        return profile_picture;
+    public String getProfilePicture() {
+        return profilePicture;
     }
 }

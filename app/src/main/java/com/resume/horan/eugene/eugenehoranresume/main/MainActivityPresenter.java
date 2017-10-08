@@ -1,16 +1,11 @@
 package com.resume.horan.eugene.eugenehoranresume.main;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.MainPresenterNullCheck;
 import com.resume.horan.eugene.eugenehoranresume.model.About;
-import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.EugeneHoran;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
@@ -47,7 +42,7 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
 
     @Override
     public void onStart() {
-
+        loadMainData();
         getView().setFragmentPosition(mFragmentPosition);
         getView().expandAppbar();
         getView().showLoading(true);
@@ -63,8 +58,11 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
                 getView().showTabs(false);
                 getView().setToolbarTitle("About Eugene");
                 break;
+            case Common.WHICH_FEED_FRAGMENT:
+                getView().showTabs(false);
+                getView().setToolbarTitle("Social Feed");
+                break;
         }
-        loadMainData();
     }
 
     @Override
@@ -78,6 +76,9 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
                 break;
             case Common.WHICH_ABOUT_FRAGMENT:
                 myAboutReference.addListenerForSingleValueEvent(mAboutEventListener);
+                break;
+            case Common.WHICH_FEED_FRAGMENT:
+                getView().showFeedFragment();
                 break;
             default:
                 break;
