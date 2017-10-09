@@ -1,13 +1,11 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
 
-import android.app.Activity;
 import android.databinding.BindingAdapter;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
 import com.squareup.picasso.Callback;

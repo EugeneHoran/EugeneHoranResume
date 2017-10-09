@@ -56,6 +56,14 @@ public class Common {
     public static final String DIVIDER_LINE_WITH_SPACE = "divider_space";
     public static final String DIVIDER_NO_LINE_WITH_SPACE = "footer";
 
+
+    /**
+     * Posts
+     */
+
+    public static final int TYPE_POST_MESSAGE = 0;
+    public static final int TYPE_POST_IMAGE = 1;
+    public static final int TYPE_POST_MESSAGE_IMAGE = 2;
     /**
      * Image Link
      */

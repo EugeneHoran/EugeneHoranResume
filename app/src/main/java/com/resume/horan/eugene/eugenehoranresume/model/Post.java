@@ -1,7 +1,5 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
-import android.text.format.DateUtils;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.firebase.database.Exclude;
 
@@ -13,12 +11,17 @@ public class Post {
     private String text;
     private Object timestamp;
     private String full_storage_uri;
+    private int type;
+
+
+    @Exclude
+    private String key;
 
     public Post() {
         // empty default constructor, necessary for Firebase to be able to deserialize blog posts
     }
 
-    public Post(Author author, String full_url, String full_storage_uri, String thumb_url, String thumb_storage_uri, String text, Object timestamp) {
+    public Post(Author author, String full_url, String full_storage_uri, String thumb_url, String thumb_storage_uri, String text, Object timestamp, int type) {
         this.author = author;
         this.full_url = full_url;
         this.text = text;
@@ -26,6 +29,17 @@ public class Post {
         this.thumb_storage_uri = thumb_storage_uri;
         this.thumb_url = thumb_url;
         this.full_storage_uri = full_storage_uri;
+        this.type = type;
+    }
+
+    @Exclude
+    public String getKey() {
+        return key;
+    }
+
+    @Exclude
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public Author getAuthor() {
@@ -55,5 +69,13 @@ public class Post {
 
     public String getFull_storage_uri() {
         return full_storage_uri;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

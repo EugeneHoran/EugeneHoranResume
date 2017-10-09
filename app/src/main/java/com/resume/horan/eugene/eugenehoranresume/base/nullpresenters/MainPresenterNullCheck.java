@@ -62,6 +62,11 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainActivityC
             }
 
             @Override
+            public void setScrollFlags(int fragmentPosition) {
+
+            }
+
+            @Override
             public void showFeedFragment() {
 
             }

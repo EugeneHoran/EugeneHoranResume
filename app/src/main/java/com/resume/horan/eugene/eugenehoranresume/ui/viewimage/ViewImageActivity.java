@@ -16,19 +16,21 @@ public class ViewImageActivity extends AppCompatActivity implements PullBackLayo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityViewImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_view_image);
-        supportPostponeEnterTransition();
-        AlbumImage albumImage = getIntent().getParcelableExtra(Common.ARG_IMAGE);
-        binding.setObject(albumImage);
-        binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                supportFinishAfterTransition();
-            }
-        });
-        binding.puller.setCallback(this);
-        binding.toolbar.bringToFront();
+        if (getIntent().getParcelableExtra(Common.ARG_IMAGE) != null) {
+            ActivityViewImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_view_image);
+            supportPostponeEnterTransition();
+            AlbumImage albumImage = getIntent().getParcelableExtra(Common.ARG_IMAGE);
+            binding.setObject(albumImage);
+            binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+            binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    supportFinishAfterTransition();
+                }
+            });
+            binding.puller.setCallback(this);
+            binding.toolbar.bringToFront();
+        }
     }
 
     @Override

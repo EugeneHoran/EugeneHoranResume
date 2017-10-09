@@ -1,8 +1,7 @@
 package com.resume.horan.eugene.eugenehoranresume.base;
 
 import android.databinding.BindingAdapter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -19,6 +18,12 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BaseBindingPresenters {
+
+    @BindingAdapter("bind:bitmap")
+    public static void loadBitmap(ImageView imageView, Bitmap bitmap) {
+        imageView.setImageBitmap(bitmap);
+    }
+
     @BindingAdapter({"bind:imageUrl", "bind:error"})
     public static void loadImage(View view, String url, Drawable error) {
         if (view instanceof CircleImageView) {

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -25,7 +27,6 @@ import com.resume.horan.eugene.eugenehoranresume.ui.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -50,7 +51,7 @@ public class MainActivity extends BaseActivity implements
     private MainActivityContract.Presenter mPresenter;
 
     @Override
-    public void setPresenter(MainActivityContract.Presenter presenter) {
+    public void setPresenter(@NonNull MainActivityContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
@@ -80,7 +81,6 @@ public class MainActivity extends BaseActivity implements
         initProfileImage();
         mImageUserProfile.setOnClickListener(this);
         mBottomBar = findViewById(R.id.bottomBar);
-
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -103,8 +103,7 @@ public class MainActivity extends BaseActivity implements
         }
         mPresenter.start(mFragmentPosition);
         mBottomNavClickable = true;
-        BottomBarTab nearby = mBottomBar.getTabWithId(R.id.action_feed);
-        nearby.setBadgeCount(2);
+
     }
 
     @Override
@@ -119,56 +118,52 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void showResumeFragment(ResumeBaseObject experienceObject, ResumeBaseObject resumeSkillObject, ResumeBaseObject resumeEducationObject) {
-        ResumePagerFragment resumePagerFragment = (ResumePagerFragment) mFragmentManager.findFragmentByTag(TAG_RESUME_PARENT_FRAGMENT);
-        if (resumePagerFragment == null) {
-            resumePagerFragment = ResumePagerFragment.newInstance(experienceObject, resumeSkillObject, resumeEducationObject);
-            replaceFragment(resumePagerFragment, TAG_RESUME_PARENT_FRAGMENT);
+    public void showResumeFragment(@NonNull ResumeBaseObject experienceObject, @NonNull ResumeBaseObject resumeSkillObject, @NonNull ResumeBaseObject resumeEducationObject) {
+        ResumePagerFragment fragment = (ResumePagerFragment) mFragmentManager.findFragmentByTag(TAG_RESUME_PARENT_FRAGMENT);
+        if (fragment == null) {
+            fragment = ResumePagerFragment.newInstance(experienceObject, resumeSkillObject, resumeEducationObject);
+            replaceFragment(fragment, TAG_RESUME_PARENT_FRAGMENT);
         }
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS); // list other flags here by |
-        mToolbar.setLayoutParams(params);
-
     }
 
     @Override
-    public void showAboutFragment(ResumeBaseObject aboutObject) {
-        AboutFragment aboutFragment = (AboutFragment) mFragmentManager.findFragmentByTag(TAG_ABOUT_FRAGMENT);
-        if (aboutFragment == null) {
-            aboutFragment = AboutFragment.newInstance(aboutObject);
-            replaceFragment(aboutFragment, TAG_ABOUT_FRAGMENT);
+    public void showAboutFragment(@NonNull ResumeBaseObject aboutObject) {
+        AboutFragment fragment = (AboutFragment) mFragmentManager.findFragmentByTag(TAG_ABOUT_FRAGMENT);
+        if (fragment == null) {
+            fragment = AboutFragment.newInstance(aboutObject);
+            replaceFragment(fragment, TAG_ABOUT_FRAGMENT);
         }
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS); // list other flags here by |
-        mToolbar.setLayoutParams(params);
     }
 
     @Override
-    public void showContactFragment(Contact contact) {
-        ContactFragment contactFragment = (ContactFragment) mFragmentManager.findFragmentByTag(TAG_CONTACT_FRAGMENT);
-        if (contactFragment == null) {
-            contactFragment = ContactFragment.newInstance(contact);
-            replaceFragment(contactFragment, TAG_CONTACT_FRAGMENT);
+    public void showContactFragment(@NonNull Contact contact) {
+        ContactFragment fragment = (ContactFragment) mFragmentManager.findFragmentByTag(TAG_CONTACT_FRAGMENT);
+        if (fragment == null) {
+            fragment = ContactFragment.newInstance(contact);
+            replaceFragment(fragment, TAG_CONTACT_FRAGMENT);
         }
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS); // list other flags here by |
-        mToolbar.setLayoutParams(params);
     }
 
     @Override
     public void showFeedFragment() {
-        FeedFragment feedFragment = (FeedFragment) mFragmentManager.findFragmentByTag(TAG_FEED_FRAGMENT);
-        if (feedFragment == null) {
-            feedFragment = FeedFragment.newInstance();
-            replaceFragment(feedFragment, TAG_FEED_FRAGMENT);
+        FeedFragment fragment = (FeedFragment) mFragmentManager.findFragmentByTag(TAG_FEED_FRAGMENT);
+        if (fragment == null) {
+            fragment = FeedFragment.newInstance();
+            replaceFragment(fragment, TAG_FEED_FRAGMENT);
         }
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP); // list other flags here by |
-        mToolbar.setLayoutParams(params);
     }
 
+    /**
+     * Toolbar Functions
+     * <p>
+     * Toolbar Title
+     * Expand AppBar
+     * Enable Tabs
+     * Load Profile Image inside of Toolbar
+     * Scroll Flags
+     */
     @Override
-    public void setToolbarTitle(String title) {
+    public void setToolbarTitle(@Nullable String title) {
         setTitle(title);
     }
 
@@ -182,24 +177,9 @@ public class MainActivity extends BaseActivity implements
         mTabLayout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    @Override
-    public void showLoading(boolean showLoading) {
-//        mFrameContainer.setVisibility(showLoading ? View.GONE : View.VISIBLE);
-//        mProgressBar.setVisibility(showLoading ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void showLoadingError() {
-        Snackbar.make(mFrameContainer, "Error loading data", Snackbar.LENGTH_INDEFINITE).setAction("Try Again", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPresenter.onStart();
-            }
-        });
-    }
 
     private void initProfileImage() {
-        String profileUrl = FirebaseUtil.getUser().getPhotoUrl() != null ? FirebaseUtil.getUser().getPhotoUrl().toString() : "null";
+        String profileUrl = FirebaseUtil.getUser().getPhotoUrl() != null ? String.valueOf(FirebaseUtil.getUser().getPhotoUrl()) : "null";
         Picasso.with(mContext)
                 .load(profileUrl)
                 .error(R.drawable.ic_account_circle)
@@ -222,6 +202,46 @@ public class MainActivity extends BaseActivity implements
                         mImageUserProfile.startAnimation(fadeIn);
                     }
                 });
+    }
+
+    @Override
+    public void setScrollFlags(int fragmentPosition) {
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        switch (fragmentPosition) {
+            case Common.WHICH_RESUME_FRAGMENT:
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                mToolbar.setLayoutParams(params);
+                break;
+            case Common.WHICH_ABOUT_FRAGMENT:
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                break;
+            case Common.WHICH_CONTACT_FRAGMENT:
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                break;
+            case Common.WHICH_FEED_FRAGMENT:
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                break;
+        }
+        mToolbar.setLayoutParams(params);
+    }
+
+    /**
+     * Loading Functions
+     */
+    @Override
+    public void showLoading(boolean showLoading) {
+//        mFrameContainer.setVisibility(showLoading ? View.GONE : View.VISIBLE);
+//        mProgressBar.setVisibility(showLoading ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showLoadingError() {
+        Snackbar.make(mFrameContainer, "Error loading data", Snackbar.LENGTH_INDEFINITE).setAction("Try Again", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.onStart();
+            }
+        });
     }
 
     @Override

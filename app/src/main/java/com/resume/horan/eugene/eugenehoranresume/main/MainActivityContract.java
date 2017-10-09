@@ -25,6 +25,8 @@ public interface MainActivityContract {
 
         void showFeedFragment();
 
+        void setScrollFlags(int fragmentPosition);
+
         void showLoadingError();
     }
 

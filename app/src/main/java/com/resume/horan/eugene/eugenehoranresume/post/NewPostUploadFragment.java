@@ -2,7 +2,6 @@ package com.resume.horan.eugene.eugenehoranresume.post;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,11 +25,7 @@ import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +35,6 @@ public class NewPostUploadFragment extends Fragment {
     private static final String TAG = "NewPostTaskFragment";
 
     public interface TaskCallbacks {
-        void onBitmapResized(Bitmap resizedBitmap, int mMaxDimension);
-
         void onPostUploaded(String error);
     }
 
@@ -99,14 +92,8 @@ public class NewPostUploadFragment extends Fragment {
         return thumbnail;
     }
 
-    public void resizeBitmap(Uri uri, int maxDimension) {
-        LoadResizedBitmapTask task = new LoadResizedBitmapTask(maxDimension);
-        task.execute(uri);
-    }
-
-    public void uploadPost(Bitmap bitmap, String inBitmapPath, Bitmap thumbnail, String inThumbnailPath,
-                           String inFileName, String inPostText) {
-        UploadPostTask uploadTask = new UploadPostTask(bitmap, inBitmapPath, thumbnail, inThumbnailPath, inFileName, inPostText);
+    public void uploadPost(Bitmap bitmap, Bitmap thumbnail, String inFileName, String inPostText) {
+        UploadPostTask uploadTask = new UploadPostTask(bitmap, thumbnail, inFileName, inPostText);
         uploadTask.execute();
     }
 
@@ -115,19 +102,14 @@ public class NewPostUploadFragment extends Fragment {
         private WeakReference<Bitmap> thumbnailReference;
         private String postText;
         private String fileName;
-        private String bitmapPath;
-        private String thumbnailPath;
 
         private String mUserId;
 
-        public UploadPostTask(Bitmap bitmap, String inBitmapPath, Bitmap thumbnail, String inThumbnailPath,
-                              String inFileName, String inPostText) {
-            bitmapReference = new WeakReference<Bitmap>(bitmap);
-            thumbnailReference = new WeakReference<Bitmap>(thumbnail);
+        public UploadPostTask(Bitmap bitmap, Bitmap thumbnail, String inFileName, String inPostText) {
+            bitmapReference = new WeakReference<>(bitmap);
+            thumbnailReference = new WeakReference<>(thumbnail);
             postText = inPostText;
             fileName = inFileName;
-            bitmapPath = inBitmapPath;
-            thumbnailPath = inThumbnailPath;
         }
 
         public Author getAuthor() {
@@ -184,7 +166,7 @@ public class NewPostUploadFragment extends Fragment {
                                         mCallbacks.onPostUploaded(mApplicationContext.getString(R.string.error_user_not_signed_in));
                                         return;
                                     }
-                                    Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), postText, ServerValue.TIMESTAMP);
+                                    Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), postText, ServerValue.TIMESTAMP, 0);
                                     Map<String, Object> updatedUserData = new HashMap<>();
                                     updatedUserData.put("people/" + author.getUid() + "/posts/" + newPostKey, true);
                                     updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
@@ -203,8 +185,7 @@ public class NewPostUploadFragment extends Fragment {
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            mCallbacks.onPostUploaded(mApplicationContext.getString(
-                                    R.string.error_upload_task_create));
+                            mCallbacks.onPostUploaded(mApplicationContext.getString(R.string.error_upload_task_create));
                         }
                     });
                 }
@@ -218,79 +199,5 @@ public class NewPostUploadFragment extends Fragment {
             // TODO: Refactor these insanely nested callbacks.
             return null;
         }
-    }
-
-    class LoadResizedBitmapTask extends AsyncTask<Uri, Void, Bitmap> {
-        private int mMaxDimension;
-
-        public LoadResizedBitmapTask(int maxDimension) {
-            mMaxDimension = maxDimension;
-        }
-
-        // Decode image in background.
-        @Override
-        protected Bitmap doInBackground(Uri... params) {
-            Uri uri = params[0];
-            if (uri != null) {
-                // TODO: Currently making these very small to investigate modulefood bug.
-                // Implement thumbnail + fullsize later.
-                Bitmap bitmap = null;
-                try {
-                    bitmap = decodeSampledBitmapFromUri(uri, mMaxDimension, mMaxDimension);
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "Can't find file to resize: " + e.getMessage());
-//                    FirebaseCrash.report(e);
-                } catch (IOException e) {
-                    Log.e(TAG, "Error occurred during resize: " + e.getMessage());
-//                    FirebaseCrash.report(e);
-                }
-                return bitmap;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            mCallbacks.onBitmapResized(bitmap, mMaxDimension);
-        }
-    }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    public Bitmap decodeSampledBitmapFromUri(Uri fileUri, int reqWidth, int reqHeight) throws IOException {
-        InputStream stream = new BufferedInputStream(mApplicationContext.getContentResolver().openInputStream(fileUri));
-        stream.mark(stream.available());
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        // First decode with inJustDecodeBounds=true to check dimensions
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(stream, null, options);
-        stream.reset();
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
-        BitmapFactory.decodeStream(stream, null, options);
-        // Decode bitmap with inSampleSize set
-        stream.reset();
-        return BitmapFactory.decodeStream(stream, null, options);
     }
 }

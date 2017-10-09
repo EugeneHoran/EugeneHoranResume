@@ -44,6 +44,7 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
     public void onStart() {
         loadMainData();
         getView().setFragmentPosition(mFragmentPosition);
+        getView().setScrollFlags(mFragmentPosition);
         getView().expandAppbar();
         getView().showLoading(true);
         switch (mFragmentPosition) {
