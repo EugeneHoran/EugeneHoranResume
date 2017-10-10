@@ -9,6 +9,19 @@ TODO:
  
 ## Lates Updates:
 
+**UPDATED** October 9, 2017
+
+- For the most part I have converted most of the application to MVVM other than a few classes. 
+- Added a Feed fragment to the bottom nav. I tried to make it look similar to Facebook. 
+- Added a Post activity that allows users to upload images or status. As well as the option to like other peoples statuses. 
+- Kinda lost track on all of these updates. 
+- Added the feed fragment.
+  </br><img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00UpdateToFeed.png" width="220" />
+- Added the option to upload a message and/or image to the feed. 
+  </br><img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00PostToFeed.png" width="220" />
+
+
+
 **UPDATED** October 5, 2017
 
 - Converted most of the app to MVVM using the latest DataBinding. I am still getting used to it and learning new ways of handling views.
