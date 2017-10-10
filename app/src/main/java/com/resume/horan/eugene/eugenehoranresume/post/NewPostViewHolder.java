@@ -16,7 +16,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.resume.horan.eugene.eugenehoranresume.R;
@@ -38,7 +36,6 @@ import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
-import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,7 +51,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import rapid.decoder.BitmapDecoder;
 
 public class NewPostViewHolder extends BaseObservable {
-    public static final String TAG = "NewPostActivity";
+    private static final String TAG = "NewPostActivity";
     private static final String[] cameraPerms = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
@@ -72,7 +69,7 @@ public class NewPostViewHolder extends BaseObservable {
     private DatabaseReference userReference;
     private NewPostActivity activity;
 
-    public NewPostViewHolder(Activity activity) {
+    NewPostViewHolder(Activity activity) {
         this.activity = (NewPostActivity) activity;
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userReference = FirebaseDatabase.getInstance().getReference().child(Common.FB_REF_USERS).child(userId);
@@ -87,6 +84,25 @@ public class NewPostViewHolder extends BaseObservable {
                 user.getDisplayName() != null ? user.getDisplayName() : "Anonymous",
                 user.getImageUrl() != null ? user.getImageUrl() : null,
                 userId);
+    }
+
+    void makePost(String message) {
+        if (mFileUri == null && TextUtils.isEmpty(message)) {
+            showError("Nothing to post");
+            return;
+        }
+        setLoading(true);
+        if (mFileUri == null && !TextUtils.isEmpty(message)) {
+            postMessage(message);
+            return;
+        }
+        if (mFileUri != null && TextUtils.isEmpty(message)) {
+            makePost();
+            return;
+        }
+        if (mFileUri != null && !TextUtils.isEmpty(message)) {
+            postMessageImage(message);
+        }
     }
 
     private void postMessage(String message) {
@@ -111,7 +127,7 @@ public class NewPostViewHolder extends BaseObservable {
         });
     }
 
-    private void postImage() {
+    private void makePost() {
         String fileName = mFileUri.getLastPathSegment();
         WeakReference<Bitmap> bitmapReference = new WeakReference<>(mResizedBitmap);
         WeakReference<Bitmap> thumbnailReference = new WeakReference<>(mThumbnail);
@@ -256,25 +272,6 @@ public class NewPostViewHolder extends BaseObservable {
                 showError(activity.getString(R.string.error_upload_task_create));
             }
         });
-    }
-
-    void postImage(String message) {
-        if (mFileUri == null && TextUtils.isEmpty(message)) {
-            showError("Nothing to post");
-            return;
-        }
-        setLoading(true);
-        if (mFileUri == null && !TextUtils.isEmpty(message)) {
-            postMessage(message);
-            return;
-        }
-        if (mFileUri != null && TextUtils.isEmpty(message)) {
-            postImage();
-            return;
-        }
-        if (mFileUri != null && !TextUtils.isEmpty(message)) {
-            postMessageImage(message);
-        }
     }
 
     private void postUploaded() {

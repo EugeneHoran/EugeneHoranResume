@@ -9,6 +9,10 @@
         <variable
             name="object"
             type="com.resume.horan.eugene.eugenehoranresume.model.AlbumImage" />
+
+        <variable
+            name="holder"
+            type="com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageViewHolder" />
     </data>
 
     <RelativeLayout
@@ -20,14 +24,14 @@
             android:id="@+id/puller"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@{object.cardBackgroundColor}">
+            android:background="@{holder.backgroundColor}">
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:transitionName="image"
-                app:load_image="@{object}" />
+                android:transitionName="@string/image"
+                app:imageString="@{holder.imageUrl}" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

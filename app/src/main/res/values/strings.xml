@@ -60,4 +60,8 @@
     <string name="display_name">Display Name</string>
     <string name="post">Post</string>
     <string name="delete_post">Delete Post</string>
+    <string name="image">image</string>
+    <string name="all_users">All Users</string>
+    <string name="view_profile">View Profile</string>
+    <string name="send_message">Send Message</string>
 </resources>

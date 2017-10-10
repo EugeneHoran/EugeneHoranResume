@@ -11,13 +11,45 @@ import android.widget.ImageView;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedRecyclerAdapter;
+import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedUserRecyclerAdapter;
+import com.resume.horan.eugene.eugenehoranresume.model.User;
+import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BaseBindingPresenters {
+
+    @BindingAdapter("bind:imageString")
+    public static void loadImageTransition(ImageView imageView, Object object) {
+        final ImageView view = imageView;
+        if (object instanceof String) {
+            String image = (String) object;
+            Picasso.with(view.getContext())
+                    .load(image)
+                    .into(view, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            if (view.getContext() instanceof ViewImageActivity) {
+                                ViewImageActivity activity = (ViewImageActivity) view.getContext();
+                                activity.supportStartPostponedEnterTransition();
+                            }
+                        }
+
+                        @Override
+                        public void onError() {
+                            if (view.getContext() instanceof ViewImageActivity) {
+                                ViewImageActivity activity = (ViewImageActivity) view.getContext();
+                                activity.supportStartPostponedEnterTransition();
+                            }
+                        }
+                    });
+        }
+    }
 
     @BindingAdapter("bind:bitmap")
     public static void loadBitmap(ImageView imageView, Bitmap bitmap) {
@@ -56,6 +88,15 @@ public class BaseBindingPresenters {
                 }
                 if (newObjectList != null) {
                     mAdapter.addItems(newObjectList);
+                }
+            } else if (adapter instanceof FeedUserRecyclerAdapter) {
+                FeedUserRecyclerAdapter mAdapter = (FeedUserRecyclerAdapter) adapter;
+                List<User> userList = new ArrayList<>();
+                if (objectList != null) {
+                    for (Object user : objectList) {
+                        userList.add((User) user);
+                    }
+                    mAdapter.setItems(userList);
                 }
             }
         }

@@ -7,6 +7,7 @@
         <variable
             name="object"
             type="com.resume.horan.eugene.eugenehoranresume.model.Post" />
+
     </data>
 
     <android.support.v7.widget.CardView
@@ -47,6 +48,7 @@
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="centerCrop"
+                android:transitionName="@string/image"
                 app:error="@{@drawable/ic_account_circle}"
                 app:imageUrl="@{object.full_url}" />
 

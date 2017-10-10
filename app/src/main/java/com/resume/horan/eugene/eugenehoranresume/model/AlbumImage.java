@@ -24,30 +24,56 @@ public class AlbumImage implements Parcelable {
     private String imageLocation;
 
     @BindingAdapter("load_image")
-    public static void loadImage(final ImageView view, AlbumImage object) {
-        Picasso.with(view.getContext())
-                .load(object.getImageUrl())
-                .rotate(object.getRotate())
-                .resize(object.getFormattedWidth(), object.getFormattedHeight())
-                .onlyScaleDown()
-                .centerInside()
-                .into(view, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        if (view.getContext() instanceof ViewImageActivity) {
-                            ViewImageActivity activity = (ViewImageActivity) view.getContext();
-                            activity.supportStartPostponedEnterTransition();
-                        }
-                    }
+    public static void loadImage(final ImageView view, Object object) {
+        if (object != null) {
+            if (object instanceof AlbumImage) {
+                AlbumImage image = (AlbumImage) object;
+                Picasso.with(view.getContext())
+                        .load(image.getImageUrl())
+                        .rotate(image.getRotate())
+                        .resize(image.getFormattedWidth(), image.getFormattedHeight())
+                        .onlyScaleDown()
+                        .centerInside()
+                        .into(view, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                if (view.getContext() instanceof ViewImageActivity) {
+                                    ViewImageActivity activity = (ViewImageActivity) view.getContext();
+                                    activity.supportStartPostponedEnterTransition();
+                                }
+                            }
 
-                    @Override
-                    public void onError() {
-                        if (view.getContext() instanceof ViewImageActivity) {
-                            ViewImageActivity activity = (ViewImageActivity) view.getContext();
-                            activity.supportStartPostponedEnterTransition();
-                        }
-                    }
-                });
+                            @Override
+                            public void onError() {
+                                if (view.getContext() instanceof ViewImageActivity) {
+                                    ViewImageActivity activity = (ViewImageActivity) view.getContext();
+                                    activity.supportStartPostponedEnterTransition();
+                                }
+                            }
+                        });
+            } else {
+                String image = (String) object;
+                Picasso.with(view.getContext())
+                        .load(image)
+                        .into(view, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                if (view.getContext() instanceof ViewImageActivity) {
+                                    ViewImageActivity activity = (ViewImageActivity) view.getContext();
+                                    activity.supportStartPostponedEnterTransition();
+                                }
+                            }
+
+                            @Override
+                            public void onError() {
+                                if (view.getContext() instanceof ViewImageActivity) {
+                                    ViewImageActivity activity = (ViewImageActivity) view.getContext();
+                                    activity.supportStartPostponedEnterTransition();
+                                }
+                            }
+                        });
+            }
+        }
     }
 
 

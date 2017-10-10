@@ -47,7 +47,7 @@ public class Common {
     public static final String ARG_CONTACT = "arg_contact";
     public static final String ARG_ABOUT = "arg_about";
     public static final String ARG_IMAGE = "image";
-
+    public static final String ARG_IMAGE_STRING = "image_string";
 
     /**
      * Divider

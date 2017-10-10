@@ -38,9 +38,4 @@ public class ContactFragment extends Fragment {
         mContactBinding.setContactViewModel(mContactViewModel);
         return mContactBinding.getRoot();
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

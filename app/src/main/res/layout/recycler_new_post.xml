@@ -81,6 +81,5 @@
                 android:paddingTop="4dp"
                 android:text="Photo" />
         </RelativeLayout>
-
     </android.support.v7.widget.CardView>
 </layout>

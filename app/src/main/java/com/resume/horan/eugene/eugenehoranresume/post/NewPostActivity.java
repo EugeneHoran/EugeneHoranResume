@@ -46,7 +46,7 @@ public class NewPostActivity extends AppCompatActivity implements EasyPermission
                 finish();
                 return true;
             case R.id.action_post:
-                newPostViewHolder.postImage(binding.newPostText.getText().toString());
+                newPostViewHolder.makePost(binding.newPostText.getText().toString());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,6 +1,9 @@
 package com.resume.horan.eugene.eugenehoranresume.main.feed;
 
-import android.databinding.ViewDataBinding;
+import android.app.Activity;
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -18,35 +21,34 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.R;
+import com.resume.horan.eugene.eugenehoranresume.base.BasePostViewHolder;
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerNewPostBinding;
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerPostImageBinding;
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerPostMessageBinding;
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerPostMessageImageBinding;
 import com.resume.horan.eugene.eugenehoranresume.model.FeedNewPost;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
+import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int HOLDER_ERROR = 0;
-    private static final int HOLDER_NEW_POST = 1;
-    private static final int HOLDER_POST_PHOTO = 2;
-    private static final int HOLDER_POST_MESSAGE = 3;
-    private static final int HOLDER_POST_MESSAGE_PHOTO = 4;
-
+    private static final int HOLDER_NEW_POST = 2;
+    private static final int HOLDER_POST_PHOTO = 3;
+    private static final int HOLDER_POST_MESSAGE = 4;
+    private static final int HOLDER_POST_MESSAGE_PHOTO = 5;
     private List<Object> mObjectList = new ArrayList<>();
-
     private Listener mListener;
 
-    public interface Listener {
-        void onAddImageClick();
-
-        void onLikedClicked(Post post);
+    FeedRecyclerAdapter() {
     }
 
-    public FeedRecyclerAdapter() {
+    public List<Object> getObjectList() {
+        return mObjectList;
     }
 
     public void setListener(Listener listener) {
@@ -150,88 +152,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
-
-        public BaseViewHolder(ViewDataBinding itemView) {
-            super(itemView.getRoot());
-        }
-
-        public void setPost(Post post) {
-            ValueEventListener likeListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    setLikes(dataSnapshot.getChildrenCount() == 1 ? " like" : " likes");
-                    setNumLikes(dataSnapshot.getChildrenCount());
-                    if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        setLiked(true);
-                    } else {
-                        setLiked(false);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-            FirebaseDatabase.getInstance().getReference().child("likes").child(post.getKey()).addValueEventListener(likeListener);
-        }
-
-        public abstract void setLikes(String likes);
-
-        public abstract void setLiked(boolean liked);
-
-        public void setNumLikes(long numLikes) {
-            String likes = numLikes == 0 || numLikes == 1 ? " like" : " likes";
-            String totalLikes = String.valueOf(numLikes) + " ";
-            setLikes(totalLikes + likes);
-        }
-    }
-
-
-    private class ViewHolderPostImage extends BaseViewHolder implements View.OnClickListener {
-        private RecyclerPostImageBinding binding;
-        private Post object;
-
-        ViewHolderPostImage(RecyclerPostImageBinding binding) {
-            super(binding);
-            this.binding = binding;
-        }
-
-        void bindItem() {
-            object = (Post) mObjectList.get(getAdapterPosition());
-            binding.setObject(object);
-            setPost(object);
-            binding.executePendingBindings();
-            binding.footer.like.setOnClickListener(this);
-            binding.header.imageMenu.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (v == binding.footer.like) {
-                mListener.onLikedClicked(object);
-            } else if (v == binding.header.imageMenu) {
-                onMenuClick(v, object);
-            }
-        }
-
-        @Override
-        public void setLikes(String likes) {
-            binding.footer.likes.setText(likes);
-        }
-
-        @Override
-        public void setLiked(boolean liked) {
-            if (liked) {
-                binding.footer.like.setImageResource(R.drawable.ic_heart_full);
-            } else {
-                binding.footer.like.setImageResource(R.drawable.ic_heart_empty);
-            }
-        }
-    }
-
-    private class ViewHolderPostMessage extends BaseViewHolder implements View.OnClickListener {
+    private class ViewHolderPostMessage extends BasePostViewHolder implements View.OnClickListener {
         private RecyclerPostMessageBinding binding;
         private Post object;
 
@@ -273,11 +194,11 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private class ViewHolderPostMessageImage extends BaseViewHolder implements View.OnClickListener {
-        private RecyclerPostMessageImageBinding binding;
+    private class ViewHolderPostImage extends BasePostViewHolder implements View.OnClickListener {
+        private RecyclerPostImageBinding binding;
         private Post object;
 
-        ViewHolderPostMessageImage(RecyclerPostMessageImageBinding binding) {
+        ViewHolderPostImage(RecyclerPostImageBinding binding) {
             super(binding);
             this.binding = binding;
         }
@@ -287,13 +208,16 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             binding.setObject(object);
             setPost(object);
             binding.executePendingBindings();
+            binding.image.setOnClickListener(this);
             binding.footer.like.setOnClickListener(this);
             binding.header.imageMenu.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (v == binding.footer.like) {
+            if (v == binding.image) {
+                imageClicked(v, object);
+            } else if (v == binding.footer.like) {
                 mListener.onLikedClicked(object);
             } else if (v == binding.header.imageMenu) {
                 onMenuClick(v, object);
@@ -315,7 +239,76 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public void onMenuClick(final View view, final Post post) {
+    private class ViewHolderPostMessageImage extends BasePostViewHolder implements View.OnClickListener {
+        private RecyclerPostMessageImageBinding binding;
+        private Post object;
+
+        ViewHolderPostMessageImage(RecyclerPostMessageImageBinding binding) {
+            super(binding);
+            this.binding = binding;
+        }
+
+        void bindItem() {
+            object = (Post) mObjectList.get(getAdapterPosition());
+            binding.setObject(object);
+            setPost(object);
+            binding.executePendingBindings();
+            binding.footer.like.setOnClickListener(this);
+            binding.header.imageMenu.setOnClickListener(this);
+            binding.image.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v == binding.image) {
+                imageClicked(v, object);
+            } else if (v == binding.footer.like) {
+                mListener.onLikedClicked(object);
+            } else if (v == binding.header.imageMenu) {
+                onMenuClick(v, object);
+            }
+        }
+
+        @Override
+        public void setLikes(String likes) {
+            binding.footer.likes.setText(likes);
+        }
+
+        @Override
+        public void setLiked(boolean liked) {
+            if (liked) {
+                binding.footer.like.setImageResource(R.drawable.ic_heart_full);
+            } else {
+                binding.footer.like.setImageResource(R.drawable.ic_heart_empty);
+            }
+        }
+    }
+
+    /**
+     * Handle Shared Functions
+     */
+    public interface Listener {
+        void onAddImageClick();
+
+        void onLikedClicked(Post post);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void imageClicked(View view, Post post) {
+        Activity activity = (Activity) view.getContext();
+        Intent intent = new Intent(activity, ViewImageActivity.class);
+        intent.putExtra(Common.ARG_IMAGE_STRING, post.getFull_url());
+        if (LayoutUtil.isM()) {
+            Pair<View, String> p2 = Pair.create(view, "image");
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, p2);
+            activity.startActivity(intent, options.toBundle());
+        } else {
+            activity.startActivity(intent);
+        }
+    }
+
+
+    private void onMenuClick(final View view, final Post post) {
         PopupMenu popup = new PopupMenu(view.getContext(), view, GravityCompat.START);
         if (post.getAuthor().getUid().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             popup.getMenuInflater().inflate(R.menu.menu_feed, popup.getMenu());

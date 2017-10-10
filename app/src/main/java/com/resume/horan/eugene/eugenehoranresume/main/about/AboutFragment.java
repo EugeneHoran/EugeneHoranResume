@@ -21,6 +21,7 @@ import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject;
 import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
 import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 
 public class AboutFragment extends Fragment {
 
@@ -90,12 +91,17 @@ public class AboutFragment extends Fragment {
             }
 
             @Override
+            @SuppressWarnings("unchecked")
             public void onImageClicked(AlbumImage albumImage, View image, View card) {
                 Intent intent = new Intent(getActivity(), ViewImageActivity.class);
                 intent.putExtra(Common.ARG_IMAGE, albumImage);
-                Pair<View, String> p2 = Pair.create(image, "image");
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p2);
-                startActivity(intent, options.toBundle());
+                if (LayoutUtil.isM()) {
+                    Pair<View, String> p2 = Pair.create(image, "image");
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p2);
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(intent);
+                }
             }
         });
         return binding.getRoot();

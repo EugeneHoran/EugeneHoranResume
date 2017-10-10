@@ -3,10 +3,11 @@ package com.resume.horan.eugene.eugenehoranresume.main.feed;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,32 +31,27 @@ public class FeedFragment extends Fragment {
         return fragment;
     }
 
+    private FeedViewModel model;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        model = new FeedViewModel();
     }
-
-    private FeedViewModel model;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentFeedBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_feed, container, false);
+        // Recycler Users
+        binding.setAdapterUsers(new FeedUserRecyclerAdapter());
+        binding.recyclerUsers.setNestedScrollingEnabled(false);
+        binding.recyclerUsers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        // Recycler Feed
         FeedRecyclerAdapter adapter = new FeedRecyclerAdapter();
         binding.setAdapter(adapter);
-        adapter.setListener(new FeedRecyclerAdapter.Listener() {
-            @Override
-            public void onAddImageClick() {
-                Intent i = new Intent(getActivity(), NewPostActivity.class);
-                startActivity(i);
-            }
+        binding.recycler.setNestedScrollingEnabled(false);
+        adapter.setListener(listener);
 
-            @Override
-            public void onLikedClicked(Post post) {
-                setLiked(post);
-            }
-        });
-        model = new FeedViewModel();
         binding.setModel(model);
         return binding.getRoot();
     }
@@ -76,16 +72,27 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError firebaseError) {
-
             }
         });
     }
+
+    private FeedRecyclerAdapter.Listener listener = new FeedRecyclerAdapter.Listener() {
+        @Override
+        public void onAddImageClick() {
+            Intent i = new Intent(getActivity(), NewPostActivity.class);
+            startActivity(i);
+        }
+
+        @Override
+        public void onLikedClicked(Post post) {
+            setLiked(post);
+        }
+    };
 
     @Override
     public void onResume() {
         super.onResume();
         model.initItems();
-        model.filterItems();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import com.google.firebase.database.Exclude;
+
 public class User {
     public String email;
     public String displayName;
@@ -12,6 +14,11 @@ public class User {
         this.email = email;
         this.displayName = displayName;
         this.imageUrl = imageUrl;
+    }
+
+    @Exclude
+    public String getNameFormatted() {
+        return getDisplayName() != null ? getDisplayName().split(" ")[0] : "";
     }
 
     public String getEmail() {
