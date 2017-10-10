@@ -51,9 +51,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:padding="16dp"
-                    android:text="Whats on your mind?"
+                    android:text="Make a post!"
                     android:textSize="20sp" />
-
             </LinearLayout>
 
             <View
