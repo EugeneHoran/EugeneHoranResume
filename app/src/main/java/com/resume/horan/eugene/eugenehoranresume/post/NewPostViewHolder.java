@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.resume.horan.eugene.eugenehoranresume.R;
@@ -36,6 +38,7 @@ import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,6 +68,7 @@ public class NewPostViewHolder extends BaseObservable {
     private String userName;
     private String userImageUrl;
     private String userId;
+    private boolean isLoading = false;
     private DatabaseReference userReference;
     private NewPostActivity activity;
 
@@ -96,6 +100,7 @@ public class NewPostViewHolder extends BaseObservable {
         ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError firebaseError, DatabaseReference databaseReference) {
+                setLoading(false);
                 if (firebaseError == null) {
                     postUploaded();
                 } else {
@@ -132,45 +137,47 @@ public class NewPostViewHolder extends BaseObservable {
                 final Uri fullSizeUrl = taskSnapshot.getDownloadUrl();
                 ByteArrayOutputStream thumbnailStream = new ByteArrayOutputStream();
                 thumbnail.compress(Bitmap.CompressFormat.JPEG, 70, thumbnailStream);
-                thumbnailRef.putBytes(thumbnailStream.toByteArray())
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                thumbnailRef.putBytes(thumbnailStream.toByteArray()).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference().child("posts");
+                        final String newPostKey = postsRef.push().getKey();
+                        final Uri thumbnailUrl = taskSnapshot.getDownloadUrl();
+                        Author author = getAuthor();
+                        if (author == null) {
+                            showError(activity.getString(R.string.error_user_not_signed_in));
+                            return;
+                        }
+                        Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), null, ServerValue.TIMESTAMP, Common.TYPE_POST_IMAGE);
+                        Map<String, Object> updatedUserData = new HashMap<>();
+                        updatedUserData.put("people/" + author.getUid() + "/posts/" + newPostKey, true);
+                        updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
+                        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                        ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {
                             @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference().child("posts");
-                                final String newPostKey = postsRef.push().getKey();
-                                final Uri thumbnailUrl = taskSnapshot.getDownloadUrl();
-                                Author author = getAuthor();
-                                if (author == null) {
-                                    showError(activity.getString(R.string.error_user_not_signed_in));
-                                    return;
+                            public void onComplete(DatabaseError firebaseError, DatabaseReference databaseReference) {
+                                setLoading(false);
+                                if (firebaseError == null) {
+                                    postUploaded();
+                                } else {
+                                    Log.e(TAG, "Unable to create new post: " + firebaseError.getMessage());
+                                    showError(activity.getString(R.string.error_upload_task_create));
                                 }
-                                Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), null, ServerValue.TIMESTAMP, Common.TYPE_POST_IMAGE);
-                                Map<String, Object> updatedUserData = new HashMap<>();
-                                updatedUserData.put("people/" + author.getUid() + "/posts/" + newPostKey, true);
-                                updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
-                                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                                ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(DatabaseError firebaseError, DatabaseReference databaseReference) {
-                                        if (firebaseError == null) {
-                                            postUploaded();
-                                        } else {
-                                            Log.e(TAG, "Unable to create new post: " + firebaseError.getMessage());
-                                            showError(activity.getString(R.string.error_upload_task_create));
-                                        }
-                                    }
-                                });
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         showError(activity.getString(R.string.error_upload_task_create));
+                        setLoading(false);
                     }
                 });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                setLoading(false);
                 showError(activity.getString(R.string.error_upload_task_create));
             }
         });
@@ -212,6 +219,7 @@ public class NewPostViewHolder extends BaseObservable {
                                 final Uri thumbnailUrl = taskSnapshot.getDownloadUrl();
                                 Author author = getAuthor();
                                 if (author == null) {
+                                    setLoading(false);
                                     showError(activity.getString(R.string.error_user_not_signed_in));
                                     return;
                                 }
@@ -223,6 +231,7 @@ public class NewPostViewHolder extends BaseObservable {
                                 ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(DatabaseError firebaseError, DatabaseReference databaseReference) {
+                                        setLoading(false);
                                         if (firebaseError == null) {
                                             postUploaded();
                                         } else {
@@ -235,6 +244,7 @@ public class NewPostViewHolder extends BaseObservable {
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        setLoading(false);
                         showError(activity.getString(R.string.error_upload_task_create));
                     }
                 });
@@ -242,6 +252,7 @@ public class NewPostViewHolder extends BaseObservable {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                setLoading(false);
                 showError(activity.getString(R.string.error_upload_task_create));
             }
         });
@@ -252,6 +263,7 @@ public class NewPostViewHolder extends BaseObservable {
             showError("Nothing to post");
             return;
         }
+        setLoading(true);
         if (mFileUri == null && !TextUtils.isEmpty(message)) {
             postMessage(message);
             return;
@@ -380,6 +392,17 @@ public class NewPostViewHolder extends BaseObservable {
     /**
      * Getters And Setters
      */
+
+    @Bindable
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setLoading(boolean loading) {
+        this.isLoading = loading;
+        notifyChange();
+    }
+
     @Bindable
     public String getUserName() {
         return userName;

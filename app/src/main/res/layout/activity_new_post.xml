@@ -140,13 +140,21 @@
                 android:textSize="15sp" />
         </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/viewProgress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black_transparency"
+            android:visibility="@{model.isLoading ? View.VISIBLE : View.GONE}">
+
+            <ProgressBar
+                android:id="@+id/viewProgress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:visibility="visible" />
+        </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>
