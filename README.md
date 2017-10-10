@@ -9,6 +9,15 @@ TODO:
  
 ## Lates Updates:
 
+**UPDATED** October 10, 2017
+
+- Updaed Feed Fragment
+-- Added all users and the option to click on them. 
+<p float="top">
+<img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00UpdateToSocialFeed.png" width="200" />
+<img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00AddedBottomSheetToSF.png" width="200"  />
+</p>
+
 **UPDATED** October 9, 2017
 
 - For the most part I have converted most of the application to MVVM other than a few classes. 
