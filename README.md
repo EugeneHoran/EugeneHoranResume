@@ -9,7 +9,7 @@ https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0
 TODO:
 - ~~Convert project to MVVM DataBinding~~
 - ~~Try FirebaseRecyclerAdapter~~
-- Switch between Picasso to Glide
+- Switch to Glide from Picasso
 - Add option to post Gifs into Social Feed
 - Add profile 
 - Add view user 
