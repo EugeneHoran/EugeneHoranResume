@@ -172,6 +172,7 @@ public abstract class BasePostViewHolder extends RecyclerView.ViewHolder {
                         for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                             appleSnapshot.getRef().removeValue();
                         }
+
                         Toast.makeText(view.getContext(), "Deleted Post", Toast.LENGTH_SHORT).show();
                     }
 
