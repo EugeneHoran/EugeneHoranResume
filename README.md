@@ -2,6 +2,10 @@
 Interactive Resume Application. 
 It will be updated as time goes on with the latest libraries and design patterns. It will be documented with text, images and dates. 
 
+**Download Link** Note that there may be issues in this stage. 
+
+https://www.dropbox.com/s/8sycoks4bzfy0z3/app_apk.apk?dl=0
+
 TODO:
 - Convert project to MVVM DataBinding
 - Try FirebaseRecyclerAdapter
