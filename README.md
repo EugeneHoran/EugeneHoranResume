@@ -6,6 +6,11 @@ It will be updated as time goes on with the latest libraries and design patterns
 
 https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0
 
+**Youtube Video**
+
+https://www.youtube.com/watch?v=549T8NzNx9E&feature=youtu.be
+
+
 TODO:
 - ~~Convert project to MVVM DataBinding~~
 - ~~Try FirebaseRecyclerAdapter~~
