@@ -24,6 +24,11 @@ TODO:
 - Added Bottom sheets that display Comments and Likes of a post. 
 - Added Firebase Recycler Adapter to the bottom sheets. 
 
+Photo Updates (Comment and Like Bottom Sheets)
+<p float="top">
+<img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00CommentBottomSheet.png" width="220" />
+<img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00LikesBottomSheet.png" width="220"  />
+</p>
 
 **UPDATED** October 10, 2017
 
