@@ -8,7 +8,7 @@ https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0
 
 **Youtube Video**
 
-https://www.youtube.com/watch?v=549T8NzNx9E&feature=youtu.be
+https://youtu.be/549T8NzNx9E
 
 
 TODO:
