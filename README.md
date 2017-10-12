@@ -4,14 +4,26 @@ It will be updated as time goes on with the latest libraries and design patterns
 
 **Download Link** Note that there may be issues in this stage. 
 
-https://www.dropbox.com/s/8sycoks4bzfy0z3/app_apk.apk?dl=0
+https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0
 
 TODO:
-- Convert project to MVVM DataBinding
-- Try FirebaseRecyclerAdapter
+- ~~Convert project to MVVM DataBinding~~
+- ~~Try FirebaseRecyclerAdapter~~
+- Switch between Picasso to Glide
+- Add option to post Gifs into Social Feed
+- Add profile 
+- Add view user 
+- Clean up code
 - Other ...
  
 ## Lates Updates:
+
+**UPDATED** October 12, 2017
+
+- Added the option to post and delete comments to posts. 
+- Added Bottom sheets that display Comments and Likes of a post. 
+- Added Firebase Recycler Adapter to the bottom sheets. 
+
 
 **UPDATED** October 10, 2017
 
