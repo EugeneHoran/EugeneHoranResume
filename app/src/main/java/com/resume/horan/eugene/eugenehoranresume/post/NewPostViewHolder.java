@@ -36,6 +36,7 @@ import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,7 +73,7 @@ public class NewPostViewHolder extends BaseObservable {
     NewPostViewHolder(Activity activity) {
         this.activity = (NewPostActivity) activity;
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        userReference = FirebaseDatabase.getInstance().getReference().child(Common.FB_REF_USERS).child(userId);
+        userReference = FirebaseUtil.getCurrentUserRef();
         loadUserData();
     }
 
@@ -239,7 +240,7 @@ public class NewPostViewHolder extends BaseObservable {
                                     showError(activity.getString(R.string.error_user_not_signed_in));
                                     return;
                                 }
-                                Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), text, ServerValue.TIMESTAMP, Common.TYPE_POST_MESSAGE_IMAGE);
+                                Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), text, ServerValue.TIMESTAMP, Common.TYPE_POST_IMAGE);
                                 Map<String, Object> updatedUserData = new HashMap<>();
                                 updatedUserData.put("people/" + author.getUid() + "/posts/" + newPostKey, true);
                                 updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
@@ -312,7 +313,7 @@ public class NewPostViewHolder extends BaseObservable {
     private Bitmap mThumbnail;
 
     @AfterPermissionGranted(RC_CAMERA_PERMISSIONS)
-    private void showImagePicker() {
+    public void showImagePicker() {
         if (!EasyPermissions.hasPermissions(activity, cameraPerms)) {
             EasyPermissions.requestPermissions(activity, "This sample will upload a picture from your Camera", RC_CAMERA_PERMISSIONS, cameraPerms);
             return;

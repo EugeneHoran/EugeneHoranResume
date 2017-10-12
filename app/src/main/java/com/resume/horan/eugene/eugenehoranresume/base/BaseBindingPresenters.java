@@ -13,7 +13,7 @@ import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedRecyclerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedUserRecyclerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
-import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
+import com.resume.horan.eugene.eugenehoranresume.viewimage.ViewImageActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 

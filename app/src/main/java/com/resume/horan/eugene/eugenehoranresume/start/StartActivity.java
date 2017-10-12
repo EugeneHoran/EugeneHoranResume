@@ -16,18 +16,17 @@ import android.widget.Toast;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.databinding.ActivityStartBinding;
 import com.resume.horan.eugene.eugenehoranresume.fingerprint.FingerprintActivity;
-import com.resume.horan.eugene.eugenehoranresume.login.LoginRequestDataBSFragment;
 import com.resume.horan.eugene.eugenehoranresume.main.MainActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
-import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
-import com.resume.horan.eugene.eugenehoranresume.util.MultiTextWatcher;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.MultiTextWatcher;
 
 import java.util.Arrays;
 
 public class StartActivity extends AppCompatActivity implements
         StartContract.View,
         View.OnClickListener,
-        LoginRequestDataBSFragment.Listener,
+        StartBSDataFragment.Listener,
         ViewTreeObserver.OnGlobalLayoutListener {
     private StartContract.Presenter mPresenter;
 
@@ -186,7 +185,7 @@ public class StartActivity extends AppCompatActivity implements
 
     @Override
     public void showEmailRequired() {
-        LoginRequestDataBSFragment.newInstance().show(getSupportFragmentManager(), "DIALOG");
+        StartBSDataFragment.newInstance().show(getSupportFragmentManager(), "DIALOG");
     }
 
     @Override

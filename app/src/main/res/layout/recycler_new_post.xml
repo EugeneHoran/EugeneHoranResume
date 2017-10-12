@@ -43,7 +43,7 @@
                     android:layout_marginBottom="12dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="12dp"
-                    app:error="@{@drawable/ic_account_circle}"
+                    app:error="@{@drawable/ic_account_circle_white}"
                     app:imageUrl="@{object.url}" />
 
                 <TextView
@@ -71,9 +71,8 @@
                 android:layout_below="@+id/divider"
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="16dp"
-                android:drawableLeft="@drawable/ic_camera_alt"
+                android:drawableLeft="@drawable/ic_add_a_photo"
                 android:drawablePadding="10dp"
-                android:drawableTint="@color/colorAccentBlue"
                 android:gravity="center_vertical"
                 android:paddingBottom="4dp"
                 android:paddingLeft="8dp"

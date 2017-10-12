@@ -7,6 +7,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,9 +29,9 @@ import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerPostMessage
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerPostMessageImageBinding;
 import com.resume.horan.eugene.eugenehoranresume.model.FeedNewPost;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
-import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
+import com.resume.horan.eugene.eugenehoranresume.viewimage.ViewImageActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
-import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,20 +106,36 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    private ViewHolderPostImage mHolderImage;
+    private ViewHolderPostMessage mHolderMessage;
+    private ViewHolderPostMessageImage mHolderImageMessage;
+
+    public void onDestroy() {
+        if (mHolderImage != null) {
+            mHolderImage.cancelRef();
+        }
+        if (mHolderMessage != null) {
+            mHolderMessage.cancelRef();
+        }
+        if (mHolderImageMessage != null) {
+            mHolderImageMessage.cancelRef();
+        }
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderNewPost) {
             ViewHolderNewPost mHolder = (ViewHolderNewPost) holder;
             mHolder.bindItem();
         } else if (holder instanceof ViewHolderPostImage) {
-            ViewHolderPostImage mHolder = (ViewHolderPostImage) holder;
-            mHolder.bindItem();
+            mHolderImage = (ViewHolderPostImage) holder;
+            mHolderImage.bindItem();
         } else if (holder instanceof ViewHolderPostMessage) {
-            ViewHolderPostMessage mHolder = (ViewHolderPostMessage) holder;
-            mHolder.bindItem();
+            mHolderMessage = (ViewHolderPostMessage) holder;
+            mHolderMessage.bindItem();
         } else if (holder instanceof ViewHolderPostMessageImage) {
-            ViewHolderPostMessageImage mHolder = (ViewHolderPostMessageImage) holder;
-            mHolder.bindItem();
+            mHolderImageMessage = (ViewHolderPostMessageImage) holder;
+            mHolderImageMessage.bindItem();
         }
     }
 
@@ -166,16 +183,21 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             binding.setObject(object);
             setPost(object);
             binding.executePendingBindings();
-            binding.footer.like.setOnClickListener(this);
             binding.header.imageMenu.setOnClickListener(this);
+            binding.footer.clickViewLikes.setOnClickListener(this);
+            binding.footer.clickLike.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (v == binding.footer.like) {
+            if (v == binding.footer.clickLike) {
                 mListener.onLikedClicked(object);
             } else if (v == binding.header.imageMenu) {
                 onMenuClick(v, object);
+            } else if (v == binding.footer.clickViewLikes) {
+                if (mListener != null) {
+                    mListener.onShowLikesClicked(object);
+                }
             }
         }
 
@@ -187,8 +209,10 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public void setLiked(boolean liked) {
             if (liked) {
+                binding.footer.textLike.setText(R.string.unlike);
                 binding.footer.like.setImageResource(R.drawable.ic_heart_full);
             } else {
+                binding.footer.textLike.setText(R.string.like);
                 binding.footer.like.setImageResource(R.drawable.ic_heart_empty);
             }
         }
@@ -207,20 +231,24 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             object = (Post) mObjectList.get(getAdapterPosition());
             binding.setObject(object);
             setPost(object);
-            binding.executePendingBindings();
             binding.image.setOnClickListener(this);
-            binding.footer.like.setOnClickListener(this);
             binding.header.imageMenu.setOnClickListener(this);
+            binding.footer.clickLike.setOnClickListener(this);
+            binding.footer.clickViewLikes.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (v == binding.image) {
                 imageClicked(v, object);
-            } else if (v == binding.footer.like) {
+            } else if (v == binding.footer.clickLike) {
                 mListener.onLikedClicked(object);
             } else if (v == binding.header.imageMenu) {
                 onMenuClick(v, object);
+            } else if (v == binding.footer.clickViewLikes) {
+                if (mListener != null) {
+                    mListener.onShowLikesClicked(object);
+                }
             }
         }
 
@@ -232,8 +260,10 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public void setLiked(boolean liked) {
             if (liked) {
+                binding.footer.textLike.setText(R.string.unlike);
                 binding.footer.like.setImageResource(R.drawable.ic_heart_full);
             } else {
+                binding.footer.textLike.setText(R.string.like);
                 binding.footer.like.setImageResource(R.drawable.ic_heart_empty);
             }
         }
@@ -252,20 +282,25 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             object = (Post) mObjectList.get(getAdapterPosition());
             binding.setObject(object);
             setPost(object);
-            binding.executePendingBindings();
-            binding.footer.like.setOnClickListener(this);
             binding.header.imageMenu.setOnClickListener(this);
             binding.image.setOnClickListener(this);
+            binding.footer.clickLike.setOnClickListener(this);
+            binding.footer.clickViewLikes.setOnClickListener(this);
+            binding.executePendingBindings();
         }
 
         @Override
         public void onClick(View v) {
             if (v == binding.image) {
                 imageClicked(v, object);
-            } else if (v == binding.footer.like) {
+            } else if (v == binding.footer.clickLike) {
                 mListener.onLikedClicked(object);
             } else if (v == binding.header.imageMenu) {
                 onMenuClick(v, object);
+            } else if (v == binding.footer.clickViewLikes) {
+                if (mListener != null) {
+                    mListener.onShowLikesClicked(object);
+                }
             }
         }
 
@@ -277,8 +312,10 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public void setLiked(boolean liked) {
             if (liked) {
+                binding.footer.textLike.setText(R.string.unlike);
                 binding.footer.like.setImageResource(R.drawable.ic_heart_full);
             } else {
+                binding.footer.textLike.setText(R.string.like);
                 binding.footer.like.setImageResource(R.drawable.ic_heart_empty);
             }
         }
@@ -291,6 +328,8 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void onAddImageClick();
 
         void onLikedClicked(Post post);
+
+        void onShowLikesClicked(Post post);
     }
 
     @SuppressWarnings("unchecked")

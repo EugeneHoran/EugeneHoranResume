@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.util;
+package com.resume.horan.eugene.eugenehoranresume.util.ui;
 
 import android.text.Editable;
 import android.text.TextWatcher;

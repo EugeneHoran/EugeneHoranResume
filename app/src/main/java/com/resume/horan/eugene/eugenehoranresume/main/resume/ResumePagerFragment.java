@@ -1,7 +1,6 @@
 package com.resume.horan.eugene.eugenehoranresume.main.resume;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
-import com.resume.horan.eugene.eugenehoranresume.base.BaseInterface;
 import com.resume.horan.eugene.eugenehoranresume.main.MainActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 
@@ -84,7 +82,6 @@ public class ResumePagerFragment extends Fragment {
         mViewPager.setAdapter(mPagerAdapter);
         TabLayout mTabLayout = mHost.findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
-        mCallback.showTabs(true);
         setCurrentPage();
     }
 
@@ -106,28 +103,5 @@ public class ResumePagerFragment extends Fragment {
         if (mViewPager != null) {
             mViewPager.setCurrentItem(mCurrentPage);
         }
-    }
-
-    private ResumeInteraction mCallback;
-
-    public interface ResumeInteraction extends BaseInterface {
-        void showTabs(boolean show);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof ResumeInteraction) {
-            mCallback = (ResumeInteraction) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement Listener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallback = null;
     }
 }

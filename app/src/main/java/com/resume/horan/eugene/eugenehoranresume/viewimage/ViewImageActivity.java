@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.viewimage;
+package com.resume.horan.eugene.eugenehoranresume.viewimage;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

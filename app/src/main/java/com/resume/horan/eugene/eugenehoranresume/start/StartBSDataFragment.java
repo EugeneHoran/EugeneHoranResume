@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.login;
+package com.resume.horan.eugene.eugenehoranresume.start;
 
 
 import android.app.Activity;
@@ -18,13 +18,13 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.resume.horan.eugene.eugenehoranresume.R;
-import com.resume.horan.eugene.eugenehoranresume.util.Verify;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.Verify;
 
-public class LoginRequestDataBSFragment extends BottomSheetDialogFragment implements View.OnClickListener {
+public class StartBSDataFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
 
-    public static LoginRequestDataBSFragment newInstance() {
-        return new LoginRequestDataBSFragment();
+    public static StartBSDataFragment newInstance() {
+        return new StartBSDataFragment();
     }
 
     @Override

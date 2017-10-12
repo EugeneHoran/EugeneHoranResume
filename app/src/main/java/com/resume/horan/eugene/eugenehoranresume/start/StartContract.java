@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import com.resume.horan.eugene.eugenehoranresume.base.BasePresenter;
 import com.resume.horan.eugene.eugenehoranresume.base.BaseView;
-import com.resume.horan.eugene.eugenehoranresume.login.LoginActivity;
 
 
 public interface StartContract {

@@ -7,15 +7,11 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
 import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.model.Location;
-import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 

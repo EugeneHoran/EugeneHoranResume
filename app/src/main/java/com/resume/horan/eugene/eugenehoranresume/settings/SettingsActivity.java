@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.settings;
+package com.resume.horan.eugene.eugenehoranresume.settings;
 
 
 import android.app.Activity;
@@ -10,26 +10,22 @@ import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.fingerprint.FingerprintActivity;
-import com.resume.horan.eugene.eugenehoranresume.login.LoginActivity;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.start.StartActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
-import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 
 
 public class SettingsActivity extends AppCompatPreferenceActivity {

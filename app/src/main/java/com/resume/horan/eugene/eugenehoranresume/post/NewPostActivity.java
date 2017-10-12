@@ -22,6 +22,7 @@ public class NewPostActivity extends AppCompatActivity implements EasyPermission
     private ActivityNewPostBinding binding;
 
     @Override
+    @SuppressWarnings("ConstantConditions")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_new_post);
@@ -68,7 +69,6 @@ public class NewPostActivity extends AppCompatActivity implements EasyPermission
     /**
      * Permissions
      */
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -77,7 +77,7 @@ public class NewPostActivity extends AppCompatActivity implements EasyPermission
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-
+        newPostViewHolder.showImagePicker();
     }
 
     @Override

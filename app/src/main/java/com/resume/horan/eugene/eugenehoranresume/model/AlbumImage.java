@@ -7,7 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.ImageView;
 
-import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
+import com.resume.horan.eugene.eugenehoranresume.viewimage.ViewImageActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 

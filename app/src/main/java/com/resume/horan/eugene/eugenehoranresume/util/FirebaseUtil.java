@@ -5,55 +5,78 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+@SuppressWarnings("ConstantConditions")
 public class FirebaseUtil {
+    /**
+     * Initializer's
+     */
+    private static FirebaseDatabase getFirebaseDatabase() {
+        return FirebaseDatabase.getInstance();
+    }
 
     public static FirebaseAuth getAuth() {
         return FirebaseAuth.getInstance();
     }
 
-    public static DatabaseReference getBaseRef() {
-        return FirebaseDatabase.getInstance().getReference();
+    private static DatabaseReference getRef() {
+        return getFirebaseDatabase().getReference();
     }
 
-    public static String getCurrentUserId() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            return user.getUid();
+    public static FirebaseUser getUser() {
+        return getAuth().getCurrentUser();
+    }
+
+    private static String getUserId() {
+        if (getUser() != null) {
+            return getUser().getUid();
         }
         return null;
     }
 
-
-    public static FirebaseUser getUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-
     /**
      * Main Data References
      */
+    public static DatabaseReference getNewUserRef() {
+        return getRef().child(Common.FB_REF_USERS).child(getUserId());
+    }
+
     public static DatabaseReference getResumeRef() {
-        return getBaseRef().child(Common.FB_REF_EUGENE_HORAN);
+        return getRef().child(Common.FB_REF_EUGENE_HORAN);
     }
 
     public static DatabaseReference getContactRef() {
-        return getBaseRef().child(Common.FB_REF_EUGENE_HORAN).child(Common.FB_REF_CONTACT);
+        return getRef().child(Common.FB_REF_EUGENE_HORAN).child(Common.FB_REF_CONTACT);
     }
 
     public static DatabaseReference getAboutRef() {
-        return getBaseRef().child(Common.FB_REF_EUGENE_HORAN).child(Common.FB_REF_ABOUT);
+        return getRef().child(Common.FB_REF_EUGENE_HORAN).child(Common.FB_REF_ABOUT);
     }
 
+    public static DatabaseReference getAllPostsRef() {
+        return getRef().child(Common.FB_REF_POSTS);
+    }
 
-    /**
-     * User References
-     */
-
-    private static DatabaseReference getUserRef() {
-        return getBaseRef().child(Common.FB_REF_USERS);
+    public static DatabaseReference getAllUsersRef() {
+        return getRef().child(Common.FB_REF_USERS);
     }
 
     public static DatabaseReference getCurrentUserRef() {
-        return getUserRef().child(getCurrentUserId());
+        return getAllUsersRef().child(getUserId());
+    }
+
+    public static DatabaseReference getAllLikesRef() {
+        return getRef().child(Common.FB_REF_LIKES);
+    }
+
+    public static DatabaseReference getPostLikesRef(String postKey) {
+        return getAllLikesRef().child(postKey);
+    }
+
+    public static DatabaseReference getUserPostLikeRef(String postKey) {
+        return getAllLikesRef().child(postKey).child(getUserId());
+    }
+
+    public static DatabaseReference getPostLikesListRef(String postKey) {
+        return getAllLikesRef().child(postKey);
     }
 }

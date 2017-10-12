@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.ui.settings;
+package com.resume.horan.eugene.eugenehoranresume.settings;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

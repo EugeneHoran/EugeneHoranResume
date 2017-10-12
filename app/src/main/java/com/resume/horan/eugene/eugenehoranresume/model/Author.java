@@ -20,7 +20,6 @@ package com.resume.horan.eugene.eugenehoranresume.model;
 public class Author {
     private String userName;
     private String profilePicture;
-
     private String uid;
 
     public Author() {

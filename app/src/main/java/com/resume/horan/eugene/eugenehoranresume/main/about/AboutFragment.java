@@ -19,9 +19,9 @@ import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.databinding.FragmentAboutBinding;
 import com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject;
 import com.resume.horan.eugene.eugenehoranresume.model.AlbumImage;
-import com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity;
+import com.resume.horan.eugene.eugenehoranresume.viewimage.ViewImageActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
-import com.resume.horan.eugene.eugenehoranresume.util.LayoutUtil;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 
 public class AboutFragment extends Fragment {
 

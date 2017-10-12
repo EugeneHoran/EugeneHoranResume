@@ -64,4 +64,6 @@
     <string name="all_users">All Users</string>
     <string name="view_profile">View Profile</string>
     <string name="send_message">Send Message</string>
+    <string name="unlike">Unlike</string>
+    <string name="like">Like</string>
 </resources>

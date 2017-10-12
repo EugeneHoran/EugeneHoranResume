@@ -1,4 +1,4 @@
-package com.resume.horan.eugene.eugenehoranresume.util;
+package com.resume.horan.eugene.eugenehoranresume.util.ui;
 
 public class Verify {
 

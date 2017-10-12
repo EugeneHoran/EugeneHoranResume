@@ -38,7 +38,7 @@ public class User {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return imageUrl == null ? "null" : imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {

@@ -5,14 +5,13 @@
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorButtonPrimary">#607D8B</color>
     <color name="colorButtonDark">#00695C</color>
-
-    <color name="colorBottomNav">#E0F2F1</color>
-    <color name="colorBottomNavDark">#B2DFDB</color>
-
+    <color name="colorBackground">#E0E0E0</color>
+    <color name="colorAccent">#616161</color>
+    <color name="colorButtonPrimaryText">#EEEEEE</color>
     <color name="colorBottomNavGray">#999999</color>
+    <color name="greyIconNormal">#727272</color>
 
     <!--Chip -->
-    <color name="colorChipViewBackground">#E0E0E0</color>
     <color name="white_transparency">#b9ffffff</color>
     <color name="black_transparency">#b9000000</color>
 
@@ -20,8 +19,6 @@
     <color name="colorPrimaryWhite">#F5F5F5</color>
     <color name="colorPrimaryDarkWhite">#E0E0E0</color>
     <color name="colorAccentBlue">#2979ff</color>
-
-    <color name="greyIconNormal">#727272</color>
 
 
     <color name="colorPrimaryBlue">#2979ff</color>

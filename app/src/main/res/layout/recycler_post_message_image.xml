@@ -44,14 +44,15 @@
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
+                android:layout_marginTop="12dp"
                 android:background="@color/black"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="centerCrop"
                 android:transitionName="@string/image"
-                app:error="@{@drawable/ic_account_circle}"
+                android:visibility="visible"
+                app:error="@{@drawable/ic_account_circle_white}"
                 app:imageUrl="@{object.full_url}" />
-
 
             <include
                 android:id="@+id/footer"

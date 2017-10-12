@@ -49,6 +49,7 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
         getView().showLoading(true);
         switch (mFragmentPosition) {
             case Common.WHICH_RESUME_FRAGMENT:
+                getView().showTabs(true);
                 getView().setToolbarTitle("Eugene Horan's Resume");
                 break;
             case Common.WHICH_CONTACT_FRAGMENT:

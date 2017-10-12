@@ -60,6 +60,7 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         holder.bind();
         holder.itemView.setTag(position);
         Animation anim = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.anim_set_fade_in_slide_up_recycler);
+        anim.setStartOffset(280);
         holder.itemView.startAnimation(anim);
     }
 
@@ -76,14 +77,15 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             user = mDataList.get(getAdapterPosition());
             binding.setObject(user);
             binding.setHolder(this);
-            binding.circleImage.setBorderColorResource(R.color.colorAccentBlue);
             if (user.getDisplayName() != null) {
+                binding.circleImage.setBorderColorResource(R.color.colorAccentBlue);
                 binding.circleImage.setAlpha(1f);
             } else {
+                binding.circleImage.setBorderColorResource(R.color.greyIconNormal);
                 binding.circleImage.setAlpha(.3f);
             }
-            Drawable drawable = ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_account_circle);
-            drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.colorAccentBlue), PorterDuff.Mode.MULTIPLY));
+            Drawable drawable = ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_account_circle_white);
+            drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.greyIconNormal), PorterDuff.Mode.MULTIPLY));
             drawable.mutate();
             Picasso.with(itemView.getContext()).load(user.getImageUrl()).error(drawable).into(binding.circleImage);
         }
@@ -93,8 +95,8 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return;
             }
             Activity activity = (Activity) view.getContext();
-            Drawable drawable = ContextCompat.getDrawable(activity, R.drawable.ic_account_circle);
-            drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(activity, R.color.colorAccentBlue), PorterDuff.Mode.MULTIPLY));
+            Drawable drawable = ContextCompat.getDrawable(activity, R.drawable.ic_account_circle_white);
+            drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(activity, R.color.greyIconNormal), PorterDuff.Mode.MULTIPLY));
             drawable.mutate();
             BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity);
             View v = activity.getLayoutInflater().inflate(R.layout.layout_bs_user, null);

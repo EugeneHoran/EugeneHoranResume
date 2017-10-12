@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageActivity">
+    tools:context="com.resume.horan.eugene.eugenehoranresume.viewimage.ViewImageActivity">
 
     <data>
 
@@ -12,7 +12,7 @@
 
         <variable
             name="holder"
-            type="com.resume.horan.eugene.eugenehoranresume.ui.viewimage.ViewImageViewHolder" />
+            type="com.resume.horan.eugene.eugenehoranresume.viewimage.ViewImageViewHolder" />
     </data>
 
     <RelativeLayout
