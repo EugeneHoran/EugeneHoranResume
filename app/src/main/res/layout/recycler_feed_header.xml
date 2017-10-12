@@ -6,6 +6,12 @@
 
         <import type="android.text.format.DateUtils" />
 
+        <import type="android.view.View" />
+
+        <variable
+            name="holderParent"
+            type="com.resume.horan.eugene.eugenehoranresume.base.BasePostViewHolder" />
+
         <variable
             name="object"
             type="com.resume.horan.eugene.eugenehoranresume.model.Post" />
@@ -63,7 +69,9 @@
             android:layout_alignParentTop="true"
             android:background="?selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:onClick="@{holderParent::onMenuClicked}"
             android:padding="2dp"
+            android:visibility="@{holderParent.boolShowMenu? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_more_horiz" />
     </RelativeLayout>
 

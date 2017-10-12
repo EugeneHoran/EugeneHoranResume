@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="holderParent"
+            type="com.resume.horan.eugene.eugenehoranresume.base.BasePostViewHolder" />
+
+        <variable
             name="object"
             type="com.resume.horan.eugene.eugenehoranresume.model.Post" />
     </data>
@@ -15,49 +19,66 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/clickViewLikes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp">
+            android:gravity="center_vertical">
 
-            <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                app:srcCompat="@drawable/ic_heart_full" />
-
-            <TextView
-                android:id="@+id/likes"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:layout_weight="1"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:onClick="@{holderParent::onShowLikesClicked}"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
 
-            <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_marginLeft="12dp"
-                android:tint="@color/colorAccentBlue"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_message" />
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    app:srcCompat="@drawable/ic_heart_full" />
 
-            <TextView
-                android:id="@+id/comments"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@{holderParent.strNumOfLikes}"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:paddingLeft="4dp"
-                android:text="Comments"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:visibility="gone" />
+                android:layout_weight="1"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:onClick="@{holderParent::onShowCommentsClicked}"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="2dp"
+                    android:tint="@color/colorAccentBlue"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_message" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:paddingLeft="4dp"
+                    android:text="@{holderParent.strNumOfComments}"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:visibility="visible" />
+            </LinearLayout>
         </LinearLayout>
 
         <View
@@ -71,31 +92,29 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/clickLike"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
+                android:onClick="@{holderParent::onLikeClicked}"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
                 <ImageView
-                    android:id="@+id/like"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:padding="2dp"
-                    app:srcCompat="@drawable/ic_heart_empty" />
+                    app:imageResource="@{holderParent.intLikedStatus}" />
 
                 <TextView
-                    android:id="@+id/textLike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:paddingLeft="8dp"
-                    android:text="Like"
+                    android:text="@{holderParent.strLikedStatus}"
                     android:textColor="@color/black" />
             </LinearLayout>
 
@@ -106,15 +125,17 @@
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
+                android:onClick="@{holderParent::onAddCommentsClicked}"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/message"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
                     android:padding="2dp"
                     android:tint="@color/colorAccentBlue"
                     app:srcCompat="@drawable/ic_message" />

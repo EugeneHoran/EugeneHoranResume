@@ -16,6 +16,7 @@ public class Common {
     public static final String FB_REF_USERS = "users";
     public static final String FB_REF_POSTS = "posts";
     public static final String FB_REF_LIKES = "likes";
+    public static final String FB_REF_COMMENTS = "comments";
     public static final String FB_AUTHOR = "author";
 
     /**
@@ -51,6 +52,8 @@ public class Common {
     public static final String ARG_ABOUT = "arg_about";
     public static final String ARG_IMAGE = "image";
     public static final String ARG_IMAGE_STRING = "image_string";
+    public static final String ARG_POST_KEY = "post_key";
+    public static final String ARG_FEED_LIKES_OR_COMMENTS = "feed_likes_or_comments";
 
     /**
      * Divider
@@ -67,6 +70,19 @@ public class Common {
     public static final int TYPE_POST_MESSAGE = 0;
     public static final int TYPE_POST_IMAGE = 1;
     public static final int TYPE_POST_MESSAGE_IMAGE = 2;
+
+    /**
+     * Feed Bottom Sheet Which
+     * Comments or Likes
+     */
+    public static final int WHICH_LIKES = 0;
+    public static final int WHICH_COMMENTS = 1;
+
+    /**
+     * Common References
+     */
+    public static final String DIALOG_FEED_LIKES_COMMENTS = "dialog_feed_likes_comments";
+    public static final String DIALOG_FEED_ADD_COMMENT = "dialog_feed_add_comment";
     /**
      * Image Link
      */

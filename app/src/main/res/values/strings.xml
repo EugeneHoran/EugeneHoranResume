@@ -59,11 +59,15 @@
     <string name="error_required_field">Required</string>
     <string name="display_name">Display Name</string>
     <string name="post">Post</string>
-    <string name="delete_post">Delete Post</string>
+    <string name="delete_post">Delete</string>
     <string name="image">image</string>
     <string name="all_users">All Users</string>
     <string name="view_profile">View Profile</string>
     <string name="send_message">Send Message</string>
     <string name="unlike">Unlike</string>
     <string name="like">Like</string>
+    <string name="add_comment">Add Comment</string>
+    <string name="post_comment">Post Comment</string>
+    <string name="likes">Likes</string>
+    <string name="comments">Comments</string>
 </resources>

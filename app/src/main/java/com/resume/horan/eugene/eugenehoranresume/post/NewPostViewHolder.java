@@ -111,7 +111,7 @@ public class NewPostViewHolder extends BaseObservable {
         DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference().child("posts");
         final String newPostKey = postsRef.push().getKey();
         Map<String, Object> updatedUserData = new HashMap<>();
-        updatedUserData.put("people/" + getAuthor().getUid() + "/posts/" + newPostKey, true);
+        updatedUserData.put("users/" + getAuthor().getUid() + "/posts/" + newPostKey, true);
         updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {
@@ -167,7 +167,7 @@ public class NewPostViewHolder extends BaseObservable {
                         }
                         Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), null, ServerValue.TIMESTAMP, Common.TYPE_POST_IMAGE);
                         Map<String, Object> updatedUserData = new HashMap<>();
-                        updatedUserData.put("people/" + author.getUid() + "/posts/" + newPostKey, true);
+                        updatedUserData.put("users/" + author.getUid() + "/posts/" + newPostKey, true);
                         updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
                         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                         ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {
@@ -240,9 +240,9 @@ public class NewPostViewHolder extends BaseObservable {
                                     showError(activity.getString(R.string.error_user_not_signed_in));
                                     return;
                                 }
-                                Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), text, ServerValue.TIMESTAMP, Common.TYPE_POST_IMAGE);
+                                Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), text, ServerValue.TIMESTAMP, Common.TYPE_POST_MESSAGE_IMAGE);
                                 Map<String, Object> updatedUserData = new HashMap<>();
-                                updatedUserData.put("people/" + author.getUid() + "/posts/" + newPostKey, true);
+                                updatedUserData.put("users/" + author.getUid() + "/posts/" + newPostKey, true);
                                 updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
                                 final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                 ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {

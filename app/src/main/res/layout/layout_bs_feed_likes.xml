@@ -9,17 +9,30 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_heart_full"
-            android:drawablePadding="16dp"
-            android:fontFamily="sans-serif"
             android:gravity="center_vertical"
-            android:padding="16dp"
-            android:text="Likes"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:text="Likes"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

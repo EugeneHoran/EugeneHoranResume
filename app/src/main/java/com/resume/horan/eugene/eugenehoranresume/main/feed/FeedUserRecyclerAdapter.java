@@ -29,7 +29,7 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private List<User> mDataList = new ArrayList<>();
 
-    public FeedUserRecyclerAdapter() {
+    FeedUserRecyclerAdapter() {
     }
 
     public void setItems(List<User> data) {
@@ -60,7 +60,7 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         holder.bind();
         holder.itemView.setTag(position);
         Animation anim = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.anim_set_fade_in_slide_up_recycler);
-        anim.setStartOffset(280);
+        anim.setStartOffset(200);
         holder.itemView.startAnimation(anim);
     }
 

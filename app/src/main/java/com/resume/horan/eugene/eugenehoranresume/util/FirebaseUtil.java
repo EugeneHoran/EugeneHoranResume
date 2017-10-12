@@ -79,4 +79,8 @@ public class FirebaseUtil {
     public static DatabaseReference getPostLikesListRef(String postKey) {
         return getAllLikesRef().child(postKey);
     }
+
+    public static DatabaseReference getPostCommentsRef(String postKey) {
+        return getRef().child(Common.FB_REF_COMMENTS).child(postKey);
+    }
 }

@@ -1,14 +1,36 @@
 package com.resume.horan.eugene.eugenehoranresume.util.ui;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+
+import com.resume.horan.eugene.eugenehoranresume.R;
+import com.squareup.picasso.Picasso;
 
 
 public class LayoutUtil {
+
+    public static Drawable getDrawableMutate(Context context, int resDrawable, int resColor) {
+        Drawable drawableChange = ContextCompat.getDrawable(context, resDrawable);
+        drawableChange.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(context, resColor), PorterDuff.Mode.MULTIPLY));
+        drawableChange.mutate();
+        return drawableChange;
+    }
+
+    public static void setColorImage(ImageView image, int drawableImage, int color) {
+        Drawable drawable = ContextCompat.getDrawable(image.getContext(), drawableImage);
+        drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(image.getContext(), color), PorterDuff.Mode.SRC_ATOP));
+        drawable.mutate();
+        image.setImageDrawable(drawable);
+    }
 
     public static boolean isM() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
