@@ -1,10 +1,14 @@
-# Eugene Horan Resume
+## Eugene Horan Resume
+
+### Currently Updating Data Structure
+- If you downloaded the app it needs to be deleted and reinstalled after data structure.
+
 Interactive Resume Application. 
 It will be updated as time goes on with the latest libraries and design patterns. It will be documented with text, images and dates. 
 
 **Download Link** Note that there may be issues in this stage. 
 
-https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0
+~~https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0~~
 
 **Youtube Video**
 
