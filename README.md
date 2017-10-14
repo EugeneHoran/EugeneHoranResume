@@ -1,15 +1,24 @@
-# Eugene Horan Resume
+## Eugene Horan Resume
+
+### Currently Updating Data Structure
+- If you downloaded the app it needs to be deleted and reinstalled after data structure.
+
 Interactive Resume Application. 
 It will be updated as time goes on with the latest libraries and design patterns. It will be documented with text, images and dates. 
 
 **Download Link** Note that there may be issues in this stage. 
 
-https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0
+~~https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0~~
+
+**Youtube Video**
+
+https://youtu.be/549T8NzNx9E
+
 
 TODO:
 - ~~Convert project to MVVM DataBinding~~
 - ~~Try FirebaseRecyclerAdapter~~
-- Switch between Picasso to Glide
+- Switch to Glide from Picasso
 - Add option to post Gifs into Social Feed
 - Add profile 
 - Add view user 
@@ -24,6 +33,11 @@ TODO:
 - Added Bottom sheets that display Comments and Likes of a post. 
 - Added Firebase Recycler Adapter to the bottom sheets. 
 
+Photo Updates (Comment and Like Bottom Sheets)
+<p float="top">
+<img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00CommentBottomSheet.png" width="220" />
+<img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00LikesBottomSheet.png" width="220"  />
+</p>
 
 **UPDATED** October 10, 2017
 
