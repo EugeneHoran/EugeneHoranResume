@@ -1,7 +1,6 @@
 package com.resume.horan.eugene.eugenehoranresume.main.resume;
 
 import android.content.res.Resources;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -39,7 +38,7 @@ public class ResumeEducationFragment extends ResumeBaseInfoFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentRecyclerviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recyclerview, container, false);
+        FragmentRecyclerviewBinding binding = FragmentRecyclerviewBinding.inflate(getLayoutInflater());
         binding.recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.setAdapter(new ResumeEducationRecyclerAdapter());
 

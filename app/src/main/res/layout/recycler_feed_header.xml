@@ -21,8 +21,11 @@
         android:id="@+id/topHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?selectableItemBackgroundBorderless"
         android:gravity="center_vertical"
-        android:paddingBottom="0dp"
+        android:onClick="@{holderParent::onProfileClicked}"
+        android:paddingBottom="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="16dp">
@@ -32,7 +35,7 @@
             android:layout_width="34dp"
             android:layout_height="34dp"
             app:error="@{@drawable/ic_account_circle_white}"
-            app:imageUrl="@{object.author.profilePicture}" />
+            app:imageUrl="@{holderParent.obsUser.imageUrl}" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -47,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@{object.author.userName}"
+                android:text="@{holderParent.obsUser.displayName}"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold" />

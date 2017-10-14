@@ -42,6 +42,7 @@ public class Common {
     /**
      * Common Arguments
      */
+    public static final String ARG_USER_ID = "arg_user_id";
     public static final String ARG_FINGERPRINT_TYPE = "arg_fingerprint_type";
     public static final String ARG_FINGERPRINT_RETURN_ERROR = "arg_fingerprint_return_error";
     public static final String ARG_WHICH_FRAGMENT = "arg_which_fragment";

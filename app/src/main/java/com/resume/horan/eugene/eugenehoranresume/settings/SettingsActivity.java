@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             } else {
                 userEmail.setSummary("null");
             }
-            if (LayoutUtil.isM()) {
+            if (LayoutUtil.isL()) {
                 initFingerprint();
             } else {
                 fingerPrintSwitch.setEnabled(false);

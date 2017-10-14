@@ -11,6 +11,7 @@ import com.resume.horan.eugene.eugenehoranresume.model.EugeneHoran;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 
+@SuppressWarnings("all")
 class MainActivityPresenter extends MainPresenterNullCheck implements MainActivityContract.Presenter {
     private DatabaseReference myResumeReference;
     private DatabaseReference myContactReference;
@@ -50,18 +51,22 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
         switch (mFragmentPosition) {
             case Common.WHICH_RESUME_FRAGMENT:
                 getView().showTabs(true);
+                getView().showHeaderBar(false);
                 getView().setToolbarTitle("Eugene Horan's Resume");
                 break;
             case Common.WHICH_CONTACT_FRAGMENT:
                 getView().showTabs(false);
+                getView().showHeaderBar(false);
                 getView().setToolbarTitle("Eugene J. Horan");
                 break;
             case Common.WHICH_ABOUT_FRAGMENT:
                 getView().showTabs(false);
+                getView().showHeaderBar(false);
                 getView().setToolbarTitle("About Eugene");
                 break;
             case Common.WHICH_FEED_FRAGMENT:
                 getView().showTabs(false);
+                getView().showHeaderBar(false);
                 getView().setToolbarTitle("Social Feed");
                 break;
         }
@@ -89,7 +94,6 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
 
     private ValueEventListener mResumeEventListener = new ValueEventListener() {
         @Override
-        @SuppressWarnings("all")
         public void onDataChange(DataSnapshot dataSnapshot) {
             EugeneHoran mEugeneValue = dataSnapshot.getValue(EugeneHoran.class);
             myResumeReference.keepSynced(true);
@@ -123,7 +127,6 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
 
     private ValueEventListener mAboutEventListener = new ValueEventListener() {
         @Override
-        @SuppressWarnings("all")
         public void onDataChange(DataSnapshot dataSnapshot) {
             About mAboutValue = dataSnapshot.getValue(About.class);
             myAboutReference.keepSynced(true);

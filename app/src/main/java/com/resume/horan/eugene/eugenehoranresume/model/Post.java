@@ -1,10 +1,11 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.firebase.database.Exclude;
 
 public class Post {
-    private Author author;
+    private String uid;
     private String full_url;
     private String thumb_storage_uri;
     private String thumb_url;
@@ -21,8 +22,8 @@ public class Post {
         // empty default constructor, necessary for Firebase to be able to deserialize blog posts
     }
 
-    public Post(Author author, String full_url, String full_storage_uri, String thumb_url, String thumb_storage_uri, String text, Object timestamp, int type) {
-        this.author = author;
+    public Post(String uid, String full_url, String full_storage_uri, String thumb_url, String thumb_storage_uri, String text, Object timestamp, int type) {
+        this.uid = uid;
         this.full_url = full_url;
         this.text = text;
         this.timestamp = timestamp;
@@ -32,18 +33,25 @@ public class Post {
         this.type = type;
     }
 
+    @JsonIgnore
     @Exclude
     public String getKey() {
         return key;
     }
 
+    @JsonIgnore
     @Exclude
     public void setKey(String key) {
         this.key = key;
     }
 
-    public Author getAuthor() {
-        return author;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getFull_url() {

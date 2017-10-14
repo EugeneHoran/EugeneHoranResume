@@ -21,12 +21,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.R;
-import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerFeedImageBinding;
-import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerFeedMessageBinding;
-import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerFeedMessageImageBinding;
 import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedRecyclerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.model.Comment;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
+import com.resume.horan.eugene.eugenehoranresume.model.User;
+import com.resume.horan.eugene.eugenehoranresume.userprofile.UserProfileActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
@@ -37,11 +36,14 @@ import java.util.List;
 
 @SuppressWarnings({"unused", "ConstantConditions"})
 public abstract class BasePostViewHolder extends RecyclerView.ViewHolder {
-    private DatabaseReference likeRef;
-    private DatabaseReference commentRef;
     private FeedRecyclerAdapter.Listener listener;
     private Post post;
 
+    private DatabaseReference userRef;
+    private DatabaseReference likeRef;
+    private DatabaseReference commentRef;
+
+    public final ObservableField<User> obsUser = new ObservableField<>();
     public final ObservableField<String> strNumOfLikes = new ObservableField<>();
     public final ObservableField<String> strLikedStatus = new ObservableField<>();
     public final ObservableField<Integer> intLikedStatus = new ObservableField<>();
@@ -50,29 +52,74 @@ public abstract class BasePostViewHolder extends RecyclerView.ViewHolder {
 
     public BasePostViewHolder(ViewDataBinding itemView) {
         super(itemView.getRoot());
-        if (itemView instanceof RecyclerFeedMessageBinding) {
-            RecyclerFeedMessageBinding binding = (RecyclerFeedMessageBinding) itemView;
-        } else if (itemView instanceof RecyclerFeedImageBinding) {
-            RecyclerFeedImageBinding binding = (RecyclerFeedImageBinding) itemView;
-        } else if (itemView instanceof RecyclerFeedMessageImageBinding) {
-            RecyclerFeedMessageImageBinding binding = (RecyclerFeedMessageImageBinding) itemView;
-        }
     }
 
     protected void bindBaseViews(FeedRecyclerAdapter.Listener listener, Post post) {
         this.listener = listener;
         this.post = post;
+        userRef = FirebaseUtil.getAllUsersRef().child(post.getUid());
         likeRef = FirebaseUtil.getPostLikesRef(post.getKey());
         commentRef = FirebaseUtil.getPostCommentsRef(post.getKey());
+        userRef.addListenerForSingleValueEvent(userValueEventListener);
         likeRef.addValueEventListener(likeValueEventListener);
         commentRef.addValueEventListener(commentValueEventListener);
-        if (post.getAuthor().getUid().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+        if (post == null) {
+            return;
+        }
+        if (post.getUid() == null) {
+            return;
+        }
+        if (post.getUid().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             boolShowMenu.set(true);
         } else {
             boolShowMenu.set(false);
         }
     }
 
+    /**
+     * Handle Event Life
+     */
+    private ValueEventListener userValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            User user = dataSnapshot.getValue(User.class);
+            obsUser.set(user);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+    private ValueEventListener commentValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            List<Comment> comments = new ArrayList<>();
+            for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
+                Comment comment = commentSnapshot.getValue(Comment.class);
+                comments.add(comment);
+            }
+            String commentSize = comments.size() == 0 ? "0" : comments.size() + "";
+            strNumOfComments.set(String.valueOf(comments.size()) + String.valueOf(comments.size() == 1 ? " Comment" : " Comments"));
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+    private ValueEventListener likeValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            long numLikes = dataSnapshot.getChildrenCount();
+            boolean isLiked = dataSnapshot.hasChild(FirebaseUtil.getUser().getUid());
+            strNumOfLikes.set(String.valueOf(numLikes) + String.valueOf(numLikes == 1 ? " like" : " likes"));
+            strLikedStatus.set(isLiked ? "Unlike" : "Like");
+            intLikedStatus.set(isLiked ? R.drawable.ic_heart_full : R.drawable.ic_heart_empty);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
     /**
      * Handle Shared Clicks
@@ -81,6 +128,12 @@ public abstract class BasePostViewHolder extends RecyclerView.ViewHolder {
      */
     public void onMenuClicked(View view) {
         onMenuClick(view, post);
+    }
+
+    public void onProfileClicked(View view) {
+        if (listener != null) {
+            listener.onViewUserProfileClicked(post.getUid());
+        }
     }
 
     public void onImageClicked(View view) {
@@ -111,47 +164,20 @@ public abstract class BasePostViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    /**
-     * Handle Event Life
-     */
-
-    private ValueEventListener commentValueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            List<Comment> comments = new ArrayList<>();
-            for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
-                Comment comment = commentSnapshot.getValue(Comment.class);
-                comments.add(comment);
-            }
-            String commentSize = comments.size() == 0 ? "0" : comments.size() + "";
-            strNumOfComments.set(String.valueOf(comments.size()) + String.valueOf(comments.size() == 1 ? " Comment" : " Comments"));
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    };
-    private ValueEventListener likeValueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            long numLikes = dataSnapshot.getChildrenCount();
-            boolean isLiked = dataSnapshot.hasChild(FirebaseUtil.getUser().getUid());
-            strNumOfLikes.set(String.valueOf(numLikes) + String.valueOf(numLikes == 1 ? " like" : " likes"));
-            strLikedStatus.set(isLiked ? "Unlike" : "Like");
-            intLikedStatus.set(isLiked ? R.drawable.ic_heart_full : R.drawable.ic_heart_empty);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    };
-
     public void cancelRef() {
+        if (userRef != null) {
+            if (userValueEventListener != null) {
+                userRef.removeEventListener(userValueEventListener);
+            }
+        }
         if (likeRef != null) {
             if (likeValueEventListener != null) {
                 likeRef.removeEventListener(likeValueEventListener);
+            }
+        }
+        if (commentRef != null) {
+            if (commentValueEventListener != null) {
+                commentRef.removeEventListener(commentValueEventListener);
             }
         }
     }
@@ -164,21 +190,21 @@ public abstract class BasePostViewHolder extends RecyclerView.ViewHolder {
         popup.getMenuInflater().inflate(R.menu.menu_feed, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                Query applesQuery = ref.child("posts").child(post.getKey());
-                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                Query postQuery = FirebaseUtil.getAllPostsRef().child(post.getKey());
+                postQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                             appleSnapshot.getRef().removeValue();
+                            FirebaseUtil.getPostCommentsRef(post.getKey()).removeValue();
+                            FirebaseUtil.getPostLikesListRef(post.getKey()).removeValue();
+                            FirebaseUtil.getCurrentUserPostRef(post.getKey()).removeValue();
                         }
-
                         Toast.makeText(view.getContext(), "Deleted Post", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
                     }
                 });
                 return true;
@@ -195,7 +221,7 @@ public abstract class BasePostViewHolder extends RecyclerView.ViewHolder {
         Activity activity = (Activity) view.getContext();
         Intent intent = new Intent(activity, ViewImageActivity.class);
         intent.putExtra(Common.ARG_IMAGE_STRING, post.getFull_url());
-        if (LayoutUtil.isM()) {
+        if (LayoutUtil.isL()) {
             Pair<View, String> p2 = Pair.create(view, "image");
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, p2);
             activity.startActivity(intent, options.toBundle());

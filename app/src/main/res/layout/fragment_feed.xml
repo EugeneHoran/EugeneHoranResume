@@ -5,11 +5,11 @@
     <data>
 
         <variable
-            name="adapter"
+            name="adapterUsers"
             type="android.support.v7.widget.RecyclerView.Adapter" />
 
         <variable
-            name="adapterUsers"
+            name="adapter"
             type="android.support.v7.widget.RecyclerView.Adapter" />
 
         <variable
@@ -24,6 +24,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:id="@+id/testHeight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">

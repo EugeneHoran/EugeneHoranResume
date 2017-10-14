@@ -95,7 +95,7 @@ public class AboutFragment extends Fragment {
             public void onImageClicked(AlbumImage albumImage, View image, View card) {
                 Intent intent = new Intent(getActivity(), ViewImageActivity.class);
                 intent.putExtra(Common.ARG_IMAGE, albumImage);
-                if (LayoutUtil.isM()) {
+                if (LayoutUtil.isL()) {
                     Pair<View, String> p2 = Pair.create(image, "image");
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p2);
                     startActivity(intent, options.toBundle());

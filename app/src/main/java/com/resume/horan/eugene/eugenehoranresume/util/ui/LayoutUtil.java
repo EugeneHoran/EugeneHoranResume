@@ -25,6 +25,12 @@ public class LayoutUtil {
         return drawableChange;
     }
 
+    public static Drawable getDrawableMutate(Context context, Drawable resDrawable, int resColor) {
+        resDrawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(context, resColor), PorterDuff.Mode.MULTIPLY));
+        resDrawable.mutate();
+        return resDrawable;
+    }
+
     public static void setColorImage(ImageView image, int drawableImage, int color) {
         Drawable drawable = ContextCompat.getDrawable(image.getContext(), drawableImage);
         drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(image.getContext(), color), PorterDuff.Mode.SRC_ATOP));
@@ -32,8 +38,17 @@ public class LayoutUtil {
         image.setImageDrawable(drawable);
     }
 
-    public static boolean isM() {
+    public static boolean isL() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public static boolean is0() {
+        if (Build.VERSION.SDK_INT >= 23) {
             return true;
         } else {
             return false;
@@ -63,6 +78,17 @@ public class LayoutUtil {
         Context context = v.getContext();
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    /**
+     * Show keyboard
+     *
+     * @param v View focus
+     */
+    public static void showKeyboard(View v) {
+        Context context = v.getContext();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInputFromInputMethod(v.getWindowToken(), 0);
     }
 
     /**

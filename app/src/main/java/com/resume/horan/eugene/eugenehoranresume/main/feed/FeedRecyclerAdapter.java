@@ -1,10 +1,14 @@
 package com.resume.horan.eugene.eugenehoranresume.main.feed;
 
+import android.animation.AnimatorInflater;
+import android.animation.StateListAnimator;
+import android.annotation.TargetApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.BasePostViewHolder;
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerFeedImageBinding;
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerFeedMessageBinding;
@@ -13,26 +17,27 @@ import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerFeedNewPost
 import com.resume.horan.eugene.eugenehoranresume.model.FeedNewPost;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int HOLDER_ERROR = 0;
-    private static final int HOLDER_NEW_POST = 2;
-    private static final int HOLDER_POST_PHOTO = 3;
-    private static final int HOLDER_POST_MESSAGE = 4;
-    private static final int HOLDER_POST_MESSAGE_PHOTO = 5;
+    public static final int HOLDER_ERROR = 0;
+    public static final int HOLDER_NEW_POST = 2;
+    public static final int HOLDER_POST_PHOTO = 3;
+    public static final int HOLDER_POST_MESSAGE = 4;
+    public static final int HOLDER_POST_MESSAGE_PHOTO = 5;
+    public static final int HOLDER_POST_NO_POSTS = 6;
+
     private ViewHolderPostImage mHolderImage;
     private ViewHolderPostMessage mHolderMessage;
     private ViewHolderPostMessageImage mHolderImageMessage;
 
     private List<Object> objectList = new ArrayList<>();
-    private Listener listener;
 
-    public List<Object> getObjectList() {
-        return objectList;
-    }
+
+    private Listener listener;
 
     public void setListener(Listener listener) {
         this.listener = listener;
@@ -48,6 +53,8 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void onShowCommentsClicked(Post post);
 
         void onAddCommentClicked(Post post);
+
+        void onViewUserProfileClicked(String uid);
     }
 
     public void setItems(List<Object> objectList) {
@@ -59,6 +66,32 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void addItems(List<Object> objectList) {
         this.objectList.addAll(objectList);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+        super.registerAdapterDataObserver(observer);
+    }
+
+    public List<Object> getObjectList() {
+        return objectList;
+    }
+
+    @Override
+    public int getItemCount() {
+        return objectList.size();
+    }
+
+    public void onDestroy() {
+        if (mHolderImage != null) {
+            mHolderImage.cancelRef();
+        }
+        if (mHolderMessage != null) {
+            mHolderMessage.cancelRef();
+        }
+        if (mHolderImageMessage != null) {
+            mHolderImageMessage.cancelRef();
+        }
     }
 
     @Override
@@ -107,37 +140,15 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mHolder.bindItem();
         } else if (holder instanceof ViewHolderPostImage) {
             mHolderImage = (ViewHolderPostImage) holder;
-            mHolderImage.bindItem();
+            mHolderImage.bindItem((Post) objectList.get(position), listener);
         } else if (holder instanceof ViewHolderPostMessage) {
             mHolderMessage = (ViewHolderPostMessage) holder;
-            mHolderMessage.bindItem();
+            mHolderMessage.bindItem((Post) objectList.get(position), listener);
         } else if (holder instanceof ViewHolderPostMessageImage) {
             mHolderImageMessage = (ViewHolderPostMessageImage) holder;
-            mHolderImageMessage.bindItem();
+            mHolderImageMessage.bindItem((Post) objectList.get(position), listener);
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return objectList.size();
-    }
-
-    @Override
-    public void onViewRecycled(RecyclerView.ViewHolder holder) {
-        super.onViewRecycled(holder);
-
-    }
-
-    public void onDestroy() {
-        if (mHolderImage != null) {
-            mHolderImage.cancelRef();
-        }
-        if (mHolderMessage != null) {
-            mHolderMessage.cancelRef();
-        }
-        if (mHolderImageMessage != null) {
-            mHolderImageMessage.cancelRef();
-        }
+        holder.itemView.setTag(this);
     }
 
     /**
@@ -165,16 +176,15 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private class ViewHolderPostMessage extends BasePostViewHolder {
+    public static class ViewHolderPostMessage extends BasePostViewHolder {
         private RecyclerFeedMessageBinding binding;
 
-        ViewHolderPostMessage(RecyclerFeedMessageBinding binding) {
+        public ViewHolderPostMessage(RecyclerFeedMessageBinding binding) {
             super(binding);
             this.binding = binding;
         }
 
-        void bindItem() {
-            Post object = (Post) objectList.get(getAdapterPosition());
+        public void bindItem(Post object, Listener listener) {
             bindBaseViews(listener, object);
             binding.setObject(object);
             binding.setHolderParent(this);
@@ -182,37 +192,53 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private class ViewHolderPostImage extends BasePostViewHolder {
+    public static class ViewHolderPostImage extends BasePostViewHolder {
         private RecyclerFeedImageBinding binding;
 
-        ViewHolderPostImage(RecyclerFeedImageBinding binding) {
+        public ViewHolderPostImage(RecyclerFeedImageBinding binding) {
             super(binding);
             this.binding = binding;
         }
 
-        void bindItem() {
-            Post object = (Post) objectList.get(getAdapterPosition());
+        public void bindItem(Post object, Listener listener) {
             bindBaseViews(listener, object);
             binding.setHolderParent(this);
             binding.setObject(object);
             binding.executePendingBindings();
+            if (LayoutUtil.isL()) {
+                setAnimator(binding.image);
+            }
+        }
+
+        @TargetApi(21)
+        private void setAnimator(View view) {
+            StateListAnimator sla = AnimatorInflater.loadStateListAnimator(binding.getRoot().getContext(), R.drawable.anim_touch_elevate);
+            view.setStateListAnimator(sla);
         }
     }
 
-    private class ViewHolderPostMessageImage extends BasePostViewHolder {
+    public static class ViewHolderPostMessageImage extends BasePostViewHolder {
         private RecyclerFeedMessageImageBinding binding;
 
-        ViewHolderPostMessageImage(RecyclerFeedMessageImageBinding binding) {
+        public ViewHolderPostMessageImage(RecyclerFeedMessageImageBinding binding) {
             super(binding);
             this.binding = binding;
         }
 
-        void bindItem() {
-            Post object = (Post) objectList.get(getAdapterPosition());
+        public void bindItem(Post object, Listener listener) {
             bindBaseViews(listener, object);
             binding.setHolderParent(this);
             binding.setObject(object);
             binding.executePendingBindings();
+            if (LayoutUtil.isL()) {
+                setAnimator(binding.image);
+            }
+        }
+
+        @TargetApi(21)
+        private void setAnimator(View view) {
+            StateListAnimator sla = AnimatorInflater.loadStateListAnimator(binding.getRoot().getContext(), R.drawable.anim_touch_elevate);
+            view.setStateListAnimator(sla);
         }
     }
 }

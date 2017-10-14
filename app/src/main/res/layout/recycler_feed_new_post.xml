@@ -21,6 +21,7 @@
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:onClick="@{handler::onNewPostClicked}"
+        android:stateListAnimator="@drawable/anim_touch_elevate"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="0dp">
 

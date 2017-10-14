@@ -32,7 +32,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.resume.horan.eugene.eugenehoranresume.R;
-import com.resume.horan.eugene.eugenehoranresume.model.Author;
 import com.resume.horan.eugene.eugenehoranresume.model.Post;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
@@ -80,13 +79,6 @@ public class NewPostViewHolder extends BaseObservable {
     /**
      * Handle Post
      */
-    private Author getAuthor() {
-        return new Author(
-                user.getDisplayName() != null ? user.getDisplayName() : "Anonymous",
-                user.getImageUrl() != null ? user.getImageUrl() : null,
-                userId);
-    }
-
     void makePost(String message) {
         if (mFileUri == null && TextUtils.isEmpty(message)) {
             showError("Nothing to post");
@@ -107,11 +99,15 @@ public class NewPostViewHolder extends BaseObservable {
     }
 
     private void postMessage(String message) {
-        Post newPost = new Post(getAuthor(), null, null, null, null, message, ServerValue.TIMESTAMP, Common.TYPE_POST_MESSAGE);
+        Post newPost = new Post(userId, null, null, null, null, message, ServerValue.TIMESTAMP, Common.TYPE_POST_MESSAGE);
         DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference().child("posts");
+        if (userId == null) {
+            showError(activity.getString(R.string.error_user_not_signed_in));
+            return;
+        }
         final String newPostKey = postsRef.push().getKey();
         Map<String, Object> updatedUserData = new HashMap<>();
-        updatedUserData.put("users/" + getAuthor().getUid() + "/posts/" + newPostKey, true);
+        updatedUserData.put("users/" + userId + "/posts/" + newPostKey, true);
         updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {
@@ -160,14 +156,13 @@ public class NewPostViewHolder extends BaseObservable {
                         DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference().child("posts");
                         final String newPostKey = postsRef.push().getKey();
                         final Uri thumbnailUrl = taskSnapshot.getDownloadUrl();
-                        Author author = getAuthor();
-                        if (author == null) {
+                        if (userId == null) {
                             showError(activity.getString(R.string.error_user_not_signed_in));
                             return;
                         }
-                        Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), null, ServerValue.TIMESTAMP, Common.TYPE_POST_IMAGE);
+                        Post newPost = new Post(userId, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), null, ServerValue.TIMESTAMP, Common.TYPE_POST_IMAGE);
                         Map<String, Object> updatedUserData = new HashMap<>();
-                        updatedUserData.put("users/" + author.getUid() + "/posts/" + newPostKey, true);
+                        updatedUserData.put("users/" + userId + "/posts/" + newPostKey, true);
                         updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
                         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                         ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {
@@ -234,15 +229,13 @@ public class NewPostViewHolder extends BaseObservable {
                                 DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference().child("posts");
                                 final String newPostKey = postsRef.push().getKey();
                                 final Uri thumbnailUrl = taskSnapshot.getDownloadUrl();
-                                Author author = getAuthor();
-                                if (author == null) {
-                                    setLoading(false);
+                                if (userId == null) {
                                     showError(activity.getString(R.string.error_user_not_signed_in));
                                     return;
                                 }
-                                Post newPost = new Post(author, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), text, ServerValue.TIMESTAMP, Common.TYPE_POST_MESSAGE_IMAGE);
+                                Post newPost = new Post(userId, fullSizeUrl.toString(), fullSizeRef.toString(), thumbnailUrl.toString(), thumbnailRef.toString(), text, ServerValue.TIMESTAMP, Common.TYPE_POST_MESSAGE_IMAGE);
                                 Map<String, Object> updatedUserData = new HashMap<>();
-                                updatedUserData.put("users/" + author.getUid() + "/posts/" + newPostKey, true);
+                                updatedUserData.put("users/" + userId + "/posts/" + newPostKey, true);
                                 updatedUserData.put("posts/" + newPostKey, new ObjectMapper().convertValue(newPost, Map.class));
                                 final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                 ref.updateChildren(updatedUserData, new DatabaseReference.CompletionListener() {

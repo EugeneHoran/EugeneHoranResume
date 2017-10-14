@@ -1,6 +1,11 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.firebase.database.Exclude;
+
 public class Comment {
+    @JsonIgnore
+    @Exclude
     private User users;
     private String uid;
     private String currentPostKey;
@@ -10,18 +15,21 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(User users, String uid, String currentPostKey, String text, Object timestamp) {
-        this.users = users;
+    public Comment( String uid, String currentPostKey, String text, Object timestamp) {
         this.uid = uid;
         this.currentPostKey = currentPostKey;
         this.text = text;
         this.timestamp = timestamp;
     }
 
+    @JsonIgnore
+    @Exclude
     public User getUsers() {
         return users;
     }
 
+    @JsonIgnore
+    @Exclude
     public void setUsers(User users) {
         this.users = users;
     }

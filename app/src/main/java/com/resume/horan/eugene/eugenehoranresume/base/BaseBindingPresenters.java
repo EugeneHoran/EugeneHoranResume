@@ -3,8 +3,6 @@ package com.resume.horan.eugene.eugenehoranresume.base;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +11,7 @@ import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedRecyclerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedUserRecyclerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 import com.resume.horan.eugene.eugenehoranresume.viewimage.ViewImageActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -59,15 +58,17 @@ public class BaseBindingPresenters {
     @BindingAdapter({"bind:imageUrl", "bind:error"})
     public static void loadImage(View view, String url, Drawable error) {
         if (view instanceof CircleImageView) {
-            Drawable drawable = DrawableCompat.wrap(error);
-            drawable.mutate(); // to not share its state with any other drawable
-            DrawableCompat.setTint(drawable, ContextCompat.getColor(view.getContext(), R.color.greyIconNormal));
-            Picasso.with(view.getContext()).load(url).error(drawable).into((CircleImageView) view);
+            if (url == null || url.equalsIgnoreCase("null")) {
+                ((CircleImageView) view).setImageDrawable(LayoutUtil.getDrawableMutate(view.getContext(), error, R.color.greyIconNormal));
+                return;
+            }
+            Picasso.with(view.getContext()).load(url).error(LayoutUtil.getDrawableMutate(view.getContext(), error, R.color.greyIconNormal)).into((CircleImageView) view);
         } else if (view instanceof ImageView) {
-            Drawable drawable = DrawableCompat.wrap(error);
-            drawable.mutate(); // to not share its state with any other drawable
-            DrawableCompat.setTint(drawable, ContextCompat.getColor(view.getContext(), R.color.colorAccentBlue));
-            Picasso.with(view.getContext()).load(url).error(drawable).into((ImageView) view);
+            if (url == null || url.equalsIgnoreCase("null")) {
+                ((ImageView) view).setImageDrawable(LayoutUtil.getDrawableMutate(view.getContext(), error, R.color.colorAccentBlue));
+                return;
+            }
+            Picasso.with(view.getContext()).load(url).error(LayoutUtil.getDrawableMutate(view.getContext(), error, R.color.colorAccentBlue)).into((ImageView) view);
         }
     }
 
@@ -75,7 +76,6 @@ public class BaseBindingPresenters {
     public static void setRecyclerAdapter(RecyclerView view, RecyclerView.Adapter adapter) {
         view.setAdapter(adapter);
     }
-
 
     @BindingAdapter({"bind:items", "bind:itemsAdd"})
     public static void setAdapterItems(RecyclerView recyclerView, List<Object> objectList, List<Object> newObjectList) {

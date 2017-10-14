@@ -1,7 +1,6 @@
 package com.resume.horan.eugene.eugenehoranresume.main.resume;
 
 import android.content.res.Resources;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +36,7 @@ public class ResumeSkillFragment extends ResumeBaseInfoFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentSkillBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_skill, container, false);
+        FragmentSkillBinding binding = FragmentSkillBinding.inflate(getLayoutInflater());
         binding.setAdapter(new ResumeSkillRecyclerAdapter());
         binding.setObject(mSkillObject);
         return binding.getRoot();

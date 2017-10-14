@@ -7,4 +7,5 @@
         <item name="colorAccent">@color/colorAccentBlue</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
+
 </resources>

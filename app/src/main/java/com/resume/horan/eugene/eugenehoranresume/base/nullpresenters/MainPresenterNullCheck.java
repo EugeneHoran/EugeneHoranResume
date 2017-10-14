@@ -70,6 +70,11 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainActivityC
             public void showFeedFragment() {
 
             }
+
+            @Override
+            public void showHeaderBar(boolean show) {
+
+            }
         };
     }
 }

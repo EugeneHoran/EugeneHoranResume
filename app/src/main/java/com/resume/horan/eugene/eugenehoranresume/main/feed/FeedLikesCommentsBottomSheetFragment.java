@@ -17,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.model.Comment;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
@@ -80,20 +83,45 @@ public class FeedLikesCommentsBottomSheetFragment extends BottomSheetDialogFragm
         }
     }
 
-    private FirebaseRecyclerAdapter<User, ViewHolderLikes> getLikesAdapter(Query query) {
-        return new FirebaseRecyclerAdapter<User, ViewHolderLikes>(User.class, R.layout.recycler_feed_post_likes, ViewHolderLikes.class, query) {
+    private FirebaseRecyclerAdapter<Boolean, ViewHolderLikes> getLikesAdapter(Query query) {
+        return new FirebaseRecyclerAdapter<Boolean, ViewHolderLikes>(Boolean.class, R.layout.recycler_feed_post_likes, ViewHolderLikes.class, query) {
             @Override
-            public void populateViewHolder(final ViewHolderLikes postViewHolder, final User user, final int position) {
-                postViewHolder.bindViews(user);
+            public void populateViewHolder(final ViewHolderLikes postViewHolder, Boolean user, final int position) {
+                String key = this.getRef(position).getKey();
+                FirebaseUtil.getAllUsersRef().child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        postViewHolder.bindViews(user);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         };
     }
 
-    private FirebaseRecyclerAdapter<Comment, ViewHolderComments> getCommentsAdapter(Query query) {
+    private FirebaseRecyclerAdapter<Comment, ViewHolderComments> getCommentsAdapter(final Query query) {
         return new FirebaseRecyclerAdapter<Comment, ViewHolderComments>(Comment.class, R.layout.recycler_feed_post_comments, ViewHolderComments.class, query) {
             @Override
             public void populateViewHolder(final ViewHolderComments viewHolder, final Comment comment, final int position) {
-                viewHolder.bindViews(comment, this);
+                final FirebaseRecyclerAdapter adapter = this;
+                FirebaseUtil.getAllUsersRef().child(comment.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        comment.setUsers(user);
+                        viewHolder.bindViews(comment, adapter);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         };
     }

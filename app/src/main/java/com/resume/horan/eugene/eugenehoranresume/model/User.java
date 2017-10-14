@@ -1,11 +1,16 @@
 package com.resume.horan.eugene.eugenehoranresume.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.firebase.database.Exclude;
 
 public class User {
     public String email;
     public String displayName;
     public String imageUrl;
+
+    @Exclude
+    @JsonIgnore
+    public String uid;
 
     public User() {
     }
@@ -16,9 +21,22 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
+    @JsonIgnore
     @Exclude
     public String getNameFormatted() {
         return getDisplayName() != null ? getDisplayName().split(" ")[0] : "";
+    }
+
+    @JsonIgnore
+    @Exclude
+    public String getUid() {
+        return uid;
+    }
+
+    @JsonIgnore
+    @Exclude
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {

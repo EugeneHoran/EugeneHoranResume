@@ -57,6 +57,7 @@
         android:layout_height="6dp" />
 
     <TextView
+        android:id="@+id/viewProfile"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:clickable="true"

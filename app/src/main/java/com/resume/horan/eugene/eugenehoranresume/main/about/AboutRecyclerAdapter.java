@@ -1,11 +1,12 @@
 package com.resume.horan.eugene.eugenehoranresume.main.about;
 
+import android.animation.AnimatorInflater;
+import android.animation.StateListAnimator;
+import android.annotation.TargetApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerAboutGoalsBinding;
@@ -21,19 +22,20 @@ import com.resume.horan.eugene.eugenehoranresume.model.Goals;
 import com.resume.horan.eugene.eugenehoranresume.model.Header;
 import com.resume.horan.eugene.eugenehoranresume.model.LoaderObject;
 import com.resume.horan.eugene.eugenehoranresume.model.SocialMedia;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int HOLDER_ERROR = 0;
-    public static final int HOLDER_HEADER = 1;
-    public static final int HOLDER_GOAL = 2;
-    public static final int HOLDER_SOCIAL_MEDIA = 3;
-    public static final int HOLDER_IMAGES = 4;
-    public static final int HOLDER_IMAGES_LARGE = 5;
-    public static final int HOLDER_LOADER = 6;
-    public static final int HOLDER_DIVIDER = 7;
+    static final int HOLDER_HEADER = 1;
+    static final int HOLDER_GOAL = 2;
+    static final int HOLDER_SOCIAL_MEDIA = 3;
+    static final int HOLDER_IMAGES = 4;
+    static final int HOLDER_IMAGES_LARGE = 5;
+    static final int HOLDER_LOADER = 6;
+    static final int HOLDER_DIVIDER = 7;
 
     private List<Object> mObjectList = new ArrayList<>();
 
@@ -128,6 +130,7 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             ViewHolderDivider mHolder = (ViewHolderDivider) holder;
             mHolder.bindItem();
         }
+        holder.itemView.setTag(this);
     }
 
     @Override
@@ -212,6 +215,15 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             binding.setObject(object);
             binding.setHandler(this);
             binding.executePendingBindings();
+            if (LayoutUtil.isL()) {
+                setAnimator(binding.viewSocialMediaHolder);
+            }
+        }
+
+        @TargetApi(21)
+        private void setAnimator(View view) {
+            StateListAnimator sla = AnimatorInflater.loadStateListAnimator(binding.getRoot().getContext(), R.drawable.anim_touch_elevate);
+            view.setStateListAnimator(sla);
         }
 
         public void onLinkClicked(View view) {
@@ -242,7 +254,6 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 mListener.onImageClicked(object, binding.imagePhoto, binding.cardImageHolder);
             }
         }
-
     }
 
     public class ViewHolderImageSmall extends RecyclerView.ViewHolder {
@@ -260,6 +271,7 @@ public class AboutRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             binding.setHandler(this);
             binding.executePendingBindings();
         }
+
 
         public void onImageClicked(View view) {
             if (mListener != null) {

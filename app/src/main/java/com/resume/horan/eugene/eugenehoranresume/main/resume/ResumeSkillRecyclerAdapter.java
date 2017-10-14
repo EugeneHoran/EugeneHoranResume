@@ -76,6 +76,7 @@ public class ResumeSkillRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
         Animation anim = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.anim_set_fade_in_slide_up_recycler);
         holder.itemView.startAnimation(anim);
+        holder.itemView.setTag(this);
     }
 
     private class ViewHolderSkillHeader extends RecyclerView.ViewHolder {

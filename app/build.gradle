@@ -1,8 +1,27 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://maven.google.com' }
+    maven { url 'https://github.com/suckgamony/RapidDecoder/raw/master/repository' }
+}
+
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-eugene.txt')
+        applicationId "com.resume.horan.eugene.eugenehoranresume"
+        versionCode = Integer.valueOf("" + appVersionCode).intValue()
+        versionName "${appVersionName}"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        vectorDrawables.useSupportLibrary = true
+        // testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
     signingConfigs {
         release {
             keyAlias 'eugene'
@@ -11,37 +30,31 @@ android {
             storePassword 'iona$1009'
         }
     }
-    defaultConfig {
-        applicationId "com.resume.horan.eugene.eugenehoranresume"
-        minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 2
-        versionName '1.001'
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-    }
+
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            shrinkResources true
         }
         debug {
             minifyEnabled false
+            shrinkResources false
+            consumerProguardFiles file('proguard-eugene.txt')
+            buildConfigField("String", "GSO_TOKEN_ID", "\"${gso_token_id}\"")
         }
     }
-    dataBinding {
-        enabled = true
-    }
     packagingOptions {
+        // Exclude files to avoid packaging collisions (same file name in multiple dependencies).
+        exclude 'LICENSE.txt'
         exclude 'META-INF/LICENSE'
-        exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE-FIREBASE.txt'
         exclude 'META-INF/NOTICE'
     }
     lintOptions {
         abortOnError false
     }
-    productFlavors {
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -50,38 +63,41 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.google.android.gms:play-services-auth:11.4.0'
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.firebase:firebase-core:11.4.0'
-    compile 'com.google.firebase:firebase-auth:11.4.0'
-    compile 'com.google.firebase:firebase-database:11.4.0'
-    compile 'com.google.firebase:firebase-storage:11.4.0'
-    compile 'com.firebaseui:firebase-ui-database:2.4.0'
-    compile 'com.android.support:appcompat-v7:26.0.1'
-    compile 'com.android.support:design:26.0.1'
-    compile 'com.android.support:preference-v7:26.0.1'
-    compile 'com.android.support:recyclerview-v7:26.0.1'
-    compile 'com.android.support:cardview-v7:26.0.1'
-    compile 'com.android.support:customtabs:26.0.1'
+
+    // Support Libraries
+    compile "com.android.support:appcompat-v7:${android_support_lib_version}"
+    compile "com.android.support:design:${android_support_lib_version}"
+    compile "com.android.support:preference-v7:${android_support_lib_version}"
+    compile "com.android.support:recyclerview-v7:${android_support_lib_version}"
+    compile "com.android.support:cardview-v7:${android_support_lib_version}"
+    compile "com.android.support:customtabs:${android_support_lib_version}"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.mattprecious.swirl:swirl:1.0.0'
-    compile 'com.xiaofeng.android:flowlayoutmanager:1.2.3.2'
-    compile 'de.hdodenhof:circleimageview:1.3.0'
-    compile 'com.roughike:bottom-bar:2.3.1'
-    compile 'pub.devrel:easypermissions:0.1.5'
-    compile 'com.multidots:fingerprint-auth:1.0.1'
+
+    // Firebase Libraries
+    compile "com.google.android.gms:play-services-auth:${google_play_services_client_library_version}"
+    compile "com.google.firebase:firebase-core:${google_play_services_client_library_version}"
+    compile "com.google.firebase:firebase-auth:${google_play_services_client_library_version}"
+    compile "com.google.firebase:firebase-database:${google_play_services_client_library_version}"
+    compile "com.google.firebase:firebase-storage:${google_play_services_client_library_version}"
+    compile 'com.firebaseui:firebase-ui-database:2.4.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
-    compile 'rapid.decoder:library:0.3.0'
-    compile 'rapid.decoder:jpeg-decoder:0.3.0'
-    compile 'rapid.decoder:png-decoder:0.3.0'
-    // FirebaseUI for Firebase Realtime Database
+
+    // Image Processing Libraries
+    compile "rapid.decoder:library:${rapid_decoder_lib_version}"
+    compile "rapid.decoder:jpeg-decoder:${rapid_decoder_lib_version}"
+    compile "rapid.decoder:png-decoder:${rapid_decoder_lib_version}"
+    compile 'de.hdodenhof:circleimageview:1.3.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // Other Libraries
+    compile 'pub.devrel:easypermissions:0.1.5'
+    compile 'com.roughike:bottom-bar:2.3.1'
+    compile 'com.xiaofeng.android:flowlayoutmanager:1.2.3.2'
+    compile 'com.multidots:fingerprint-auth:1.0.1'
+    compile 'com.mattprecious.swirl:swirl:1.0.0'
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
     testCompile 'junit:junit:4.12'
 }
-
-
-
-
-
 
 apply plugin: 'com.google.gms.google-services'

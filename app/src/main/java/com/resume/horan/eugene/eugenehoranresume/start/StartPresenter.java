@@ -37,6 +37,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.resume.horan.eugene.eugenehoranresume.BuildConfig;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.StartPresenterNullCheck;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
@@ -157,7 +158,7 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                         new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                                 .requestEmail()
                                 .requestProfile()
-                                .requestIdToken(res.getString(R.string.gso_token_id))
+                                .requestIdToken(BuildConfig.GSO_TOKEN_ID)
                                 .build()
                 ).build();
         // FacebookSignIn with Sign In

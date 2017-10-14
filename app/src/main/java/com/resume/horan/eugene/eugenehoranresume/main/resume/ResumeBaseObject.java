@@ -63,7 +63,7 @@ public class ResumeBaseObject implements Parcelable {
     }
 
     protected ResumeBaseObject(Parcel in) {
-        this.objectList = new ArrayList<Object>();
+        this.objectList = new ArrayList<>();
         in.readList(this.objectList, Object.class.getClassLoader());
     }
 

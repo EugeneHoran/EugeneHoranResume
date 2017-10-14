@@ -11,12 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.ui.MultiTextWatcher;
 import com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView;
 
@@ -35,6 +37,7 @@ public class FeedAddCommentBottomSheetFragment extends BottomSheetDialogFragment
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     @Override
@@ -43,7 +46,6 @@ public class FeedAddCommentBottomSheetFragment extends BottomSheetDialogFragment
         if (getArguments() != null) {
             strPostKey = getArguments().getString(Common.ARG_POST_KEY);
         }
-        Log.e("Testing", strPostKey);
     }
 
     @Override

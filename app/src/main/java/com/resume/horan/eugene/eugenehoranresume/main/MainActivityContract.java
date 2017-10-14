@@ -28,6 +28,8 @@ public interface MainActivityContract {
         void setScrollFlags(int fragmentPosition);
 
         void showLoadingError();
+
+        void showHeaderBar(boolean show);
     }
 
     interface Presenter extends BasePresenter {
@@ -35,5 +37,4 @@ public interface MainActivityContract {
 
         void loadMainData();
     }
-
 }

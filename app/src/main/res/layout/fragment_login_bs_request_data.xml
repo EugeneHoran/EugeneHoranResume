@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
     android:orientation="vertical"
     android:paddingBottom="16dp">
 
@@ -43,7 +44,6 @@
         android:id="@+id/inputEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="88dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp">
@@ -55,8 +55,5 @@
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress|textFilter"
             android:maxLines="1" />
-
     </com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView>
-
-
 </LinearLayout>

@@ -24,11 +24,12 @@
             android:gravity="center_vertical">
 
             <LinearLayout
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginLeft="12dp"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{holderParent::onShowLikesClicked}"
                 android:paddingBottom="8dp"
@@ -50,11 +51,12 @@
             </LinearLayout>
 
             <LinearLayout
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginRight="12dp"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{holderParent::onShowCommentsClicked}"
                 android:paddingBottom="8dp"
@@ -92,11 +94,12 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
+                android:layout_marginLeft="12dp"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{holderParent::onLikeClicked}"
                 android:orientation="horizontal"
@@ -119,11 +122,12 @@
             </LinearLayout>
 
             <LinearLayout
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
+                android:layout_marginRight="12dp"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{holderParent::onAddCommentsClicked}"
                 android:orientation="horizontal"

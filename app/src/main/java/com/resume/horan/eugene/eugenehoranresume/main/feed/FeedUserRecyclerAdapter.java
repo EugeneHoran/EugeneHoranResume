@@ -1,11 +1,8 @@
 package com.resume.horan.eugene.eugenehoranresume.main.feed;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +21,22 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
+@SuppressLint("InflateParams")
 public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<User> mDataList = new ArrayList<>();
 
     FeedUserRecyclerAdapter() {
+    }
+
+    private Listener listener;
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
+    public interface Listener {
+        void onViewUserProfileClicked(String uid);
     }
 
     public void setItems(List<User> data) {
@@ -58,17 +65,17 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder rawHolder, int position) {
         UserViewHolder holder = (UserViewHolder) rawHolder;
         holder.bind();
-        holder.itemView.setTag(position);
         Animation anim = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.anim_set_fade_in_slide_up_recycler);
         anim.setStartOffset(200);
         holder.itemView.startAnimation(anim);
+        holder.itemView.setTag(this);
     }
 
     public class UserViewHolder extends RecyclerView.ViewHolder {
         RecyclerUserListItemBinding binding;
         private User user;
 
-        public UserViewHolder(RecyclerUserListItemBinding binding) {
+        UserViewHolder(RecyclerUserListItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -84,30 +91,36 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 binding.circleImage.setBorderColorResource(R.color.greyIconNormal);
                 binding.circleImage.setAlpha(.3f);
             }
-            Drawable drawable = ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_account_circle_white);
-            drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.greyIconNormal), PorterDuff.Mode.MULTIPLY));
-            drawable.mutate();
-            Picasso.with(itemView.getContext()).load(user.getImageUrl()).error(drawable).into(binding.circleImage);
+            Picasso.with(itemView.getContext()).load(user.getImageUrl()).error(R.drawable.ic_account_circle_grey).into(binding.circleImage);
         }
 
         public void onUserClicked(View view) {
-            if (user.getEmail() == null) {
+            if (user.getUid() == null) {
                 return;
             }
             Activity activity = (Activity) view.getContext();
-            Drawable drawable = ContextCompat.getDrawable(activity, R.drawable.ic_account_circle_white);
-            drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(activity, R.color.greyIconNormal), PorterDuff.Mode.MULTIPLY));
-            drawable.mutate();
-            BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity);
-            View v = activity.getLayoutInflater().inflate(R.layout.layout_bs_user, null);
+            final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(activity);
+            final View v = activity.getLayoutInflater().inflate(R.layout.layout_bs_user, null);
             CircleImageView circleImage = v.findViewById(R.id.circleImage);
             TextView name = v.findViewById(R.id.name);
             TextView email = v.findViewById(R.id.email);
-            Picasso.with(activity).load(user.getImageUrl()).error(drawable).into(circleImage);
+            TextView viewProfile = v.findViewById(R.id.viewProfile);
+            viewProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        listener.onViewUserProfileClicked(user.getUid());
+                    }
+                    mBottomSheetDialog.dismiss();
+                }
+            });
+            Picasso.with(activity).load(user.getImageUrl()).error(R.drawable.ic_account_circle_grey).into(circleImage);
             name.setText(user.getDisplayName());
             email.setText(user.getEmail());
             mBottomSheetDialog.setContentView(v);
             mBottomSheetDialog.show();
         }
     }
+
+
 }

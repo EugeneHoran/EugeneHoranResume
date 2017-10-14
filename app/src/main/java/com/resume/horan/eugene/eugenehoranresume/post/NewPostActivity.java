@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.databinding.ActivityNewPostBinding;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 
 import java.util.List;
 
@@ -47,6 +50,8 @@ public class NewPostActivity extends AppCompatActivity implements EasyPermission
                 finish();
                 return true;
             case R.id.action_post:
+                LayoutUtil.hideKeyboard(binding.toolbar);
+                binding.bottomSheet.setVisibility(View.GONE);
                 newPostViewHolder.makePost(binding.newPostText.getText().toString());
                 return true;
             default:

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -38,7 +39,8 @@
                     android:visibility="invisible"
                     app:border_color="@color/white"
                     app:border_width="1dp"
-                    app:srcCompat="@android:drawable/sym_def_app_icon" />
+                    app:srcCompat="@android:drawable/sym_def_app_icon"
+                    tools:ignore="RtlHardcoded" />
             </android.support.v7.widget.Toolbar>
 
             <android.support.design.widget.TabLayout
@@ -66,6 +68,20 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+        <LinearLayout
+            android:id="@+id/testing"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@android:color/black"
+            android:baselineAligned="false"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_anchor="@id/app_bar"
+            app:layout_anchorGravity="bottom"
+            app:layout_behavior="com.resume.horan.eugene.eugenehoranresume.util.ui.PostBehavior">
+
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/viewProgress"

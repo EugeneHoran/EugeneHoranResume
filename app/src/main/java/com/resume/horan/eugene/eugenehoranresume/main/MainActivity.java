@@ -1,12 +1,16 @@
 package com.resume.horan.eugene.eugenehoranresume.main;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,9 +31,13 @@ import com.resume.horan.eugene.eugenehoranresume.model.Contact;
 import com.resume.horan.eugene.eugenehoranresume.settings.SettingsActivity;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.AppBarCollapsedListener;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View, View.OnClickListener {
@@ -65,13 +73,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mIntFragPos = saveState == null ? Common.WHICH_RESUME_FRAGMENT : saveState.getInt(STATE_FRAGMENT_POSITION, Common.WHICH_RESUME_FRAGMENT);
         presenter.start(mIntFragPos);
         initProfileImage();
+//        if (LayoutUtil.isL()) {
+//            initCustomBar();
+//        }
         mEnableBN = true;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle saveState) {
-        super.onSaveInstanceState(saveState);
-        saveState.putInt(STATE_FRAGMENT_POSITION, mIntFragPos);
     }
 
     /**
@@ -157,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
      * Enable Tabs
      * Load Profile Image inside of Toolbar
      * Scroll Flags
+     * Show Custom Bar
      */
     @Override
     public void setToolbarTitle(@Nullable String title) {
@@ -220,6 +226,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         binding.toolbar.setLayoutParams(params);
     }
 
+
+    @Override
+    public void showHeaderBar(boolean show) {
+        hideExtraBar(show);
+    }
+
     /**
      * Loading Functions
      */
@@ -260,5 +272,60 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void onDestroy() {
         presenter.onDestroy();
         super.onDestroy();
+    }
+
+
+    /**
+     * TODO HANDLE CUSTOM BAR
+     */
+    private boolean customBarInitiated = false;
+    private final Rect mFiltersBarClip = new Rect();
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("unused")
+    private void initCustomBar() {
+        customBarInitiated = true;
+        final AppBarCollapsedListener appBarCollapsedListener = new AppBarCollapsedListener();
+        binding.appBar.addOnOffsetChangedListener(appBarCollapsedListener);
+        ((CoordinatorLayout.LayoutParams) binding.container.getLayoutParams()).setBehavior(new AppBarLayout.ScrollingViewBehavior() {
+            @Override
+            public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child, @NonNull View directTargetChild, @NonNull View target, int axes, int type) {
+                return (axes & View.SCROLL_AXIS_VERTICAL) != 0 && binding.testing.getVisibility() == VISIBLE;
+            }
+
+            @Override
+            public void onNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child, @NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type) {
+                float filtersOffset = binding.testing.getTranslationY();
+                int filtersHeight = binding.testing.getHeight();
+                if (dyConsumed > 0 && appBarCollapsedListener.isCollapsed() && filtersOffset > -filtersHeight) {
+                    int offset = (int) Math.max(filtersOffset - dyConsumed, -filtersHeight);
+                    offsetFilters(filtersHeight, offset);
+                } else if (dyConsumed < 0 && filtersOffset < 0f) {
+                    int offset = (int) Math.min(filtersOffset - dyConsumed, 0f);
+                    offsetFilters(filtersHeight, offset);
+                }
+            }
+        });
+    }
+
+    private void hideExtraBar(boolean show) {
+        if (!customBarInitiated) {
+            return;
+        }
+        if (!show) {
+            binding.testing.setVisibility(INVISIBLE);
+            offsetFilters(binding.testing.getHeight(), 0);
+            binding.container.setTranslationY(0f);
+        } else {
+            binding.testing.setVisibility(VISIBLE);
+            binding.container.setTranslationY(binding.testing.getHeight());
+            offsetFilters(binding.testing.getHeight(), 0);
+        }
+    }
+
+    private void offsetFilters(int filtersHeight, int offset) {
+        binding.testing.setTranslationY(offset);
+        mFiltersBarClip.set(0, -offset, binding.testing.getWidth(), filtersHeight);
+        binding.container.setTranslationY(filtersHeight + offset);
     }
 }

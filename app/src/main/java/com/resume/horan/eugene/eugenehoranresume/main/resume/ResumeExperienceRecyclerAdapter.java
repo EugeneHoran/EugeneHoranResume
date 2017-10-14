@@ -1,11 +1,13 @@
 package com.resume.horan.eugene.eugenehoranresume.main.resume;
 
+import android.animation.AnimatorInflater;
+import android.animation.StateListAnimator;
+import android.annotation.TargetApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.databinding.RecyclerAccountBinding;
@@ -18,12 +20,12 @@ import com.resume.horan.eugene.eugenehoranresume.model.Bullet;
 import com.resume.horan.eugene.eugenehoranresume.model.DividerFiller;
 import com.resume.horan.eugene.eugenehoranresume.model.Experience;
 import com.resume.horan.eugene.eugenehoranresume.model.Header;
-import com.resume.horan.eugene.eugenehoranresume.util.Common;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@SuppressWarnings("unused")
 public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int HOLDER_ERROR = 0;
     private static final int HOLDER_HEADER = 1;
@@ -43,7 +45,7 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
         mListener = listener;
     }
 
-    public void setItems(List<Object> objectList) {
+    void setItems(List<Object> objectList) {
         mObjectList.clear();
         mObjectList.addAll(objectList);
         notifyDataSetChanged();
@@ -105,6 +107,7 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
             ViewHolderDivider mHolder = (ViewHolderDivider) holder;
             mHolder.bindItems();
         }
+        holder.itemView.setTag(this);
     }
 
     @Override
@@ -115,7 +118,6 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
     /**
      * ViewHolders
      */
-
     private class ViewHolderHeader extends RecyclerView.ViewHolder {
         private RecyclerHeaderBinding binding;
 
@@ -136,6 +138,15 @@ public class ResumeExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycl
         ViewHolderAccount(RecyclerAccountBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            if (LayoutUtil.isL()) {
+                setAnimator();
+            }
+        }
+
+        @TargetApi(21)
+        private void setAnimator() {
+            StateListAnimator sla = AnimatorInflater.loadStateListAnimator(binding.getRoot().getContext(), R.drawable.anim_touch_elevate);
+            binding.txtAccount.setStateListAnimator(sla);
         }
 
         private Account mAccount;

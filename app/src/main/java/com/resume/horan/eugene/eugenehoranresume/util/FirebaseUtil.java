@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 @SuppressWarnings("ConstantConditions")
 public class FirebaseUtil {
@@ -64,6 +65,14 @@ public class FirebaseUtil {
         return getAllUsersRef().child(getUserId());
     }
 
+    public static DatabaseReference getCurrentUserPostRef(String postKey) {
+        return getAllUsersRef().child(getUserId()).child(Common.FB_REF_POSTS).child(postKey);
+    }
+
+    public static DatabaseReference getUserRef(String uid) {
+        return getAllUsersRef().child(uid);
+    }
+
     public static DatabaseReference getAllLikesRef() {
         return getRef().child(Common.FB_REF_LIKES);
     }
@@ -82,5 +91,9 @@ public class FirebaseUtil {
 
     public static DatabaseReference getPostCommentsRef(String postKey) {
         return getRef().child(Common.FB_REF_COMMENTS).child(postKey);
+    }
+
+    public static Query getAllUserPostsQuery(String uid) {
+        return FirebaseUtil.getAllUsersRef().child(uid).child(Common.FB_REF_POSTS);
     }
 }
