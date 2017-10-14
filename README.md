@@ -8,7 +8,7 @@ It will be updated as time goes on with the latest libraries and design patterns
 
 **Download Link** Note that there may be issues in this stage. 
 
-https://drive.google.com/file/d/0B3WrncXKE1TxYmZvTUtDcGpfZ28/view?usp=sharing
+https://rink.hockeyapp.net/apps/1c7fc3f8965142b7b960201ed4737506/app_versions/1
 
 **Youtube Video**
 
