@@ -2,7 +2,7 @@
 
 **Download Link** Note that there may be issues in this stage. 
 
-https://rink.hockeyapp.net/apps/1c7fc3f8965142b7b960201ed4737506/app_versions/1
+https://rink.hockeyapp.net/apps/1c7fc3f8965142b7b960201ed4737506
 
 Interactive Resume Application. 
 It will be updated as time goes on with the latest libraries and design patterns. It will be documented with text, images and dates. 
