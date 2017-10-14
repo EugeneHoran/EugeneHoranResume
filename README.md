@@ -1,14 +1,12 @@
 ## Eugene Horan Resume
 
-### Currently Updating Data Structure
-- If you downloaded the app it needs to be deleted and reinstalled after data structure.
+**Download Link** Note that there may be issues in this stage. 
+
+https://rink.hockeyapp.net/apps/1c7fc3f8965142b7b960201ed4737506/app_versions/1
 
 Interactive Resume Application. 
 It will be updated as time goes on with the latest libraries and design patterns. It will be documented with text, images and dates. 
 
-**Download Link** Note that there may be issues in this stage. 
-
-https://rink.hockeyapp.net/apps/1c7fc3f8965142b7b960201ed4737506/app_versions/1
 
 **Youtube Video**
 
