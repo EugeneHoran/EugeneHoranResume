@@ -1,14 +1,12 @@
 ## Eugene Horan Resume
 
-### Currently Updating Data Structure
-- If you downloaded the app it needs to be deleted and reinstalled after data structure.
+**Download Link** Note that there may be issues in this stage. 
+
+https://rink.hockeyapp.net/apps/1c7fc3f8965142b7b960201ed4737506/app_versions/5
 
 Interactive Resume Application. 
 It will be updated as time goes on with the latest libraries and design patterns. It will be documented with text, images and dates. 
 
-**Download Link** Note that there may be issues in this stage. 
-
-~~https://www.dropbox.com/s/286hebodnl86s2p/apk_buil_1.apk?dl=0~~
 
 **Youtube Video**
 
@@ -18,14 +16,25 @@ https://youtu.be/549T8NzNx9E
 TODO:
 - ~~Convert project to MVVM DataBinding~~
 - ~~Try FirebaseRecyclerAdapter~~
+- ~~Add profile~~ 
+- ~~Add view user~~ 
 - Switch to Glide from Picasso
 - Add option to post Gifs into Social Feed
-- Add profile 
-- Add view user 
 - Clean up code
 - Other ...
  
 ## Lates Updates:
+
+**UPDATE** October 14, 2017
+
+- Restructured Firebase database
+- Started to work on the app Gradle
+- Cleaned up a lot of code
+- Finished User Profile Pages
+- Some other fixes that I do not remember
+
+<img src="https://github.com/EugeneHoran/EugeneHoranResume/blob/master/images/00ProfilePage.png" width="220" />
+
 
 **UPDATED** October 12, 2017
 
