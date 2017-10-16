@@ -23,11 +23,6 @@ public class StartPresenterNullCheck extends BasePresenterNullCheck<StartContrac
             }
 
             @Override
-            public void showLoading(boolean showLoading) {
-
-            }
-
-            @Override
             public void showFingerprintView() {
 
             }

@@ -10,7 +10,7 @@
 
         <variable
             name="holder"
-            type="com.resume.horan.eugene.eugenehoranresume.main.feed.FeedUserRecyclerAdapter.UserViewHolder" />
+            type="com.resume.horan.eugene.eugenehoranresume.main.feed.FeedUserRecyclerAdapterNew.UserViewHolder" />
     </data>
 
     <LinearLayout

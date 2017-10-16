@@ -44,7 +44,7 @@
                 android:paddingRight="16dp"
                 android:text="@{object.text}"
                 android:textColor="@color/black"
-                android:textSize="21sp" />
+                android:textSize="22sp" />
 
             <include
                 android:id="@+id/footer"

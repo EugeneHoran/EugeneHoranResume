@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedRecyclerAdapter;
 import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedUserRecyclerAdapter;
+import com.resume.horan.eugene.eugenehoranresume.main.feed.FeedUserRecyclerAdapterNew;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 import com.resume.horan.eugene.eugenehoranresume.viewimage.ViewImageActivity;
@@ -89,15 +90,9 @@ public class BaseBindingPresenters {
                 if (newObjectList != null) {
                     mAdapter.addItems(newObjectList);
                 }
-            } else if (adapter instanceof FeedUserRecyclerAdapter) {
-                FeedUserRecyclerAdapter mAdapter = (FeedUserRecyclerAdapter) adapter;
-                List<User> userList = new ArrayList<>();
-                if (objectList != null) {
-                    for (Object user : objectList) {
-                        userList.add((User) user);
-                    }
-                    mAdapter.setItems(userList);
-                }
+            } else if (adapter instanceof FeedUserRecyclerAdapterNew) {
+                FeedUserRecyclerAdapterNew mAdapter = (FeedUserRecyclerAdapterNew) adapter;
+                mAdapter.setItems(objectList);
             }
         }
     }

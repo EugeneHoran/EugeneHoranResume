@@ -47,7 +47,6 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
         getView().setFragmentPosition(mFragmentPosition);
         getView().setScrollFlags(mFragmentPosition);
         getView().expandAppbar();
-        getView().showLoading(true);
         switch (mFragmentPosition) {
             case Common.WHICH_RESUME_FRAGMENT:
                 getView().showTabs(true);
@@ -101,7 +100,6 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
                     mEugeneValue.getExperienceObject(),
                     mEugeneValue.getSkillsObject(),
                     mEugeneValue.getEducationObject());
-            getView().showLoading(false);
         }
 
         @Override
@@ -116,7 +114,6 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
             Contact mContactValue = dataSnapshot.getValue(Contact.class);
             myContactReference.keepSynced(true);
             getView().showContactFragment(mContactValue);
-            getView().showLoading(false);
         }
 
         @Override
@@ -131,7 +128,6 @@ class MainActivityPresenter extends MainPresenterNullCheck implements MainActivi
             About mAboutValue = dataSnapshot.getValue(About.class);
             myAboutReference.keepSynced(true);
             getView().showAboutFragment(mAboutValue.getFilteredAboutList());
-            getView().showLoading(false);
         }
 
         @Override

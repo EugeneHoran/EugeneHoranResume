@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="adapter"
+            type="android.support.v7.widget.RecyclerView.Adapter" />
+
+        <variable
+            name="object"
+            type="com.resume.horan.eugene.eugenehoranresume.main.resume.ResumeBaseObject" />
+    </data>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp"
+        android:paddingLeft="88dp"
+        android:paddingRight="88dp"
+        android:paddingTop="4dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:set_adapter="@{adapter}"
+        app:set_items="@{object}" />
+</layout>

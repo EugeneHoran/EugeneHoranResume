@@ -4,9 +4,11 @@ import android.animation.AnimatorInflater;
 import android.animation.StateListAnimator;
 import android.annotation.TargetApi;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.BasePostViewHolder;
@@ -115,7 +117,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case HOLDER_ERROR:
@@ -134,7 +136,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderNewPost) {
             ViewHolderNewPost mHolder = (ViewHolderNewPost) holder;
             mHolder.bindItem();

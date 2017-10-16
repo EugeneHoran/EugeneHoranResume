@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="contactViewModel"
+            type="com.resume.horan.eugene.eugenehoranresume.main.contact.ContactViewModel" />
+    </data>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp"
+        android:paddingLeft="88dp"
+        android:paddingRight="88dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@color/white"
+            android:elevation="1dp">
+
+            <ImageView
+                android:id="@+id/imageMap"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:load_image="@{contactViewModel.location}" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/black_transparency"
+                android:gravity="center_vertical"
+                android:visibility="@{contactViewModel.mapReady ? View.VISIBLE : View.VISIBLE}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@{contactViewModel.address}"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageMap"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@{contactViewModel.phonePrimaryFormatted}"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginRight="16dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:onClick="@{() -> contactViewModel.onClipboardClicked(contactViewModel.phonePrimary)}"
+                        android:padding="7dp"
+                        android:tint="@color/colorPrimaryBlue"
+                        app:srcCompat="@drawable/ic_content_copy" />
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginRight="16dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:onClick="@{() -> contactViewModel.onMessageClicked(contactViewModel.phonePrimary)}"
+                        android:padding="7dp"
+                        android:tint="@color/colorPrimaryBlue"
+                        app:srcCompat="@drawable/ic_message" />
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:onClick="@{() -> contactViewModel.onCallClicked(contactViewModel.phonePrimary)}"
+                        android:padding="7dp"
+                        android:tint="@color/colorPrimaryBlue"
+                        app:srcCompat="@drawable/ic_phone" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEEEEE" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@{contactViewModel.phoneSecondaryFormatted}"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginRight="16dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:onClick="@{() -> contactViewModel.onClipboardClicked(contactViewModel.phoneSecondary)}"
+                        android:padding="7dp"
+                        android:tint="@color/colorPrimaryBlue"
+                        app:srcCompat="@drawable/ic_content_copy" />
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:onClick="@{() -> contactViewModel.onCallClicked(contactViewModel.phoneSecondary)}"
+                        android:padding="7dp"
+                        android:tint="@color/colorPrimaryBlue"
+                        app:srcCompat="@drawable/ic_phone" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEEEEE" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@{contactViewModel.email}"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginRight="16dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:onClick="@{() -> contactViewModel.onClipboardClicked(contactViewModel.email)}"
+                        android:padding="7dp"
+                        android:tint="@color/colorPrimaryBlue"
+                        app:srcCompat="@drawable/ic_content_copy" />
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:onClick="@{() -> contactViewModel.onEmailClicked(contactViewModel.email)}"
+                        android:padding="7dp"
+                        android:tint="@color/colorPrimaryBlue"
+                        app:srcCompat="@drawable/ic_email" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEEEEE" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/i_will_be_moving_in_the_next_few_months_to_nassau_county"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

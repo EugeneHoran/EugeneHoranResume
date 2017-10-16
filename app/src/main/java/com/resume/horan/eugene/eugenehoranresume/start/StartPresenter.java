@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -43,17 +45,32 @@ import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.StartPresen
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
+import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 import com.resume.horan.eugene.eugenehoranresume.util.ui.Verify;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class StartPresenter extends StartPresenterNullCheck implements StartContract.Presenter {
+public class StartPresenter extends StartPresenterNullCheck implements StartContract.Presenter {
     private static final String TAG = "StartPresenter";
     private FragmentActivity activity;
     private Resources res;
     private SharedPreferences mSharedPref;
     private boolean requiresFingerprint;
+
+
+    public ObservableField<String> navTitle = new ObservableField<>();
+    public ObservableField<Integer> navIcon = new ObservableField<>(R.drawable.ic_null);
+    public ObservableField<Boolean> showLoading = new ObservableField<>(false);
+    public ObservableField<Boolean> showTitle = new ObservableField<>(true);
+    public ObservableField<Boolean> showDisplayName = new ObservableField<>(false);
+    public ObservableField<Boolean> showPassword = new ObservableField<>(true);
+    public ObservableField<Boolean> showSocial = new ObservableField<>(true);
+    public ObservableField<Boolean> showSignIn = new ObservableField<>(true);
+    public ObservableField<Boolean> showCreateAccount = new ObservableField<>(true);
+    public ObservableField<Boolean> showForgotPassword = new ObservableField<>(true);
+    public ObservableField<String> forgotText = new ObservableField<>();
+
 
     @Override
     public void onStart() {
@@ -80,17 +97,64 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
         initiateLoginClients();
     }
 
+    public void onSignEmailSignIn(View view) {
+        LayoutUtil.hideKeyboard(view);
+    }
+
+    public void showLoginView() {
+        navIcon.set(R.drawable.ic_null);
+        navTitle.set(null);
+        showTitle.set(true);
+        showDisplayName.set(false);
+        showPassword.set(true);
+        showSocial.set(true);
+        showSignIn.set(true);
+        showCreateAccount.set(true);
+        showForgotPassword.set(true);
+        forgotText.set(res.getString(R.string.forgot_password));
+    }
+
+    public void showCreateAccountView() {
+        navIcon.set(R.drawable.ic_arrow_back);
+        navTitle.set(res.getString(R.string.create_account));
+        showTitle.set(false);
+        showDisplayName.set(true);
+        showPassword.set(true);
+        showSocial.set(true);
+        showSignIn.set(false);
+        showCreateAccount.set(true);
+        showForgotPassword.set(false);
+        forgotText.set(res.getString(R.string.forgot_password));
+    }
+
+    public void showForgotPasswordView() {
+        navIcon.set(R.drawable.ic_arrow_back);
+        navTitle.set(res.getString(R.string.reset_password));
+        showTitle.set(false);
+        showDisplayName.set(false);
+        showPassword.set(false);
+        showSocial.set(false);
+        showSignIn.set(false);
+        showCreateAccount.set(false);
+        showForgotPassword.set(true);
+        forgotText.set(res.getString(R.string.reset_password));
+    }
+
+    public void showLoading(boolean show) {
+        showLoading.set(show);
+    }
+
     private void handleUser() {
         FirebaseUser firebaseUser = FirebaseUtil.getUser();
         if (firebaseUser == null) {
+            showLoading(false);
             getView().showLoginView();
-            getView().showLoading(false);
         } else {
             if (TextUtils.isEmpty(firebaseUser.getEmail())) {
+                showLoading(false);
                 getView().showEmailRequired();
-                getView().showLoading(false);
             } else {
-                getView().showLoading(true);
+                showLoading(true);
                 addOrUpdateUser(firebaseUser);
             }
         }
@@ -115,13 +179,14 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                             // No response
                             if (databaseError != null) {
-                                getView().showLoading(false);
+                                showLoading(false);
+                                //
                                 getView().showLoginView();
                                 getView().showToast(databaseError.getMessage());
                             } else {
                                 if (requiresFingerprint) {
+                                    showLoading(false);
                                     getView().showFingerprintView();
-                                    getView().showLoading(false);
                                 } else {
                                     getView().loginSuccessful();
                                 }
@@ -130,8 +195,8 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                     });
                 } else {
                     if (requiresFingerprint) {
+                        showLoading(false);
                         getView().showFingerprintView();
-                        getView().showLoading(false);
                     } else {
                         getView().loginSuccessful();
                     }
@@ -151,7 +216,7 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                         getView().showToast("Google Play Connection Failed");
-                        getView().showLoading(false);
+                        showLoading(false);
                     }
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API,
@@ -172,20 +237,20 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
 
             @Override
             public void onCancel() {
-                getView().showLoading(false);
+                showLoading(false);
                 getView().showToast("Facebook Canceled Login");
             }
 
             @Override
             public void onError(FacebookException error) {
-                getView().showLoading(false);
+                showLoading(false);
                 getView().showToast("Facebook Login Error {" + error.getMessage() + "}");
             }
         });
     }
 
     private void firebaseAuthCredential(AuthCredential credential) {
-        getView().showLoading(true);
+        showLoading(true);
         FirebaseUtil.getAuth().signInWithCredential(credential)
                 .addOnSuccessListener(activity, new OnSuccessListener<AuthResult>() {
                     @Override
@@ -219,8 +284,8 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                 AuthCredential credential = GoogleAuthProvider.getCredential(acct != null ? acct.getIdToken() : null, null);
                 firebaseAuthCredential(credential);
             } else {
+                showLoading(false);
                 Log.e(TAG, "Google Sign-In failed.");
-                getView().showLoading(false);
                 getView().showToast("Google Sign-In failed.");
             }
         }
@@ -239,13 +304,14 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                     String reason = data.getExtras().getString(Common.ARG_FINGERPRINT_RETURN_ERROR);
                     getView().showToast(reason);
                 }
+
+                showLoading(false);
                 LoginManager.getInstance().logOut();
                 getView().showLoginView();
-                getView().showLoading(false);
             }
         } else {
+            showLoading(false);
             getView().showLoginView();
-            getView().showLoading(false);
         }
     }
 
@@ -255,7 +321,7 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
     @Override
     public void createAccountEmail(final String displayName, String email, String password) {
         if (verifyNameAndEmailAndPassword(displayName, email, password)) {
-            getView().showLoading(true);
+            showLoading(true);
             FirebaseUtil.getAuth().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ConstantConditions"})
@@ -276,7 +342,7 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                                             }
                                         });
                             } else {
-                                getView().showLoading(false);
+                                showLoading(false);
                                 getView().showToast(task.getException().getMessage());
                             }
                         }
@@ -284,7 +350,7 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            getView().showLoading(false);
+                            showLoading(false);
                             getView().showToast(e.getMessage());
                         }
                     });
@@ -294,7 +360,7 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
     @Override
     public void launchSignInEmail(String email, String password) {
         if (verifyEmailAndPassword(email, password)) {
-            getView().showLoading(true);
+            showLoading(true);
             FirebaseUtil.getAuth().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ConstantConditions"})
                 @Override
@@ -302,14 +368,14 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                     if (task.isSuccessful()) {
                         handleUser();
                     } else {
-                        getView().showLoading(false);
+                        showLoading(false);
                         getView().showToast(task.getException().getMessage());
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    getView().showLoading(false);
+                    showLoading(false);
                     getView().showToast(e.getMessage());
                 }
             });
@@ -318,7 +384,7 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
 
     @Override
     public void updateUserEmail(String email) {
-        getView().showLoading(true);
+        showLoading(true);
         final FirebaseUser user = FirebaseUtil.getUser();
         if (user != null)
             user.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -330,12 +396,12 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
                         getView().showEmailRequired();
                         //noinspection ThrowableResultOfMethodCallIgnored,ConstantConditions
                         getView().showToast(task.getException().getMessage() != null ? task.getException().getMessage() : "Error");
-                        getView().showLoading(false);
+                        showLoading(false);
                     }
                 }
             });
         else {
-            getView().showLoading(false);
+            showLoading(false);
             getView().showToast("Problem with data");
         }
     }
@@ -343,18 +409,18 @@ class StartPresenter extends StartPresenterNullCheck implements StartContract.Pr
     @Override
     public void resetEmail(String email) {
         if (verifyEmail(email)) {
-            getView().showLoading(true);
+            showLoading(true);
             FirebaseUtil.getAuth().sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    getView().showLoading(false);
+                    showLoading(false);
                     getView().showLoginView();
                     getView().showToast(task.isSuccessful() ? "Check your email" : "There was an error");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    getView().showLoading(false);
+                    showLoading(false);
                     getView().showToast(e.getMessage());
                     getView().showLoginView();
                 }

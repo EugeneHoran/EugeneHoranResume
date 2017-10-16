@@ -35,12 +35,15 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
+            buildConfigField("String", "GSO_TOKEN_ID", "\"${gso_token_id}\"")
+            buildConfigField("String", "RESUME_DOWNLOAD_LINK", "\"${resume_download_link}\"")
         }
         debug {
             minifyEnabled false
             shrinkResources false
             consumerProguardFiles file('proguard-eugene.txt')
             buildConfigField("String", "GSO_TOKEN_ID", "\"${gso_token_id}\"")
+            buildConfigField("String", "RESUME_DOWNLOAD_LINK", "\"${resume_download_link}\"")
         }
     }
     packagingOptions {
@@ -96,6 +99,11 @@ dependencies {
     compile 'com.multidots:fingerprint-auth:1.0.1'
     compile 'com.mattprecious.swirl:swirl:1.0.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    // Animations
+    compile('com.airbnb.android:lottie:2.2.5') {
+        exclude group: 'com.android.support'
+    }
 
     testCompile 'junit:junit:4.12'
 }

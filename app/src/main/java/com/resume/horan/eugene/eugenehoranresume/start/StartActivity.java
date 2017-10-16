@@ -3,7 +3,6 @@ package com.resume.horan.eugene.eugenehoranresume.start;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,6 +27,9 @@ public class StartActivity extends AppCompatActivity implements
         View.OnClickListener,
         StartBSDataFragment.Listener,
         ViewTreeObserver.OnGlobalLayoutListener {
+
+    private boolean mCreateAccountVisible = false;
+    private boolean mResetPasswordVisible = false;
     private StartContract.Presenter mPresenter;
 
     @Override
@@ -35,16 +37,13 @@ public class StartActivity extends AppCompatActivity implements
         this.mPresenter = presenter;
     }
 
-    private boolean mCreateAccountVisible = false;
-    private boolean mResetPasswordVisible = false;
     private ActivityStartBinding binding;
-
+    private StartPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_start);
-
         binding.btnFacebookSignIn.setReadPermissions(Arrays.asList("email", "public_profile"));
         new MultiTextWatcher()
                 .registerEditText(binding.editEmail)
@@ -58,7 +57,8 @@ public class StartActivity extends AppCompatActivity implements
         binding.btnGoogleSignIn.setOnClickListener(this);
         binding.btnEmailForgot.setOnClickListener(this);
         // Init Presenter
-        new StartPresenter(this, this);
+        presenter = new StartPresenter(this, this);
+        binding.setModel(presenter);
         mPresenter.onStart();
     }
 
@@ -134,18 +134,9 @@ public class StartActivity extends AppCompatActivity implements
         onLayoutTypeChange();
         mCreateAccountVisible = false;
         mResetPasswordVisible = false;
-        binding.toolbar.setTitle(null);
-        setUpEnabled(false);
-        binding.editDisplayName.setVisibility(View.GONE);
-        binding.viewSocialLayout.setVisibility(View.VISIBLE);
-        binding.editPassword.setVisibility(View.VISIBLE);
-        binding.textTitle.setVisibility(View.VISIBLE);
-        binding.btnEmailSignIn.setVisibility(View.VISIBLE);
-        binding.btnEmailCreateAccount.setVisibility(View.VISIBLE);
-        binding.btnEmailCreateAccount.setBackgroundResource(R.color.transparent);
-        binding.btnEmailForgot.setVisibility(View.VISIBLE);
-        binding.btnEmailForgot.setText(R.string.forgot_password);
+        presenter.showLoginView();
         binding.btnEmailForgot.setBackgroundResource(R.color.transparent);
+        binding.btnEmailCreateAccount.setBackgroundResource(R.color.transparent);
     }
 
     @Override
@@ -153,49 +144,17 @@ public class StartActivity extends AppCompatActivity implements
         onLayoutTypeChange();
         mCreateAccountVisible = true;
         mResetPasswordVisible = false;
-        binding.toolbar.setTitle(R.string.create_account);
-        setUpEnabled(true);
-        binding.editDisplayName.setVisibility(View.VISIBLE);
-        binding.editPassword.setVisibility(View.VISIBLE);
-        binding.viewSocialLayout.setVisibility(View.VISIBLE);
-        binding.textTitle.setVisibility(View.GONE);
-        binding.btnEmailSignIn.setVisibility(View.GONE);
-        binding.btnEmailCreateAccount.setBackgroundResource(R.drawable.button_normal);
-        binding.btnEmailForgot.setVisibility(View.GONE);
-        binding.btnEmailForgot.setText(R.string.forgot_password);
+        presenter.showCreateAccountView();
         binding.btnEmailForgot.setBackgroundResource(R.color.transparent);
+        binding.btnEmailCreateAccount.setBackgroundResource(R.drawable.button_normal);
     }
 
     public void showForgotPasswordView() {
         mCreateAccountVisible = false;
         mResetPasswordVisible = true;
         onLayoutTypeChange();
-        setUpEnabled(true);
-        binding.toolbar.setTitle(R.string.reset_password);
-        binding.btnEmailForgot.setText(R.string.reset_password);
+        presenter.showForgotPasswordView();
         binding.btnEmailForgot.setBackgroundResource(R.drawable.button_normal);
-        binding.editDisplayName.setVisibility(View.GONE);
-        binding.viewSocialLayout.setVisibility(View.GONE);
-        binding.textTitle.setVisibility(View.GONE);
-        binding.btnEmailSignIn.setVisibility(View.GONE);
-        binding.btnEmailCreateAccount.setVisibility(View.GONE);
-        binding.btnEmailForgot.setVisibility(View.VISIBLE);
-        binding.editPassword.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showEmailRequired() {
-        StartBSDataFragment.newInstance().show(getSupportFragmentManager(), "DIALOG");
-    }
-
-    @Override
-    public void updateUserEmail(String email) {
-        mPresenter.updateUserEmail(email);
-    }
-
-    @Override
-    public void showToast(String message) {
-        Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -217,9 +176,18 @@ public class StartActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void showLoading(boolean showLoading) {
-        binding.viewLoginHolder.setVisibility(showLoading ? View.GONE : View.VISIBLE);
-        binding.viewProgress.setVisibility(showLoading ? View.VISIBLE : View.GONE);
+    public void showEmailRequired() {
+        StartBSDataFragment.newInstance().show(getSupportFragmentManager(), "DIALOG");
+    }
+
+    @Override
+    public void updateUserEmail(String email) {
+        mPresenter.updateUserEmail(email);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -299,14 +267,5 @@ public class StartActivity extends AppCompatActivity implements
                 binding.textTitle.setVisibility(View.VISIBLE);
             }
         }
-    }
-
-    /**
-     * Hide or show Toolbar nav icon
-     *
-     * @param showHomeAsUp boolean
-     */
-    private void setUpEnabled(boolean showHomeAsUp) {
-        binding.toolbar.setNavigationIcon(showHomeAsUp ? ContextCompat.getDrawable(this, R.drawable.ic_arrow_back) : null);
     }
 }

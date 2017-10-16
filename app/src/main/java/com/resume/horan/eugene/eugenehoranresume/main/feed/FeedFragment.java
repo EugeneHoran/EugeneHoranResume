@@ -21,7 +21,7 @@ import com.resume.horan.eugene.eugenehoranresume.userprofile.UserProfileActivity
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
 
-public class FeedFragment extends Fragment implements FeedUserRecyclerAdapter.Listener, FeedRecyclerAdapter.Listener, FeedAddCommentBottomSheetFragment.Listener {
+public class FeedFragment extends Fragment implements FeedUserRecyclerAdapterNew.Listener, FeedRecyclerAdapter.Listener, FeedAddCommentBottomSheetFragment.Listener {
     public static FeedFragment newInstance() {
         FeedFragment fragment = new FeedFragment();
         Bundle args = new Bundle();
@@ -30,14 +30,14 @@ public class FeedFragment extends Fragment implements FeedUserRecyclerAdapter.Li
     }
 
     private FeedViewModel model;
-    private FeedUserRecyclerAdapter adapterUsers;
+    private FeedUserRecyclerAdapterNew adapterUsers;
     private FeedRecyclerAdapter adapterFeed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = new FeedViewModel();
-        adapterUsers = new FeedUserRecyclerAdapter();
+        adapterUsers = new FeedUserRecyclerAdapterNew();
         adapterFeed = new FeedRecyclerAdapter();
         adapterUsers.setListener(this);
         adapterFeed.setListener(this);
@@ -61,6 +61,7 @@ public class FeedFragment extends Fragment implements FeedUserRecyclerAdapter.Li
         binding.recyclerUsers.setNestedScrollingEnabled(false);
         // Recycler Feed
         binding.setAdapter(adapterFeed);
+        binding.recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recycler.setNestedScrollingEnabled(false);
         // Init
         binding.setModel(model);

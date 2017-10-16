@@ -72,4 +72,6 @@
     <string name="comments">Comments</string>
     <string name="describe_your_post">Describe your post</string>
     <string name="all_posts">All Posts</string>
+    <string name="view_resume">View Resume</string>
+    <string name="download_resume">Download Resume</string>
 </resources>

@@ -17,11 +17,6 @@ public class MainPresenterNullCheck extends BasePresenterNullCheck<MainActivityC
             }
 
             @Override
-            public void showLoading(boolean showLoading) {
-
-            }
-
-            @Override
             public void showResumeFragment(ResumeBaseObject experienceObject, ResumeBaseObject resumeSkillObject, ResumeBaseObject resumeEducationObject) {
 
             }

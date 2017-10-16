@@ -36,11 +36,15 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
+
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, MainActivityContract.View, View.OnClickListener {
 
 
     private static final String STATE_FRAGMENT_POSITION = "saved_state_fragment_fragment_positions";
@@ -73,14 +77,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mIntFragPos = saveState == null ? Common.WHICH_RESUME_FRAGMENT : saveState.getInt(STATE_FRAGMENT_POSITION, Common.WHICH_RESUME_FRAGMENT);
         presenter.start(mIntFragPos);
         initProfileImage();
-//        if (LayoutUtil.isL()) {
-//            initCustomBar();
-//        }
         mEnableBN = true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle saveState) {
+        super.onSaveInstanceState(saveState);
+        saveState.putInt(STATE_FRAGMENT_POSITION, mIntFragPos);
     }
 
     /**
      * Navigation Handling
+     * <p>
      * <p>
      * Bottom nav {@link OnTabSelectListener}
      * Return int nav position and set (int mIntFragPos)
@@ -149,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     public void replaceFragment(Fragment fragment, String TAG) {
+        fragment.setRetainInstance(!TAG.equals(TAG_RESUME_PARENT_FRAGMENT));
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setCustomAnimations(R.anim.anim_set_fade_in_slide_up_recycler, 0);
         transaction.replace(R.id.container, fragment, TAG).commit();
@@ -226,21 +235,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         binding.toolbar.setLayoutParams(params);
     }
 
-
-    @Override
-    public void showHeaderBar(boolean show) {
-        hideExtraBar(show);
-    }
-
-    /**
-     * Loading Functions
-     */
-    @Override
-    public void showLoading(boolean showLoading) {
-//        mFrameContainer.setVisibility(showLoading ? View.GONE : View.VISIBLE);
-//        mProgressBar.setVisibility(showLoading ? View.VISIBLE : View.GONE);
-    }
-
     @Override
     public void showLoadingError() {
         Snackbar.make(binding.container, "Error loading data", Snackbar.LENGTH_INDEFINITE).setAction("Try Again", new View.OnClickListener() {
@@ -274,10 +268,27 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         super.onDestroy();
     }
 
+    /**
+     * Permissions
+     */
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+
+    }
 
     /**
      * TODO HANDLE CUSTOM BAR
      */
+    @Override
+    public void showHeaderBar(boolean show) {
+        hideExtraBar(show);
+    }
+
     private boolean customBarInitiated = false;
     private final Rect mFiltersBarClip = new Rect();
 

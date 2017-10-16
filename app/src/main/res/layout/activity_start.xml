@@ -6,7 +6,12 @@
 
     <data>
 
+
         <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.resume.horan.eugene.eugenehoranresume.start.StartPresenter" />
 
     </data>
 
@@ -30,7 +35,8 @@
             android:paddingBottom="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:paddingTop="56dp">
+            android:paddingTop="56dp"
+            android:visibility="@{model.showLoading ? View.GONE : View.VISIBLE}">
 
             <LinearLayout
                 android:id="@+id/viewMainHolder"
@@ -49,12 +55,14 @@
                     android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="Eugene Horan's \n Resume App"
-                    android:textSize="28sp" />
+                    android:textSize="28sp"
+                    android:visibility="@{model.showTitle?View.VISIBLE:View.GONE}" />
 
                 <com.resume.horan.eugene.eugenehoranresume.util.ui.TextInputView
                     android:id="@+id/inputDisplayName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="@{model.showDisplayName?View.VISIBLE:View.GONE}">
 
                     <EditText
                         android:id="@+id/editDisplayName"
@@ -85,7 +93,8 @@
                     android:id="@+id/inputPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="16dp"
+                    android:visibility="@{model.showPassword?View.VISIBLE:View.GONE}">
 
                     <EditText
                         android:id="@+id/editPassword"
@@ -105,7 +114,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/action_sign_in_short"
-                    android:theme="@style/Login.ButtonPrimary" />
+                    android:theme="@style/Login.ButtonPrimary"
+                    android:visibility="@{model.showSignIn?View.VISIBLE:View.GONE}" />
 
                 <Button
                     android:id="@+id/btnEmailCreateAccount"
@@ -117,7 +127,8 @@
                     android:background="@color/transparent"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:text="@string/action_create_account"
-                    android:theme="@style/Login.ButtonFlat" />
+                    android:theme="@style/Login.ButtonFlat"
+                    android:visibility="@{model.showCreateAccount?View.VISIBLE:View.GONE}" />
 
                 <LinearLayout
                     android:id="@+id/viewSocialLayout"
@@ -127,6 +138,7 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:orientation="horizontal"
+                    android:visibility="@{model.showSocial?View.VISIBLE:View.GONE}"
                     android:weightSum="2">
 
                     <com.google.android.gms.common.SignInButton
@@ -166,8 +178,9 @@
                     android:layout_marginTop="8dp"
                     android:background="@color/transparent"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:text="@string/forgot_password"
-                    android:theme="@style/Login.ButtonFlat" />
+                    android:text="@{model.forgotText}"
+                    android:theme="@style/Login.ButtonFlat"
+                    android:visibility="@{model.showForgotPassword ? View.VISIBLE : View.GONE}" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
@@ -178,7 +191,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone" />
+            android:visibility="@{model.showLoading ? View.VISIBLE : View.GONE}" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -186,7 +199,9 @@
             android:layout_height="?attr/actionBarSize"
             android:animateLayoutChanges="true"
             android:theme="@style/AppTheme.AppBarOverlay"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:navigationIcon="@{model.navIcon}"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="@{model.navTitle}" />
 
     </FrameLayout>
 </layout>

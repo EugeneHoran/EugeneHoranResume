@@ -26,6 +26,8 @@ public class EugeneHoran implements Parcelable {
     public ResumeBaseObject getExperienceObject() {
         List<Experience> experienceList = resume.getExperience();
         List<Object> mObjectList = new ArrayList<>();
+//        mObjectList.add(new Header("Resume PDF"));
+//        mObjectList.add(new ResumePdf("Download"));
         mObjectList.add(new Header("Public Accounts"));
         mObjectList.addAll(resume.getAccount());
         mObjectList.add(2, new DividerFiller(Common.DIVIDER_LINE_NO_SPACE));

@@ -34,7 +34,6 @@ public class NewPostActivity extends AppCompatActivity implements EasyPermission
         setTitle("Post to feed");
         newPostViewHolder = new NewPostViewHolder(this);
         binding.setModel(newPostViewHolder);
-        
     }
 
     @Override

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|snap|enterAlways"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageUserProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="11dp"
+                    android:layout_marginTop="-43dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:padding="2.75dp"
+                    android:visibility="invisible"
+                    app:border_color="@color/white"
+                    app:border_width="1dp"
+                    app:srcCompat="@android:drawable/sym_def_app_icon"
+                    tools:ignore="RtlHardcoded" />
+            </android.support.v7.widget.Toolbar>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabMode="fixed" />
+        </android.support.design.widget.AppBarLayout>
+
+        <com.roughike.bottombar.BottomBar
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"
+            android:fitsSystemWindows="false"
+            app:bb_showShadow="true"
+            app:bb_tabXmlResource="@xml/nav_bottom_tabs"
+            app:layout_behavior="com.resume.horan.eugene.eugenehoranresume.util.ui.FooterBarBehavior" />
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <LinearLayout
+            android:id="@+id/testing"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@android:color/black"
+            android:baselineAligned="false"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_anchor="@id/app_bar"
+            app:layout_anchorGravity="bottom"
+            app:layout_behavior="com.resume.horan.eugene.eugenehoranresume.util.ui.PostBehavior">
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/viewProgress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

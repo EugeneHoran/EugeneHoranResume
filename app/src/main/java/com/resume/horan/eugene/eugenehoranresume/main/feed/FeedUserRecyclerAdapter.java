@@ -83,7 +83,7 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void bind() {
             user = mDataList.get(getAdapterPosition());
             binding.setObject(user);
-            binding.setHolder(this);
+//            binding.setHolder(this);
             if (user.getDisplayName() != null) {
                 binding.circleImage.setBorderColorResource(R.color.colorAccentBlue);
                 binding.circleImage.setAlpha(1f);
@@ -91,7 +91,11 @@ public class FeedUserRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 binding.circleImage.setBorderColorResource(R.color.greyIconNormal);
                 binding.circleImage.setAlpha(.3f);
             }
-            Picasso.with(itemView.getContext()).load(user.getImageUrl()).error(R.drawable.ic_account_circle_grey).into(binding.circleImage);
+            if (user.getImageUrl().equalsIgnoreCase("null")) {
+                binding.circleImage.setImageResource(R.drawable.ic_account_circle_grey);
+            } else {
+                Picasso.with(itemView.getContext()).load(user.getImageUrl()).error(R.drawable.ic_account_circle_grey).into(binding.circleImage);
+            }
         }
 
         public void onUserClicked(View view) {
