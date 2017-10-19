@@ -50,11 +50,9 @@ public class FeedFragment extends Fragment implements FeedUserRecyclerAdapterNew
         super.onDestroy();
     }
 
-    private FragmentFeedBinding binding;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentFeedBinding.inflate(getLayoutInflater());
+        FragmentFeedBinding binding = FragmentFeedBinding.inflate(getLayoutInflater());
         // Recycler Users
         binding.setAdapterUsers(adapterUsers);
         binding.recyclerUsers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -84,7 +82,6 @@ public class FeedFragment extends Fragment implements FeedUserRecyclerAdapterNew
 
     @Override
     public void onShowLikesClicked(Post post) {
-        Log.e("Testing", binding.testHeight.getHeight() + "");
         FeedLikesCommentsBottomSheetFragment.newInstance(Common.WHICH_LIKES, post.getKey()).show(getChildFragmentManager(), Common.DIALOG_FEED_LIKES_COMMENTS);
     }
 

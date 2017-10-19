@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -60,7 +59,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         initHeader();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
     private void animateHeader() {
         final AnimatedVectorDrawable avd = (AnimatedVectorDrawable) ContextCompat.getDrawable(this, R.drawable.avd_header_feed);
         binding.animImage.setImageDrawable(avd);
@@ -154,6 +153,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         if (view == binding.toolbar.getChildAt(0)) {
             onBackPressed();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override

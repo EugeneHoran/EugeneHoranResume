@@ -96,4 +96,8 @@ public class FirebaseUtil {
     public static Query getAllUserPostsQuery(String uid) {
         return FirebaseUtil.getAllUsersRef().child(uid).child(Common.FB_REF_POSTS);
     }
+
+    public static DatabaseReference getVersionRef() {
+        return getRef().child(Common.FB_REF_APP_VERSION);
+    }
 }

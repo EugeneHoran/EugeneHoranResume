@@ -4,11 +4,9 @@ import android.animation.AnimatorInflater;
 import android.animation.StateListAnimator;
 import android.annotation.TargetApi;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.BasePostViewHolder;
@@ -24,13 +22,13 @@ import com.resume.horan.eugene.eugenehoranresume.util.ui.LayoutUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("all") // Getting warnings about public and private referenceso
 public class FeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int HOLDER_ERROR = 0;
     public static final int HOLDER_NEW_POST = 2;
     public static final int HOLDER_POST_PHOTO = 3;
     public static final int HOLDER_POST_MESSAGE = 4;
     public static final int HOLDER_POST_MESSAGE_PHOTO = 5;
-    public static final int HOLDER_POST_NO_POSTS = 6;
 
     private ViewHolderPostImage mHolderImage;
     private ViewHolderPostMessage mHolderMessage;

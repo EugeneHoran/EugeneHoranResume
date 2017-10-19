@@ -81,6 +81,7 @@ public class FileResumeUtil {
         target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         Intent intent = Intent.createChooser(target, "Open File");
         try {
+
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             // Instruct the user to install a PDF reader here, or something

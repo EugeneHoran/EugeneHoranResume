@@ -44,6 +44,7 @@ public class StartActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_start);
+        binding.setActivity(this);
         binding.btnFacebookSignIn.setReadPermissions(Arrays.asList("email", "public_profile"));
         new MultiTextWatcher()
                 .registerEditText(binding.editEmail)
@@ -52,10 +53,7 @@ public class StartActivity extends AppCompatActivity implements
         binding.viewRoot.getViewTreeObserver().addOnGlobalLayoutListener(this);
         binding.editPassword.setOnEditorActionListener(onEditorActionListener);
         binding.toolbar.setNavigationOnClickListener(this);
-        binding.btnEmailSignIn.setOnClickListener(this);
-        binding.btnEmailCreateAccount.setOnClickListener(this);
         binding.btnGoogleSignIn.setOnClickListener(this);
-        binding.btnEmailForgot.setOnClickListener(this);
         // Init Presenter
         presenter = new StartPresenter(this, this);
         binding.setModel(presenter);
@@ -78,31 +76,39 @@ public class StartActivity extends AppCompatActivity implements
         super.onDestroy();
     }
 
+    /**
+     * On Click Listeners
+     */
+    /* Sign In Email */
+    public void onLoginEmailClicked(View view) {
+        LayoutUtil.hideKeyboard(binding.inputEmail);
+        resetErrors();
+        mPresenter.launchSignInEmail(binding.editEmail.getText().toString(), binding.editPassword.getText().toString());
+    }
+
+    /* Create Account */
+    public void onCreateAccountClicked(View view) {
+        if (mCreateAccountVisible) {
+            attemptCreateAccountFromEmail();
+        } else {
+            showCreateAccountView();
+        }
+    }
+
+    /* Forgot Password */
+    public void onForgotPasswordClicked(View view) {
+        if (mResetPasswordVisible) {
+            mPresenter.resetEmail(binding.editEmail.getText().toString().trim());
+        } else {
+            showForgotPasswordView();
+        }
+    }
+
     @Override
     public void onClick(View view) {
-        /* Sign In Email */
-        if (view == binding.btnEmailSignIn) {
-            attemptLoginFromEmail();
-        }
         /* Sign In Google */
-        else if (view == binding.btnGoogleSignIn) {
+        if (view == binding.btnGoogleSignIn) {
             mPresenter.launchSignInGoogleIntent();
-        }
-        /* Create Account */
-        else if (view == binding.btnEmailCreateAccount) {
-            if (mCreateAccountVisible) {
-                attemptCreateAccountFromEmail();
-            } else {
-                showCreateAccountView();
-            }
-        }
-        /* Forgot Password */
-        else if (view == binding.btnEmailForgot) {
-            if (mResetPasswordVisible) {
-                mPresenter.resetEmail(binding.editEmail.getText().toString().trim());
-            } else {
-                showForgotPasswordView();
-            }
         }
          /* Toolbar Nav */
         else {
@@ -195,12 +201,6 @@ public class StartActivity extends AppCompatActivity implements
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLoginFromEmail() {
-        LayoutUtil.hideKeyboard(binding.inputEmail);
-        resetErrors();
-        mPresenter.launchSignInEmail(binding.editEmail.getText().toString(), binding.editPassword.getText().toString());
-    }
-
     private void attemptCreateAccountFromEmail() {
         LayoutUtil.hideKeyboard(binding.inputEmail);
         resetErrors();
@@ -245,7 +245,7 @@ public class StartActivity extends AppCompatActivity implements
         @Override
         public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
             if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                attemptLoginFromEmail();
+                onLoginEmailClicked(textView);
                 return true;
             }
             return false;

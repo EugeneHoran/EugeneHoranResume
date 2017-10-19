@@ -1,12 +1,15 @@
 package com.resume.horan.eugene.eugenehoranresume.start;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,10 +41,12 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.resume.horan.eugene.eugenehoranresume.BuildConfig;
 import com.resume.horan.eugene.eugenehoranresume.R;
 import com.resume.horan.eugene.eugenehoranresume.base.nullpresenters.StartPresenterNullCheck;
+import com.resume.horan.eugene.eugenehoranresume.model.AppVersion;
 import com.resume.horan.eugene.eugenehoranresume.model.User;
 import com.resume.horan.eugene.eugenehoranresume.util.Common;
 import com.resume.horan.eugene.eugenehoranresume.util.FirebaseUtil;
@@ -74,7 +79,37 @@ public class StartPresenter extends StartPresenterNullCheck implements StartCont
 
     @Override
     public void onStart() {
-        handleUser();
+        checkVersion();
+    }
+
+    private void checkVersion() {
+        FirebaseUtil.getVersionRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final AppVersion appVersion = dataSnapshot.getValue(AppVersion.class);
+                if (appVersion.getVersion() == BuildConfig.VERSION_CODE) {
+                    handleUser();
+                } else {
+                    new AlertDialog.Builder(activity)
+                            .setTitle("Available Update")
+                            .setCancelable(false)
+                            .setMessage("Update is required to use app!")
+                            .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appVersion.getLink()));
+                                    activity.startActivity(browserIntent);
+                                    activity.finish();
+                                }
+                            }).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

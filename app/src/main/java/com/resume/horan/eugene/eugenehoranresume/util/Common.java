@@ -17,6 +17,7 @@ public class Common {
     public static final String FB_REF_POSTS = "posts";
     public static final String FB_REF_LIKES = "likes";
     public static final String FB_REF_COMMENTS = "comments";
+    public static final String FB_REF_APP_VERSION = "app_version";
     public static final String FB_AUTHOR = "author";
 
     /**
